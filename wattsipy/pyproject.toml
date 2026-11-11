@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wattsipy"
+version = "30"
+description = "A Python port of Wattsi, the WHATWG HTML Standard build tool"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "html5lib>=1.1",
+]
+
+[project.scripts]
+wattsipy = "wattsipy.cli:main"

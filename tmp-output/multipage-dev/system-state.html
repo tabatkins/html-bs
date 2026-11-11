@@ -1,0 +1,247 @@
+<!DOCTYPE html><html lang=en-US-x-hixie class=split><script src=/link-fixup.js defer=""></script><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>HTML Standard, Edition for Web Developers</title><meta name=theme-color content=#3c790a><meta name=color-scheme content="light dark"><link rel=stylesheet crossorigin="" href=https://resources.whatwg.org/standard-shared-with-dev.css><link rel=icon crossorigin="" href=https://resources.whatwg.org/logo.svg><link rel=stylesheet crossorigin="" href=/dev/styles.css><script>
+   function toggleStatus(div) {
+     div.parentNode.classList.toggle('wrapped');
+   }
+   function setLinkFragment(link) {
+     link.hash = location.hash;
+   }
+  </script><body>
+  <script src=/dev/search.js async=""></script>
+  
+  
+  
+  <header class="head with-buttons" id=head>
+   <a href=https://whatwg.org/ class=logo><img crossorigin="" width=100 height=100 alt=WHATWG src=https://resources.whatwg.org/logo.svg class=darkmode-aware></a>
+   
+   <hgroup><h1><a href=/dev/ rel=home>HTML: The Living Standard</a></h1><p id=dev-edition-h2>Edition for Web Developers — Last Updated <span class=pubdate>10 November 2026</span></hgroup>
+   
+
+   <div id=search>
+    <input name=query type=search placeholder="Search. Press '/'" autocomplete=off id=query>
+    <ol id=results></ol>
+   </div>
+  </header>
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  <nav><a href=timers-and-user-prompts.html>← 2026 Timers</a> — <a href=./>Table of Contents</a> — <a href=imagebitmap-and-animations.html>2026 Images →</a></nav><ol class=toc><li><ol><li><a href=system-state.html#system-state-and-capabilities><span class=secno>8.10</span> System state and capabilities</a><ol><li><a href=system-state.html#the-navigator-object><span class=secno>8.10.1</span> The <code>Navigator</code> object</a><ol><li><a href=system-state.html#client-identification><span class=secno>8.10.1.1</span> Client identification</a><li><a href=system-state.html#language-preferences><span class=secno>8.10.1.2</span> Language preferences</a><li><a href=system-state.html#navigator.online><span class=secno>8.10.1.3</span> Browser state</a><li><a href=system-state.html#custom-handlers><span class=secno>8.10.1.4</span> Custom scheme handlers: the <code>registerProtocolHandler()</code> method</a><li><a href=system-state.html#cookies><span class=secno>8.10.1.5</span> Cookies</a><li><a href=system-state.html#pdf-viewing-support><span class=secno>8.10.1.6</span> PDF viewing support</a></ol></ol></ol></ol><h3 id=system-state-and-capabilities><span class=secno>2026</span> System state and capabilities<a class=self-link href=#system-state-and-capabilities></a></h3>
+
+  <h4 id=the-navigator-object><span class=secno>2026</span> The <code id=the-navigator-object:navigator><a href=#navigator>Navigator</a></code> object<a class=self-link href=#the-navigator-object></a></h4><div class="mdn-anno wrapped"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/Navigator title="The Navigator interface represents the state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities.">Navigator</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>1+</span></span><span class="safari yes"><span>Safari</span><span>1+</span></span><span class="chrome yes"><span>Chrome</span><span>1+</span></span><hr><span class="opera yes"><span>Opera</span><span>3+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>4+</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>10.1+</span></span></div></div></div>
+
+  <p>Instances of <code id=the-navigator-object:navigator-2><a href=#navigator>Navigator</a></code> represent the identity and state of the user agent (the
+  client). It has also been used as a generic global under which various APIs are located, but this
+  is not precedent to build upon. Instead use the <code id=the-navigator-object:windoworworkerglobalscope><a href=webappapis.html#windoworworkerglobalscope>WindowOrWorkerGlobalScope</a></code> mixin or
+  equivalent.</p>
+
+  <pre><code class=idl>[Exposed=Window]
+interface <dfn data-dfn-type=interface id=navigator>Navigator</dfn> {
+  // objects implementing this interface also implement the interfaces given below
+};
+<a id=the-navigator-object:navigator-3 href=#navigator>Navigator</a> includes <a id=the-navigator-object:navigatorid href=#navigatorid>NavigatorID</a>;
+<a id=the-navigator-object:navigator-4 href=#navigator>Navigator</a> includes <a id=the-navigator-object:navigatorlanguage href=#navigatorlanguage>NavigatorLanguage</a>;
+<a id=the-navigator-object:navigator-5 href=#navigator>Navigator</a> includes <a id=the-navigator-object:navigatoronline href=#navigatoronline>NavigatorOnLine</a>;
+<a id=the-navigator-object:navigator-6 href=#navigator>Navigator</a> includes <a id=the-navigator-object:navigatorcontentutils href=#navigatorcontentutils>NavigatorContentUtils</a>;
+<a id=the-navigator-object:navigator-7 href=#navigator>Navigator</a> includes <a id=the-navigator-object:navigatorcookies href=#navigatorcookies>NavigatorCookies</a>;
+<a id=the-navigator-object:navigator-8 href=#navigator>Navigator</a> includes <a id=the-navigator-object:navigatorplugins href=#navigatorplugins>NavigatorPlugins</a>;
+<a id=the-navigator-object:navigator-9 href=#navigator>Navigator</a> includes <a id=the-navigator-object:navigatorconcurrenthardware href=workers.html#navigatorconcurrenthardware>NavigatorConcurrentHardware</a>;</code></pre>
+
+  
+
+
+  <h5 id=client-identification><span class=secno>2026</span> Client identification<a class=self-link href=#client-identification></a></h5>
+
+  <pre><code class=idl>interface mixin <dfn data-dfn-type=interface id=navigatorid>NavigatorID</dfn> {
+  readonly attribute DOMString <a id=client-identification:dom-navigator-appcodename href=#dom-navigator-appcodename>appCodeName</a>; // constant "Mozilla"
+  readonly attribute DOMString <a id=client-identification:dom-navigator-appname href=#dom-navigator-appname>appName</a>; // constant "Netscape"
+  readonly attribute DOMString <a id=client-identification:dom-navigator-appversion href=#dom-navigator-appversion>appVersion</a>;
+  readonly attribute DOMString <a id=client-identification:dom-navigator-platform href=#dom-navigator-platform>platform</a>;
+  readonly attribute DOMString <a id=client-identification:dom-navigator-product href=#dom-navigator-product>product</a>; // constant "Gecko"
+  [Exposed=Window] readonly attribute DOMString <a id=client-identification:dom-navigator-productsub href=#dom-navigator-productsub>productSub</a>;
+  readonly attribute DOMString <a id=client-identification:dom-navigator-useragent href=#dom-navigator-useragent>userAgent</a>;
+  [Exposed=Window] readonly attribute DOMString <a id=client-identification:dom-navigator-vendor href=#dom-navigator-vendor>vendor</a>;
+  [Exposed=Window] readonly attribute DOMString <a id=client-identification:dom-navigator-vendorsub href=#dom-navigator-vendorsub>vendorSub</a>; // constant ""
+};</code></pre>
+
+  <p>In certain cases, despite the best efforts of the entire industry, web browsers have bugs and
+  limitations that web authors are forced to work around.</p>
+
+  <p>This section defines a collection of attributes that can be used to determine, from script, the
+  kind of user agent in use, in order to work around these issues.</p>
+
+  
+
+  <p>Client detection should always be limited to detecting known current versions; future versions
+  and unknown versions should always be assumed to be fully compliant.</p>
+
+  <dl class=domintro><dt><code><var>self</var>.<span>navigator</span>.<span id=dom-navigator-appcodename>appCodeName</span></code><dd><p>Returns the string "<code>Mozilla</code>".<dt><code><var>self</var>.<span>navigator</span>.<span id=dom-navigator-appname>appName</span></code><dd><p>Returns the string "<code>Netscape</code>".<dt><code><var>self</var>.<span>navigator</span>.<span id=dom-navigator-appversion>appVersion</span></code><dd><p>Returns the version of the browser.<dt><code><var>self</var>.<span>navigator</span>.<span id=dom-navigator-platform>platform</span></code><dd><p>Returns the name of the platform.<dt><code><var>self</var>.<span>navigator</span>.<span id=dom-navigator-product>product</span></code><dd><p>Returns the string "<code>Gecko</code>".<dt><code><var>window</var>.<span>navigator</span>.<span id=dom-navigator-productsub>productSub</span></code><dd><p>Returns either the string "<code>20030107</code>", or the string "<code>20100101</code>".<dt><code><var>self</var>.<span>navigator</span>.<span id=dom-navigator-useragent>userAgent</span></code><dd><p>Returns the complete `<code>User-Agent</code>` header.<dt><code><var>window</var>.<span>navigator</span>.<span id=dom-navigator-vendor>vendor</span></code><dd><p>Returns either the empty string, the string "<code>Apple Computer, Inc.</code>",
+   or the string "<code>Google Inc.</code>".<dt><code><var>window</var>.<span>navigator</span>.<span id=dom-navigator-vendorsub>vendorSub</span></code><dd><p>Returns the empty string.</dl>
+
+  
+
+  
+
+  <h5 id=language-preferences><span class=secno>2026</span> Language preferences<a class=self-link href=#language-preferences></a></h5>
+
+  <pre><code class=idl>interface mixin <dfn data-dfn-type=interface id=navigatorlanguage>NavigatorLanguage</dfn> {
+  readonly attribute DOMString <a id=language-preferences:dom-navigator-language href=#dom-navigator-language>language</a>;
+  readonly attribute FrozenArray&lt;DOMString> <a id=language-preferences:dom-navigator-languages href=#dom-navigator-languages>languages</a>;
+};</code></pre>
+
+  <dl class=domintro><dt><code><var>self</var>.<span>navigator</span>.<span id=dom-navigator-language>language</span></code><dd><p>Returns a language tag representing the user's preferred language.<dt><code><var>self</var>.<span>navigator</span>.<span id=dom-navigator-languages>languages</span></code><dd>
+    <p>Returns an array of language tags representing the user's preferred languages, with the most
+    preferred language first.</p>
+
+    <p>The most preferred language is the one returned by <code id=language-preferences:dom-navigator-language-2><a href=#dom-navigator-language>navigator.language</a></code>.</p>
+   </dl>
+
+  <p class=note>A <code id=language-preferences:event-languagechange><a href=indices.html#event-languagechange>languagechange</a></code> event is fired at the
+  <code id=language-preferences:window><a href=nav-history-apis.html#window>Window</a></code> or <code id=language-preferences:workerglobalscope-2><a href=workers.html#workerglobalscope-2>WorkerGlobalScope</a></code> object when the user agent's understanding
+  of what the user's preferred languages are changes.</p>
+
+  
+
+
+  <h5 id=navigator.online><span class=secno>2026</span> <span id=browser-state></span>Browser state<a class=self-link href=#navigator.online></a></h5>
+
+  <pre><code class=idl>interface mixin <dfn data-dfn-type=interface id=navigatoronline>NavigatorOnLine</dfn> {
+  readonly attribute boolean <a id=navigator.online:dom-navigator-online href=#dom-navigator-online>onLine</a>;
+};</code></pre>
+
+  <dl class=domintro><dt><code><var>self</var>.<span>navigator</span>.<span id=dom-navigator-online>onLine</span></code><dd>
+    <p>Returns false if the user agent is definitely offline (disconnected from the network).
+    Returns true if the user agent might be online.</p>
+
+    <p>The events <code id=navigator.online:event-online><a href=indices.html#event-online>online</a></code> and <code id=navigator.online:event-offline><a href=indices.html#event-offline>offline</a></code> are fired when the value of this attribute changes.</p>
+   </dl>
+
+  
+
+  <p class=note>This attribute is inherently unreliable. A computer can be connected to a network
+  without having Internet access.</p>
+
+  <div class=example>
+   <p>In this example, an indicator is updated as the browser goes online and offline.</p>
+
+   <pre><code class=html>&lt;!DOCTYPE HTML>
+&lt;html lang="en">
+ &lt;head>
+  &lt;title>Online status&lt;/title>
+  &lt;script>
+   function updateIndicator() {
+     document.getElementById('indicator').textContent = navigator.onLine ? 'online' : 'offline';
+   }
+  &lt;/script>
+ &lt;/head>
+ &lt;body onload="updateIndicator()" ononline="updateIndicator()" onoffline="updateIndicator()">
+  &lt;p>The network is: &lt;span id="indicator">(state unknown)&lt;/span>
+ &lt;/body>
+&lt;/html></code></pre>
+  </div>
+
+
+  <h5 id=custom-handlers><span class=secno>2026</span> Custom scheme handlers: the <code id=custom-handlers:dom-navigator-registerprotocolhandler><a href=#dom-navigator-registerprotocolhandler>registerProtocolHandler()</a></code> method<a class=self-link href=#custom-handlers></a></h5><div class="mdn-anno wrapped"><button class=mdn-anno-btn onclick=toggleStatus(this)><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/Navigator/registerProtocolHandler title="The Navigator method registerProtocolHandler() lets websites register their ability to open or handle particular URL schemes (aka protocols).">Navigator/registerProtocolHandler</a><div class=support><span class="firefox yes"><span>Firefox</span><span>2+</span></span><span class="safari no"><span>Safari</span><span>No</span></span><span class="chrome yes"><span>Chrome</span><span>13+</span></span><hr><span class="opera yes"><span>Opera</span><span>11.6+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge no"><span>Edge (Legacy)</span><span>No</span></span><span class="ie no"><span>Internet Explorer</span><span>No</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android no"><span>Chrome Android</span><span>No</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div>
+
+  <pre><code class=idl>interface mixin <dfn data-dfn-type=interface id=navigatorcontentutils>NavigatorContentUtils</dfn> {
+  [SecureContext] undefined <a id=custom-handlers:dom-navigator-registerprotocolhandler-2 href=#dom-navigator-registerprotocolhandler>registerProtocolHandler</a>(DOMString scheme, USVString url);
+  [SecureContext] undefined <a id=custom-handlers:dom-navigator-unregisterprotocolhandler href=#dom-navigator-unregisterprotocolhandler>unregisterProtocolHandler</a>(DOMString scheme, USVString url);
+};</code></pre>
+
+  <dl class=domintro><dt><code><var>window</var>.<span>navigator</span>.<span id=dom-navigator-registerprotocolhandler>registerProtocolHandler</span>(<var>scheme</var>, <var>url</var>)</code><dd>
+    <p>Registers a handler for <var>scheme</var> at <var>url</var>. For example, an online telephone
+    messaging service could register itself as a handler of the <code id=custom-handlers:sms-protocol><a href=https://www.rfc-editor.org/rfc/rfc5724#section-2 data-x-internal=sms-protocol>sms:</a></code> scheme, so that if the user clicks on such a link, they are given the
+    opportunity to use that web site. <a href=references.html#refsSMS>[SMS]</a></p>
+
+    <p>The string "<code>%s</code>" in <var>url</var> is used as a placeholder for where
+    to put the URL of the content to be handled.</p>
+
+    <p>Throws a <a id=custom-handlers:securityerror href=https://webidl.spec.whatwg.org/#securityerror data-x-internal=securityerror>"<code>SecurityError</code>"</a> <code id=custom-handlers:domexception><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the user
+    agent blocks the registration (this might happen if trying to register as a handler for "<code>http</code>", for instance).</p>
+
+    <p>Throws a <a id=custom-handlers:syntaxerror href=https://webidl.spec.whatwg.org/#syntaxerror data-x-internal=syntaxerror>"<code>SyntaxError</code>"</a> <code id=custom-handlers:domexception-2><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the "<code>%s</code>" string is missing in <var>url</var>.</p>
+   <dt><code><var>window</var>.<span>navigator</span>.<span id=dom-navigator-unregisterprotocolhandler>unregisterProtocolHandler</span>(<var>scheme</var>, <var>url</var>)</code><dd>
+    <p>Unregisters the handler given by the arguments.</p>
+
+    <p>Throws a <a id=custom-handlers:securityerror-2 href=https://webidl.spec.whatwg.org/#securityerror data-x-internal=securityerror>"<code>SecurityError</code>"</a> <code id=custom-handlers:domexception-3><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the user
+    agent blocks the deregistration (this might happen if with invalid schemes, for instance).</p>
+
+    <p>Throws a <a id=custom-handlers:syntaxerror-2 href=https://webidl.spec.whatwg.org/#syntaxerror data-x-internal=syntaxerror>"<code>SyntaxError</code>"</a> <code id=custom-handlers:domexception-4><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the "<code>%s</code>" string is missing in <var>url</var>.</p>
+   </dl>
+
+
+  
+
+  <h5 id=cookies><span class=secno>2026</span> Cookies<a class=self-link href=#cookies></a></h5>
+
+  <pre><code class=idl>interface mixin <dfn data-dfn-type=interface id=navigatorcookies>NavigatorCookies</dfn> {
+  readonly attribute boolean <a id=cookies:dom-navigator-cookieenabled href=#dom-navigator-cookieenabled>cookieEnabled</a>;
+};</code></pre>
+
+  <dl class=domintro><dt><code><var>window</var>.<span>navigator</span>.<span id=dom-navigator-cookieenabled>cookieEnabled</span></code><dd><p>Returns false if setting a cookie will be ignored, and true otherwise.</dl>
+
+  
+
+  <h5 id=pdf-viewing-support><span class=secno>2026</span> PDF viewing support<a class=self-link href=#pdf-viewing-support></a></h5>
+
+  <dl class=domintro><dt><code><var>window</var>.<span>navigator</span>.<span id=dom-navigator-pdfviewerenabled>pdfViewerEnabled</span></code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/Navigator/pdfViewerEnabled title="The pdfViewerEnabled property of the Navigator interface indicates whether the browser supports inline display of PDF files when navigating to them.">Navigator/pdfViewerEnabled</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>99+</span></span><span class="safari yes"><span>Safari</span><span>16.4+</span></span><span class="chrome yes"><span>Chrome</span><span>94+</span></span><hr><span class="opera unknown"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>94+</span></span><hr><span class="edge unknown"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>Internet Explorer</span><span>No</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div><dd><p>Returns true if the user agent supports inline viewing of PDF files when <a id=pdf-viewing-support:navigate href=browsing-the-web.html#navigate>navigating</a> to them, or false otherwise. In the latter case, PDF files
+   will be handled by <a id=pdf-viewing-support:hand-off-to-external-software href=browsing-the-web.html#hand-off-to-external-software>external
+   software</a>.</dl>
+
+  <pre><code class=idl>interface mixin <dfn data-dfn-type=interface id=navigatorplugins>NavigatorPlugins</dfn> {
+  [SameObject] readonly attribute <a id=pdf-viewing-support:pluginarray href=#pluginarray>PluginArray</a> <span>plugins</span>;
+  [SameObject] readonly attribute <a id=pdf-viewing-support:mimetypearray href=#mimetypearray>MimeTypeArray</a> <span>mimeTypes</span>;
+  boolean <span>javaEnabled</span>();
+  readonly attribute boolean <a id=pdf-viewing-support:dom-navigator-pdfviewerenabled href=#dom-navigator-pdfviewerenabled>pdfViewerEnabled</a>;
+};
+
+[Exposed=Window,
+ <a id=pdf-viewing-support:legacyunenumerablenamedproperties href=https://webidl.spec.whatwg.org/#LegacyUnenumerableNamedProperties data-x-internal=legacyunenumerablenamedproperties>LegacyUnenumerableNamedProperties</a>]
+interface <dfn data-dfn-type=interface id=pluginarray>PluginArray</dfn> {
+  undefined <span>refresh</span>();
+  readonly attribute unsigned long <span>length</span>;
+  getter <a id=pdf-viewing-support:plugin href=infrastructure.html#plugin>Plugin</a>? <span>item</span>(unsigned long index);
+  getter <a id=pdf-viewing-support:plugin-2 href=infrastructure.html#plugin>Plugin</a>? <span>namedItem</span>(DOMString name);
+};
+
+[Exposed=Window,
+ <a id=pdf-viewing-support:legacyunenumerablenamedproperties-2 href=https://webidl.spec.whatwg.org/#LegacyUnenumerableNamedProperties data-x-internal=legacyunenumerablenamedproperties>LegacyUnenumerableNamedProperties</a>]
+interface <dfn data-dfn-type=interface id=mimetypearray>MimeTypeArray</dfn> {
+  readonly attribute unsigned long <span>length</span>;
+  getter <a id=pdf-viewing-support:mimetype href=#mimetype>MimeType</a>? <span>item</span>(unsigned long index);
+  getter <a id=pdf-viewing-support:mimetype-2 href=#mimetype>MimeType</a>? <span>namedItem</span>(DOMString name);
+};
+
+[Exposed=Window,
+ <a id=pdf-viewing-support:legacyunenumerablenamedproperties-3 href=https://webidl.spec.whatwg.org/#LegacyUnenumerableNamedProperties data-x-internal=legacyunenumerablenamedproperties>LegacyUnenumerableNamedProperties</a>]
+interface <dfn data-dfn-type=interface id=dom-plugin>Plugin</dfn> {
+  readonly attribute DOMString <span>name</span>;
+  readonly attribute DOMString <span>description</span>;
+  readonly attribute DOMString <span>filename</span>;
+  readonly attribute unsigned long <span>length</span>;
+  getter <a id=pdf-viewing-support:mimetype-3 href=#mimetype>MimeType</a>? <span>item</span>(unsigned long index);
+  getter <a id=pdf-viewing-support:mimetype-4 href=#mimetype>MimeType</a>? <span>namedItem</span>(DOMString name);
+};
+
+[Exposed=Window]
+interface <dfn data-dfn-type=interface id=mimetype>MimeType</dfn> {
+  readonly attribute DOMString <span>type</span>;
+  readonly attribute DOMString <span>description</span>;
+  readonly attribute DOMString <span>suffixes</span>;
+  readonly attribute <a id=pdf-viewing-support:plugin-3 href=infrastructure.html#plugin>Plugin</a> <span>enabledPlugin</span>;
+};</code></pre>
+
+  
+
+
+  <nav><a href=timers-and-user-prompts.html>← 2026 Timers</a> — <a href=./>Table of Contents</a> — <a href=imagebitmap-and-animations.html>2026 Images →</a></nav>

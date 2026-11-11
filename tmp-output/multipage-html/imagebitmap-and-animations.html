@@ -1,0 +1,719 @@
+<!DOCTYPE html><html lang=en-US-x-hixie class=split><script src=/link-fixup.js defer=""></script><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>HTML Standard</title><meta name=theme-color content=#3c790a><meta name=color-scheme content="light dark"><link rel=stylesheet crossorigin="" href=https://resources.whatwg.org/standard-shared-with-dev.css><link crossorigin="" rel=stylesheet href=https://resources.whatwg.org/standard.css><link crossorigin="" rel=stylesheet href=https://resources.whatwg.org/spec.css><link rel=icon crossorigin="" href=https://resources.whatwg.org/logo.svg><link rel=stylesheet crossorigin="" href=/styles.css><script>
+   function toggleStatus(div) {
+     div.parentNode.classList.toggle('wrapped');
+   }
+   function setLinkFragment(link) {
+     link.hash = location.hash;
+   }
+  </script><body>
+  
+  <script crossorigin="" src=/html-dfn.js defer=""></script>
+  <script crossorigin="" src=/var-click-highlighting.js defer=""></script>
+  
+  <header class="head with-buttons" id=head>
+   <a href=https://whatwg.org/ class=logo><img crossorigin="" width=100 height=100 alt=WHATWG src=https://resources.whatwg.org/logo.svg class=darkmode-aware></a>
+   <hgroup><h1 class=allcaps>HTML</h1><p id=living-standard>Living Standard — Last Updated <span class=pubdate>10 November 2026</span></hgroup>
+   
+   
+
+   
+  </header>
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  <nav><a href=system-state.html>← 2026 System state and capabilities</a> — <a href=./>Table of Contents</a> — <a href=comms.html>2026 Communication →</a></nav><ol class=toc><li id=toc-webappapis><ol><li><a href=imagebitmap-and-animations.html#images-2><span class=secno>8.11</span> Images</a><ol><li><a href=imagebitmap-and-animations.html#the-imagedata-interface><span class=secno>8.11.1</span> The <code>ImageData</code> interface</a><li><a href=imagebitmap-and-animations.html#the-imagebitmap-interface><span class=secno>8.11.2</span> The <code>ImageBitmap</code> interface</a></ol><li><a href=imagebitmap-and-animations.html#animation-frames><span class=secno>8.12</span> Animation frames</a></ol></ol><h3 id=images-2><span class=secno>2026</span> Images<a class=self-link href=#images-2></a></h3>
+
+  <h4 id=the-imagedata-interface><span class=secno>2026</span> The <code id=the-imagedata-interface:imagedata><a href=#imagedata>ImageData</a></code> interface<a class=self-link href=#the-imagedata-interface></a></h4>
+
+<div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/ImageData title="The ImageData interface represents the underlying pixel data of an area of a <canvas> element.">ImageData</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>3.5+</span></span><span class="safari yes"><span>Safari</span><span>3.1+</span></span><span class="chrome yes"><span>Chrome</span><span>1+</span></span><hr><span class="opera yes"><span>Opera</span><span>9+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>9+</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android yes"><span>WebView Android</span><span>37+</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>10.1+</span></span></div></div></div><pre><code class=idl>
+typedef (<a id=the-imagedata-interface:idl-uint8clampedarray href=https://webidl.spec.whatwg.org/#idl-Uint8ClampedArray data-x-internal=idl-uint8clampedarray>Uint8ClampedArray</a> or <a id=the-imagedata-interface:idl-float16array href=https://webidl.spec.whatwg.org/#idl-Float16Array data-x-internal=idl-float16array>Float16Array</a>) <dfn data-dfn-type=typedef id=imagedataarray>ImageDataArray</dfn>;
+
+enum <dfn data-dfn-type=enum id=imagedatapixelformat>ImageDataPixelFormat</dfn> { "<a id=the-imagedata-interface:dom-imagedatapixelformat-rgba-unorm8 href=#dom-imagedatapixelformat-rgba-unorm8>rgba-unorm8</a>", "<a id=the-imagedata-interface:dom-imagedatapixelformat-rgba-float16 href=#dom-imagedatapixelformat-rgba-float16>rgba-float16</a>" };
+
+dictionary <dfn data-dfn-type=dictionary id=imagedatasettings>ImageDataSettings</dfn> {
+  <a id=the-imagedata-interface:predefinedcolorspace href=canvas.html#predefinedcolorspace>PredefinedColorSpace</a> <a id=the-imagedata-interface:dom-predefinedcolorspace-srgb href=canvas.html#dom-predefinedcolorspace-srgb>colorSpace</a>;
+  <a id=the-imagedata-interface:imagedatapixelformat href=#imagedatapixelformat>ImageDataPixelFormat</a> <a id=the-imagedata-interface:dom-imagedatasettings-pixelformat href=#dom-imagedatasettings-pixelformat>pixelFormat</a> = "<a id=the-imagedata-interface:dom-imagedatapixelformat-rgba-unorm8-2 href=#dom-imagedatapixelformat-rgba-unorm8>rgba-unorm8</a>";
+};
+
+[Exposed=(Window,Worker),
+ <a id=the-imagedata-interface:serializable href=structured-data.html#serializable>Serializable</a>]
+interface <dfn data-dfn-type=interface id=imagedata>ImageData</dfn> {
+  <a id=the-imagedata-interface:dom-imagedata href=#dom-imagedata>constructor</a>(unsigned long sw, unsigned long sh, optional <a id=the-imagedata-interface:imagedatasettings href=#imagedatasettings>ImageDataSettings</a> settings = {});
+  <a id=the-imagedata-interface:dom-imagedata-with-data href=#dom-imagedata-with-data>constructor</a>(<a id=the-imagedata-interface:imagedataarray href=#imagedataarray>ImageDataArray</a> data, unsigned long sw, optional unsigned long sh, optional <a id=the-imagedata-interface:imagedatasettings-2 href=#imagedatasettings>ImageDataSettings</a> settings = {});
+
+  readonly attribute unsigned long <a id=the-imagedata-interface:dom-imagedata-width href=#dom-imagedata-width>width</a>;
+  readonly attribute unsigned long <a id=the-imagedata-interface:dom-imagedata-height href=#dom-imagedata-height>height</a>;
+  readonly attribute <a id=the-imagedata-interface:imagedataarray-2 href=#imagedataarray>ImageDataArray</a> <a id=the-imagedata-interface:dom-imagedata-data href=#dom-imagedata-data>data</a>;
+  readonly attribute <a id=the-imagedata-interface:imagedatapixelformat-2 href=#imagedatapixelformat>ImageDataPixelFormat</a> <a id=the-imagedata-interface:dom-imagedata-pixelformat href=#dom-imagedata-pixelformat>pixelFormat</a>;
+  readonly attribute <a id=the-imagedata-interface:predefinedcolorspace-2 href=canvas.html#predefinedcolorspace>PredefinedColorSpace</a> <a id=the-imagedata-interface:dom-imagedata-colorspace href=#dom-imagedata-colorspace>colorSpace</a>;
+};
+</code></pre>
+
+  <p>An <code id=the-imagedata-interface:imagedata-2><a href=#imagedata>ImageData</a></code> object <dfn id=concept-imagedata-bitmap-representation>
+  represents a rectanglar bitmap</dfn> with width equal to the <code id=the-imagedata-interface:dom-imagedata-width-2><a href=#dom-imagedata-width>
+  width</a></code> attribute and height equal to the <code id=the-imagedata-interface:dom-imagedata-height-2><a href=#dom-imagedata-height>height</a></code>
+  attribute. The pixel values of this bitmap are stored in the <code id=the-imagedata-interface:dom-imagedata-data-2><a href=#dom-imagedata-data>
+  data</a></code> attribute in left-to-right order, row by row from top to bottom, starting with 0 for
+  the top left pixel, with the order and numerical representation of the color components of each
+  pixel determined by the <code id=the-imagedata-interface:dom-imagedata-pixelformat-2><a href=#dom-imagedata-pixelformat>pixelFormat</a></code> attribute.
+  The color space of the pixel values of the bitmap is determined by the <code id=the-imagedata-interface:dom-imagedata-colorspace-2><a href=#dom-imagedata-colorspace>colorSpace</a></code> attribute.</p>
+
+
+  <dl class=domintro><dt><code><var>imageData</var> = new <a id=dom-imagedata-dev href=#dom-imagedata>ImageData</a>(<var>sw</var>, <var>sh</var> [, <var>settings</var>])</code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/ImageData/ImageData title="The ImageData() constructor returns a newly instantiated ImageData object built from the typed array given and having the specified width and height.">ImageData/ImageData</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>29+</span></span><span class="safari yes"><span>Safari</span><span>8+</span></span><span class="chrome yes"><span>Chrome</span><span>36+</span></span><hr><span class="opera unknown"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>14+</span></span><span class="ie no"><span>Internet Explorer</span><span>No</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div><dd>
+    <p>Returns an <code id=the-imagedata-interface:imagedata-3><a href=#imagedata>ImageData</a></code> object with the given dimensions and the color space
+    indicated by <var>settings</var>. All the pixels in the returned object are <a id=the-imagedata-interface:transparent-black href=https://drafts.csswg.org/css-color/#transparent-black data-x-internal=transparent-black>transparent
+    black</a>.</p>
+
+    <p>Throws an <a id=the-imagedata-interface:indexsizeerror href=https://webidl.spec.whatwg.org/#indexsizeerror data-x-internal=indexsizeerror>"<code>IndexSizeError</code>"</a> <code id=the-imagedata-interface:domexception><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if either of
+    the width or height arguments are zero.</p>
+   <dt><code><var>imageData</var> = new <a id=dom-imagedata-with-data-dev href=#dom-imagedata-with-data>ImageData</a>(<var>data</var>, <var>sw</var> [, <var>sh</var> [, <var>settings</var> ] ])</code><dd>
+    <p>Returns an <code id=the-imagedata-interface:imagedata-4><a href=#imagedata>ImageData</a></code> object using the data provided in the <code id=the-imagedata-interface:imagedataarray-3><a href=#imagedataarray>ImageDataArray</a></code>
+    argument, interpreted using the given dimensions and the color space indicated by <var>settings</var>.</p>
+
+    <p>The byte length of the data needs to be a multiple of the number of bytes per pixel times the
+    given width. If the height is provided as well, then the length needs to be exactly the number of
+    bytes per pixel times the width times the height.</p>
+
+    <p>Throws an <a id=the-imagedata-interface:indexsizeerror-2 href=https://webidl.spec.whatwg.org/#indexsizeerror data-x-internal=indexsizeerror>"<code>IndexSizeError</code>"</a> <code id=the-imagedata-interface:domexception-2><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the given
+    data and dimensions can't be interpreted consistently, or if either dimension is zero.</p>
+   <dt><code><var>imageData</var>.<a id=dom-imagedata-width-dev href=#dom-imagedata-width>width</a></code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/ImageData/width title="The readonly ImageData.width property returns the number of pixels per row in the ImageData object.">ImageData/width</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>3.5+</span></span><span class="safari yes"><span>Safari</span><span>3.1+</span></span><span class="chrome yes"><span>Chrome</span><span>1+</span></span><hr><span class="opera yes"><span>Opera</span><span>9+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>9+</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android yes"><span>WebView Android</span><span>37+</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>10.1+</span></span></div></div></div><dt><code><var>imageData</var>.<a id=dom-imagedata-height-dev href=#dom-imagedata-height>height</a></code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/ImageData/height title="The readonly ImageData.height property returns the number of rows in the ImageData object.">ImageData/height</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>3.5+</span></span><span class="safari yes"><span>Safari</span><span>3.1+</span></span><span class="chrome yes"><span>Chrome</span><span>1+</span></span><hr><span class="opera yes"><span>Opera</span><span>9+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>9+</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android yes"><span>WebView Android</span><span>37+</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>10.1+</span></span></div></div></div><dd><p>Returns the actual dimensions of the data in the <code id=the-imagedata-interface:imagedata-5><a href=#imagedata>ImageData</a></code> object, in
+   pixels.<dt><code><var>imageData</var>.<a id=dom-imagedata-data-dev href=#dom-imagedata-data>data</a></code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/ImageData/data title="The readonly ImageData.data property returns a Uint8ClampedArray that contains the ImageData object's pixel data. Data is stored as a one-dimensional array in the RGBA order, with integer values between 0 and 255 (inclusive).">ImageData/data</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>3.5+</span></span><span class="safari yes"><span>Safari</span><span>3.1+</span></span><span class="chrome yes"><span>Chrome</span><span>1+</span></span><hr><span class="opera yes"><span>Opera</span><span>9+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>9+</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android yes"><span>WebView Android</span><span>37+</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>10.1+</span></span></div></div></div><dd><p>Returns the one-dimensional array containing the data in RGBA order, as integers in the
+   range 0 to 255.<dt><code><var>imageData</var>.<a id=dom-imagedata-colorspace-dev href=#dom-imagedata-colorspace>colorSpace</a></code><dd><p>Returns the color space of the pixels.</dl>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=ImageData data-dfn-type=constructor id=dom-imagedata><code>new ImageData(<var>sw</var>,
+  <var>sh</var>, <var>settings</var>)</code></dfn> constructor steps are:</p>
+
+  <ol><li><p>If one or both of <var>sw</var> and <var>sh</var> are zero, then throw an
+   <a id=the-imagedata-interface:indexsizeerror-3 href=https://webidl.spec.whatwg.org/#indexsizeerror data-x-internal=indexsizeerror>"<code>IndexSizeError</code>"</a> <code id=the-imagedata-interface:domexception-3><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.<li><p><a id=the-imagedata-interface:initialize-an-imagedata-object href=#initialize-an-imagedata-object>Initialize</a> <a id=the-imagedata-interface:this href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a> given
+   <var>sw</var>, <var>sh</var>, and <var>settings</var>.<li><p>Initialize the image data of <a id=the-imagedata-interface:this-2 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a> to <a id=the-imagedata-interface:transparent-black-2 href=https://drafts.csswg.org/css-color/#transparent-black data-x-internal=transparent-black>transparent black</a>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=ImageData data-dfn-type=constructor id=dom-imagedata-with-data><code>new
+  ImageData(<var>data</var>, <var>sw</var>, <var>sh</var>, <var>settings</var>)</code></dfn>
+  constructor steps are:</p>
+
+  <ol><li><p>Let <var>bytesPerPixel</var> be 4 if
+   <var>settings</var>["<code id=the-imagedata-interface:dom-imagedatasettings-pixelformat-2><a href=#dom-imagedatasettings-pixelformat>pixelFormat</a></code>"] is
+   "<a id=the-imagedata-interface:dom-imagedatapixelformat-rgba-unorm8-3 href=#dom-imagedatapixelformat-rgba-unorm8>rgba-unorm8</a>"; otherwise 8.<li><p>Let <var>length</var> be the <a id=the-imagedata-interface:buffer-source-byte-length href=https://webidl.spec.whatwg.org/#buffersource-byte-length data-x-internal=buffer-source-byte-length>buffer source byte length</a> of <var>data</var>.<li><p>If <var>length</var> is not a nonzero integral multiple of <var>bytesPerPixel</var>, then throw an
+   <a id=the-imagedata-interface:invalidstateerror href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=the-imagedata-interface:domexception-4><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.<li><p>Let <var>length</var> be <var>length</var> divided by <var>bytesPerPixel</var>.</p>
+
+   <li>
+    <p>If <var>length</var> is not an integral multiple of <var>sw</var>, then throw an
+    <a id=the-imagedata-interface:indexsizeerror-4 href=https://webidl.spec.whatwg.org/#indexsizeerror data-x-internal=indexsizeerror>"<code>IndexSizeError</code>"</a> <code id=the-imagedata-interface:domexception-5><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.</p>
+
+    <p class=note>At this step, the length is guaranteed to be greater than zero (otherwise the
+    second step above would have aborted the steps), so if <var>sw</var> is zero, this
+    step will throw the exception and return.</p>
+   <li><p>Let <var>height</var> be <var>length</var> divided by <var>sw</var>.<li><p>If <var>sh</var> was given and its value is not equal to <var>height</var>, then throw an
+   <a id=the-imagedata-interface:indexsizeerror-5 href=https://webidl.spec.whatwg.org/#indexsizeerror data-x-internal=indexsizeerror>"<code>IndexSizeError</code>"</a> <code id=the-imagedata-interface:domexception-6><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.<li>
+    <p><a id=the-imagedata-interface:initialize-an-imagedata-object-2 href=#initialize-an-imagedata-object>Initialize</a> <a id=the-imagedata-interface:this-3 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a> given
+    <var>sw</var>, <var>sh</var>, <var>settings</var>, and
+    <i><a id=the-imagedata-interface:initialize-imagedata-source href=#initialize-imagedata-source>source</a></i> set to <var>data</var>.</p>
+
+    <p class=note>This step does not set <a id=the-imagedata-interface:this-4 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s data to a copy of <var>data</var>.
+    It sets it to the actual <code id=the-imagedata-interface:imagedataarray-4><a href=#imagedataarray>ImageDataArray</a></code> object passed as <var>data</var>.</p>
+   </ol>
+  </div>
+
+
+  <div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/ImageData/colorSpace title="The read-only ImageData.colorSpace property is a string indicating the color space of the image data.">ImageData/colorSpace</a><div class=support><span class="firefox no"><span>Firefox</span><span>No</span></span><span class="safari yes"><span>Safari</span><span>15.2+</span></span><span class="chrome yes"><span>Chrome</span><span>92+</span></span><hr><span class="opera unknown"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>92+</span></span><hr><span class="edge unknown"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>Internet Explorer</span><span>No</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div><div algorithm="">
+  <p>To <dfn id=initialize-an-imagedata-object>initialize an <code>ImageData</code> object</dfn> <var>imageData</var>, given a
+  positive integer number of pixels per row <var>pixelsPerRow</var>, a positive integer number
+  of rows <var>rows</var>, an <code id=the-imagedata-interface:imagedatasettings-3><a href=#imagedatasettings>ImageDataSettings</a></code> <var>settings</var>, an optional
+  <code id=the-imagedata-interface:imagedataarray-5><a href=#imagedataarray>ImageDataArray</a></code> <dfn id=initialize-imagedata-source><var>source</var></dfn>,
+  and an optional <code id=the-imagedata-interface:predefinedcolorspace-3><a href=canvas.html#predefinedcolorspace>PredefinedColorSpace</a></code> <dfn id=initialize-imagedata-defaultcolorspace><var>defaultColorSpace</var></dfn>:</p>
+
+  <ol><li>
+    <p>If <var>source</var> was given:</p>
+
+    <ol><li><p>If <var>settings</var>["<code id=the-imagedata-interface:dom-imagedatasettings-pixelformat-3><a href=#dom-imagedatasettings-pixelformat>pixelFormat</a></code>"]
+     equals "<a id=the-imagedata-interface:dom-imagedatapixelformat-rgba-unorm8-4 href=#dom-imagedatapixelformat-rgba-unorm8>rgba-unorm8</a>" and
+     <var>source</var> is not a <code id=the-imagedata-interface:idl-uint8clampedarray-2><a href=https://webidl.spec.whatwg.org/#idl-Uint8ClampedArray data-x-internal=idl-uint8clampedarray>Uint8ClampedArray</a></code>,
+     then throw an <a id=the-imagedata-interface:invalidstateerror-2 href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=the-imagedata-interface:domexception-7><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.<li><p>If <var>settings</var>["<code id=the-imagedata-interface:dom-imagedatasettings-pixelformat-4><a href=#dom-imagedatasettings-pixelformat>pixelFormat</a></code>"]
+     is "<a id=the-imagedata-interface:dom-imagedatapixelformat-rgba-float16-2 href=#dom-imagedatapixelformat-rgba-float16>rgba-float16</a>" and
+     <var>source</var> is not a <code id=the-imagedata-interface:idl-float16array-2><a href=https://webidl.spec.whatwg.org/#idl-Float16Array data-x-internal=idl-float16array>Float16Array</a></code>,
+     then throw an <a id=the-imagedata-interface:invalidstateerror-3 href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=the-imagedata-interface:domexception-8><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.<li><p>Initialize the <dfn data-dfn-for=ImageData data-dfn-type=attribute id=dom-imagedata-data><code>data</code></dfn> attribute of <var>imageData</var> to
+     <var>source</var>.</ol>
+   <li>
+    <p>Otherwise (<var>source</var> was not given):</p>
+
+    <ol><li><p>If <var>settings</var>["<code id=the-imagedata-interface:dom-imagedatasettings-pixelformat-5><a href=#dom-imagedatasettings-pixelformat>pixelFormat</a></code>"] is "<a id=the-imagedata-interface:dom-imagedatapixelformat-rgba-unorm8-5 href=#dom-imagedatapixelformat-rgba-unorm8>rgba-unorm8</a>", then initialize the <code id=the-imagedata-interface:dom-imagedata-data-3><a href=#dom-imagedata-data>data</a></code> attribute of <var>imageData</var> to a new <code id=the-imagedata-interface:idl-uint8clampedarray-3><a href=https://webidl.spec.whatwg.org/#idl-Uint8ClampedArray data-x-internal=idl-uint8clampedarray>Uint8ClampedArray</a></code> object. The <code id=the-imagedata-interface:idl-uint8clampedarray-4><a href=https://webidl.spec.whatwg.org/#idl-Uint8ClampedArray data-x-internal=idl-uint8clampedarray>Uint8ClampedArray</a></code> object must use a new
+     <code id=the-imagedata-interface:idl-arraybuffer><a href=https://webidl.spec.whatwg.org/#idl-ArrayBuffer data-x-internal=idl-arraybuffer>ArrayBuffer</a></code> for its storage, and must have
+     a zero byte offset and byte length equal to the length of its storage, in bytes.
+     The storage <code id=the-imagedata-interface:idl-arraybuffer-2><a href=https://webidl.spec.whatwg.org/#idl-ArrayBuffer data-x-internal=idl-arraybuffer>ArrayBuffer</a></code> must have a length
+     of 4 × <var>rows</var> × <var>pixelsPerRow</var> bytes.<li><p>Otherwise, if <var>settings</var>["<code id=the-imagedata-interface:dom-imagedatasettings-pixelformat-6><a href=#dom-imagedatasettings-pixelformat>pixelFormat</a></code>"] is "<a id=the-imagedata-interface:dom-imagedatapixelformat-rgba-unorm8-6 href=#dom-imagedatapixelformat-rgba-unorm8>rgba-float16</a>", then initialize the <code id=the-imagedata-interface:dom-imagedata-data-4><a href=#dom-imagedata-data>data</a></code> attribute of <var>imageData</var> to a new <code id=the-imagedata-interface:idl-float16array-3><a href=https://webidl.spec.whatwg.org/#idl-Float16Array data-x-internal=idl-float16array>Float16Array</a></code> object. The <code id=the-imagedata-interface:idl-float16array-4><a href=https://webidl.spec.whatwg.org/#idl-Float16Array data-x-internal=idl-float16array>Float16Array</a></code> object must use a new
+     <code id=the-imagedata-interface:idl-arraybuffer-3><a href=https://webidl.spec.whatwg.org/#idl-ArrayBuffer data-x-internal=idl-arraybuffer>ArrayBuffer</a></code> for its storage, and must have
+     a zero byte offset and byte length equal to the length of its storage, in bytes.
+     The storage <code id=the-imagedata-interface:idl-arraybuffer-4><a href=https://webidl.spec.whatwg.org/#idl-ArrayBuffer data-x-internal=idl-arraybuffer>ArrayBuffer</a></code> must have a length
+     of 8 × <var>rows</var> × <var>pixelsPerRow</var> bytes.<li><p>If the storage <code id=the-imagedata-interface:idl-arraybuffer-5><a href=https://webidl.spec.whatwg.org/#idl-ArrayBuffer data-x-internal=idl-arraybuffer>ArrayBuffer</a></code> could not be
+     allocated, then rethrow the <code id=the-imagedata-interface:js-rangeerror><a href=https://tc39.es/ecma262/#sec-native-error-types-used-in-this-standard-rangeerror data-x-internal=js-rangeerror>RangeError</a></code> thrown by JavaScript,
+     and return.</ol>
+   <li><p>Initialize the <dfn data-dfn-for=ImageData data-dfn-type=attribute id=dom-imagedata-width><code>width</code></dfn> attribute of <var>imageData</var> to
+   <var>pixelsPerRow</var>.<li><p>Initialize the <dfn data-dfn-for=ImageData data-dfn-type=attribute id=dom-imagedata-height><code>height</code></dfn> attribute of <var>imageData</var> to
+   <var>rows</var>.<li><p>Initialize the
+   <dfn data-dfn-for=ImageData data-dfn-type=attribute id=dom-imagedata-pixelformat><code>pixelFormat</code></dfn>
+   attribute of <var>imageData</var> to
+   <var>settings</var>["<dfn data-dfn-for=ImageDataSettings data-dfn-type=dict-member id=dom-imagedatasettings-pixelformat><code>pixelFormat</code></dfn>"].<li><p>If <var>settings</var>["<code id=the-imagedata-interface:dom-imagedatasettings-colorspace><a href=#dom-imagedatasettings-colorspace>colorSpace</a></code>"]
+   <a id=the-imagedata-interface:map-exists href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then initialize the <dfn data-dfn-for=ImageData data-dfn-type=attribute id=dom-imagedata-colorspace><code>colorSpace</code></dfn> attribute of <var>imageData</var> to
+   <var>settings</var>["<dfn data-dfn-for=ImageDataSettings data-dfn-type=dict-member id=dom-imagedatasettings-colorspace><code>colorSpace</code></dfn>"].<li><p>Otherwise, if <var>defaultColorSpace</var> was given, then initialize the <code id=the-imagedata-interface:dom-imagedata-colorspace-3><a href=#dom-imagedata-colorspace>colorSpace</a></code> attribute of <var>imageData</var> to
+   <var>defaultColorSpace</var>.<li><p>Otherwise, initialize the <code id=the-imagedata-interface:dom-imagedata-colorspace-4><a href=#dom-imagedata-colorspace>colorSpace</a></code>
+   attribute of <var>imageData</var> to "<a id=the-imagedata-interface:dom-predefinedcolorspace-srgb-2 href=canvas.html#dom-predefinedcolorspace-srgb>srgb</a>".</ol>
+  </div>
+
+  <div algorithm="">
+  <p><code id=the-imagedata-interface:imagedata-6><a href=#imagedata>ImageData</a></code> objects are <a id=the-imagedata-interface:serializable-objects href=structured-data.html#serializable-objects>serializable objects</a>. Their <a id=the-imagedata-interface:serialization-steps href=structured-data.html#serialization-steps>serialization
+  steps</a>, given <var>value</var> and <var>serialized</var>, are:</p>
+
+  <ol><li><p>Set <var>serialized</var>.[[Data]] to the <a id=the-imagedata-interface:sub-serialization href=structured-data.html#sub-serialization>sub-serialization</a> of the value of
+   <var>value</var>'s <code id=the-imagedata-interface:dom-imagedata-data-5><a href=#dom-imagedata-data>data</a></code> attribute.<li><p>Set <var>serialized</var>.[[Width]] to the value of <var>value</var>'s <code id=the-imagedata-interface:dom-imagedata-width-3><a href=#dom-imagedata-width>width</a></code> attribute.<li><p>Set <var>serialized</var>.[[Height]] to the value of <var>value</var>'s <code id=the-imagedata-interface:dom-imagedata-height-3><a href=#dom-imagedata-height>height</a></code> attribute.<li><p>Set <var>serialized</var>.[[ColorSpace]] to the value of <var>value</var>'s <code id=the-imagedata-interface:dom-imagedata-colorspace-5><a href=#dom-imagedata-colorspace>colorSpace</a></code> attribute.<li><p>Set <var>serialized</var>.[[PixelFormat]] to the value of <var>value</var>'s <code id=the-imagedata-interface:dom-imagedata-pixelformat-3><a href=#dom-imagedata-pixelformat>pixelFormat</a></code> attribute.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>Their <a id=the-imagedata-interface:deserialization-steps href=structured-data.html#deserialization-steps>deserialization steps</a>, given <var>serialized</var>, <var>value</var>,
+  and <var>targetRealm</var>, are:</p>
+
+  <ol><li><p>Initialize <var>value</var>'s <code id=the-imagedata-interface:dom-imagedata-data-6><a href=#dom-imagedata-data>data</a></code> attribute
+   to the <a id=the-imagedata-interface:sub-deserialization href=structured-data.html#sub-deserialization>sub-deserialization</a> of <var>serialized</var>.[[Data]].<li><p>Initialize <var>value</var>'s <code id=the-imagedata-interface:dom-imagedata-width-4><a href=#dom-imagedata-width>width</a></code> attribute
+   to <var>serialized</var>.[[Width]].<li><p>Initialize <var>value</var>'s <code id=the-imagedata-interface:dom-imagedata-height-4><a href=#dom-imagedata-height>height</a></code> attribute
+   to <var>serialized</var>.[[Height]].<li><p>Initialize <var>value</var>'s <code id=the-imagedata-interface:dom-imagedata-colorspace-6><a href=#dom-imagedata-colorspace>colorSpace</a></code>
+   attribute to <var>serialized</var>.[[ColorSpace]].<li><p>Initialize <var>value</var>'s <code id=the-imagedata-interface:dom-imagedata-pixelformat-4><a href=#dom-imagedata-pixelformat>pixelFormat</a></code>
+   attribute to <var>serialized</var>.[[PixelFormat]].</ol>
+  </div>
+
+  <p>The <code id=the-imagedata-interface:imagedatapixelformat-3><a href=#imagedatapixelformat>ImageDataPixelFormat</a></code> enumeration is used to specify type of the
+  <code id=the-imagedata-interface:dom-imagedata-data-7><a href=#dom-imagedata-data>data</a></code> attribute of an <code id=the-imagedata-interface:imagedata-7><a href=#imagedata>ImageData</a></code>
+  and the arrangement and numerical representation of the color components for each pixel.</p>
+
+  <p>The "<dfn data-dfn-for=ImageDataPixelFormat data-dfn-type=enum-value id=dom-imagedatapixelformat-rgba-unorm8><code>rgba-unorm8</code></dfn>" value indicates that the
+  <code id=the-imagedata-interface:dom-imagedata-data-8><a href=#dom-imagedata-data>data</a></code> attribute of an <code id=the-imagedata-interface:imagedata-8><a href=#imagedata>ImageData</a></code> must be of
+  type <a id=the-imagedata-interface:idl-uint8clampedarray-5 href=https://webidl.spec.whatwg.org/#idl-Uint8ClampedArray data-x-internal=idl-uint8clampedarray>Uint8ClampedArray</a>. The color components of each
+  pixel must be stored in four sequential elements in the order of red, green, blue, and then alpha.
+  Each element represents the 8-bit unsigned normalized value for that component.</p>
+
+  <p>The "<dfn data-dfn-for=ImageDataPixelFormat data-dfn-type=enum-value id=dom-imagedatapixelformat-rgba-float16><code>rgba-float16</code></dfn>" value indicates that the
+  <code id=the-imagedata-interface:dom-imagedata-data-9><a href=#dom-imagedata-data>data</a></code> attribute of an <code id=the-imagedata-interface:imagedata-9><a href=#imagedata>ImageData</a></code> must be of
+  type <a id=the-imagedata-interface:idl-float16array-5 href=https://webidl.spec.whatwg.org/#idl-Float16Array data-x-internal=idl-float16array>Float16Array</a>. The color components of each pixel must
+  be stored in four sequential elements in the order of red, green, blue, and then alpha. Each
+  element represents the value for that component.</p>
+
+  <h4 id=the-imagebitmap-interface><span class=secno>2026</span> The <code id=the-imagebitmap-interface:imagebitmap><a href=#imagebitmap>ImageBitmap</a></code> interface<a class=self-link href=#the-imagebitmap-interface></a></h4>
+
+  <div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap title="The ImageBitmap interface represents a bitmap image which can be drawn to a <canvas> without undue latency. It can be created from a variety of source objects using the createImageBitmap() factory method. ImageBitmap provides an asynchronous and resource efficient pathway to prepare textures for rendering in WebGL.">ImageBitmap</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>42+</span></span><span class="safari yes"><span>Safari</span><span>15+</span></span><span class="chrome yes"><span>Chrome</span><span>50+</span></span><hr><span class="opera unknown"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge unknown"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>Internet Explorer</span><span>No</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div><pre><code class=idl>[Exposed=(Window,Worker), <a id=the-imagebitmap-interface:serializable href=structured-data.html#serializable>Serializable</a>, <a id=the-imagebitmap-interface:transferable href=structured-data.html#transferable>Transferable</a>]
+interface <dfn data-dfn-type=interface id=imagebitmap>ImageBitmap</dfn> {
+  readonly attribute unsigned long <a id=the-imagebitmap-interface:dom-imagebitmap-width href=#dom-imagebitmap-width>width</a>;
+  readonly attribute unsigned long <a id=the-imagebitmap-interface:dom-imagebitmap-height href=#dom-imagebitmap-height>height</a>;
+  undefined <a id=the-imagebitmap-interface:dom-imagebitmap-close href=#dom-imagebitmap-close>close</a>();
+};
+
+typedef (<a id=the-imagebitmap-interface:canvasimagesource href=canvas.html#canvasimagesource>CanvasImageSource</a> or
+         <a id=the-imagebitmap-interface:blob href=https://w3c.github.io/FileAPI/#dfn-Blob data-x-internal=blob>Blob</a> or
+         <a id=the-imagebitmap-interface:imagedata href=#imagedata>ImageData</a>) <dfn data-dfn-type=typedef id=imagebitmapsource>ImageBitmapSource</dfn>;
+
+enum <dfn data-dfn-type=enum id=imageorientation>ImageOrientation</dfn> { "<a id=the-imagebitmap-interface:dom-imageorientation-from-image href=#dom-imageorientation-from-image>from-image</a>", "<a id=the-imagebitmap-interface:dom-imageorientation-flipy href=#dom-imageorientation-flipy>flipY</a>" };
+enum <dfn data-dfn-type=enum id=premultiplyalpha>PremultiplyAlpha</dfn> { "<a id=the-imagebitmap-interface:dom-premultiplyalpha-none href=#dom-premultiplyalpha-none>none</a>", "<a id=the-imagebitmap-interface:dom-premultiplyalpha-premultiply href=#dom-premultiplyalpha-premultiply>premultiply</a>", "<a id=the-imagebitmap-interface:dom-premultiplyalpha-default href=#dom-premultiplyalpha-default>default</a>" };
+enum <dfn data-dfn-type=enum id=colorspaceconversion>ColorSpaceConversion</dfn> { "<a id=the-imagebitmap-interface:dom-colorspaceconversion-none href=#dom-colorspaceconversion-none>none</a>", "<a id=the-imagebitmap-interface:dom-colorspaceconversion-default href=#dom-colorspaceconversion-default>default</a>" };
+enum <dfn data-dfn-type=enum id=resizequality>ResizeQuality</dfn> { "<a id=the-imagebitmap-interface:dom-resizequality-pixelated href=#dom-resizequality-pixelated>pixelated</a>", "<a id=the-imagebitmap-interface:dom-resizequality-low href=#dom-resizequality-low>low</a>", "<a id=the-imagebitmap-interface:dom-resizequality-medium href=#dom-resizequality-medium>medium</a>", "<a id=the-imagebitmap-interface:dom-resizequality-high href=#dom-resizequality-high>high</a>" };
+
+dictionary <dfn data-dfn-type=dictionary id=imagebitmapoptions>ImageBitmapOptions</dfn> {
+  <a id=the-imagebitmap-interface:imageorientation href=#imageorientation>ImageOrientation</a> <a id=the-imagebitmap-interface:dom-imagebitmapoptions-imageorientation href=#dom-imagebitmapoptions-imageorientation>imageOrientation</a> = "<a id=the-imagebitmap-interface:dom-imageorientation-from-image-2 href=#dom-imageorientation-from-image>from-image</a>";
+  <a id=the-imagebitmap-interface:premultiplyalpha href=#premultiplyalpha>PremultiplyAlpha</a> <a id=the-imagebitmap-interface:dom-imagebitmapoptions-premultiplyalpha href=#dom-imagebitmapoptions-premultiplyalpha>premultiplyAlpha</a> = "<a id=the-imagebitmap-interface:dom-premultiplyalpha-default-2 href=#dom-premultiplyalpha-default>default</a>";
+  <a id=the-imagebitmap-interface:colorspaceconversion href=#colorspaceconversion>ColorSpaceConversion</a> <a id=the-imagebitmap-interface:dom-imagebitmapoptions-colorspaceconversion href=#dom-imagebitmapoptions-colorspaceconversion>colorSpaceConversion</a> = "<a id=the-imagebitmap-interface:dom-colorspaceconversion-default-2 href=#dom-colorspaceconversion-default>default</a>";
+  [EnforceRange] unsigned long <a id=the-imagebitmap-interface:dom-imagebitmapoptions-resizewidth href=#dom-imagebitmapoptions-resizewidth>resizeWidth</a>;
+  [EnforceRange] unsigned long <a id=the-imagebitmap-interface:dom-imagebitmapoptions-resizeheight href=#dom-imagebitmapoptions-resizeheight>resizeHeight</a>;
+  <a id=the-imagebitmap-interface:resizequality href=#resizequality>ResizeQuality</a> <a id=the-imagebitmap-interface:dom-imagebitmapoptions-resizequality href=#dom-imagebitmapoptions-resizequality>resizeQuality</a> = "<a id=the-imagebitmap-interface:dom-resizequality-low-2 href=#dom-resizequality-low>low</a>";
+};</code></pre>
+
+  <p>An <code id=the-imagebitmap-interface:imagebitmap-2><a href=#imagebitmap>ImageBitmap</a></code> object represents a bitmap image that can be painted to a canvas
+  without undue latency.</p>
+
+  <p class=note>The exact judgement of what is undue latency of this is left up to the
+  implementer, but in general if making use of the bitmap requires network I/O, or even local disk
+  I/O, then the latency is probably undue; whereas if it only requires a blocking read from a GPU or
+  system RAM, the latency is probably acceptable.</p>
+
+  <dl class=domintro><dt><code><var>promise</var> = self.<a id=dom-createimagebitmap-dev href=#dom-createimagebitmap>createImageBitmap</a>(<var>image</var> [, <var>options</var> ])</code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/createImageBitmap title="The createImageBitmap() method creates a bitmap from a given source, optionally cropped to contain only a portion of that source. The method exists on the global scope in both windows and workers. It accepts a variety of different image sources, and returns a Promise which resolves to an ImageBitmap.">createImageBitmap</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>42+</span></span><span class="safari yes"><span>Safari</span><span>15+</span></span><span class="chrome yes"><span>Chrome</span><span>50+</span></span><hr><span class="opera unknown"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge unknown"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>Internet Explorer</span><span>No</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div><dt><code><var>promise</var> = self.<a id=the-imagebitmap-interface:dom-createimagebitmap href=#dom-createimagebitmap>createImageBitmap</a>(<var>image</var>, <var>sx</var>, <var>sy</var>, <var>sw</var>, <var>sh</var> [, <var>options</var> ])</code><dd>
+    <p>Takes <var>image</var>, which can be an <code id=the-imagebitmap-interface:the-img-element><a href=embedded-content.html#the-img-element>img</a></code> element, an <a id=the-imagebitmap-interface:svg-image href=https://w3c.github.io/svgwg/svg2-draft/embedded.html#elementdef-image data-x-internal=svg-image>SVG
+    <code>image</code></a> element, a <code id=the-imagebitmap-interface:the-video-element><a href=media.html#the-video-element>video</a></code> element, a <code id=the-imagebitmap-interface:the-canvas-element><a href=canvas.html#the-canvas-element>canvas</a></code> element,
+    a <code id=the-imagebitmap-interface:blob-2><a href=https://w3c.github.io/FileAPI/#dfn-Blob data-x-internal=blob>Blob</a></code> object, an <code id=the-imagebitmap-interface:imagedata-2><a href=#imagedata>ImageData</a></code> object, or another
+    <code id=the-imagebitmap-interface:imagebitmap-3><a href=#imagebitmap>ImageBitmap</a></code> object, and returns a promise that is resolved when a new
+    <code id=the-imagebitmap-interface:imagebitmap-4><a href=#imagebitmap>ImageBitmap</a></code> is created.</p>
+
+    <p>If no <code id=the-imagebitmap-interface:imagebitmap-5><a href=#imagebitmap>ImageBitmap</a></code> object can be constructed, for example because the provided
+    <var>image</var> data is not actually an image, then the promise is rejected instead.</p>
+
+    <p>If <var>sx</var>, <var>sy</var>, <var>sw</var>, and <var>sh</var> arguments are provided, the
+    source image is cropped to the given pixels, with any pixels missing in the original replaced by
+    <a id=the-imagebitmap-interface:transparent-black href=https://drafts.csswg.org/css-color/#transparent-black data-x-internal=transparent-black>transparent black</a>. These coordinates are in the source image's pixel coordinate
+    space, <em>not</em> in <a id="the-imagebitmap-interface:'px'" href=https://drafts.csswg.org/css-values/#px data-x-internal="'px'">CSS pixels</a>.</p>
+
+    <p>If <var>options</var> is provided, the <code id=the-imagebitmap-interface:imagebitmap-6><a href=#imagebitmap>ImageBitmap</a></code> object's bitmap data is
+    modified according to <var>options</var>. For example, if the <code id=the-imagebitmap-interface:dom-imagebitmapoptions-premultiplyalpha-2><a href=#dom-imagebitmapoptions-premultiplyalpha>premultiplyAlpha</a></code> option is set to "<code id=the-imagebitmap-interface:dom-premultiplyalpha-premultiply-2><a href=#dom-premultiplyalpha-premultiply>premultiply</a></code>", the <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data href=#concept-imagebitmap-bitmap-data>bitmap data</a>'s non-alpha color components are
+    <a id=the-imagebitmap-interface:concept-premultiplied-alpha href=canvas.html#concept-premultiplied-alpha>premultiplied by the alpha component</a>.</p>
+
+    <p>Rejects the promise with an <a id=the-imagebitmap-interface:invalidstateerror href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a>
+    <code id=the-imagebitmap-interface:domexception><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the source image is not in a valid state (e.g., an <code id=the-imagebitmap-interface:the-img-element-2><a href=embedded-content.html#the-img-element>img</a></code>
+    element that hasn't loaded successfully, an <code id=the-imagebitmap-interface:imagebitmap-7><a href=#imagebitmap>ImageBitmap</a></code> object whose
+    <a id=the-imagebitmap-interface:detached href=structured-data.html#detached>[[Detached]]</a> internal slot value is true, an <code id=the-imagebitmap-interface:imagedata-3><a href=#imagedata>ImageData</a></code> object whose
+    <code id=the-imagebitmap-interface:dom-imagedata-data><a href=#dom-imagedata-data>data</a></code> attribute value's [[ViewedArrayBuffer]] internal
+    slot is detached, or a <code id=the-imagebitmap-interface:blob-3><a href=https://w3c.github.io/FileAPI/#dfn-Blob data-x-internal=blob>Blob</a></code> whose data cannot be interpreted as a bitmap
+    image).</p>
+   <dt><code><var>imageBitmap</var>.<a id=dom-imagebitmap-close-dev href=#dom-imagebitmap-close>close</a>()</code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap/close title="The ImageBitmap.close() method disposes of all graphical resources associated with an ImageBitmap.">ImageBitmap/close</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>46+</span></span><span class="safari yes"><span>Safari</span><span>15+</span></span><span class="chrome yes"><span>Chrome</span><span>52+</span></span><hr><span class="opera yes"><span>Opera</span><span>37+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge unknown"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>Internet Explorer</span><span>No</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>37+</span></span></div></div></div><dd><p>Releases <var>imageBitmap</var>'s underlying <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-2 href=#concept-imagebitmap-bitmap-data>bitmap data</a>.<dt><code><var>imageBitmap</var>.<a id=dom-imagebitmap-width-dev href=#dom-imagebitmap-width>width</a></code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap/width title="The read-only ImageBitmap.width property returns the ImageBitmap object's width in CSS pixels.">ImageBitmap/width</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>42+</span></span><span class="safari yes"><span>Safari</span><span>15+</span></span><span class="chrome yes"><span>Chrome</span><span>50+</span></span><hr><span class="opera unknown"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge unknown"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>Internet Explorer</span><span>No</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div><dd>
+    <p>Returns the <a id=the-imagebitmap-interface:natural-width href=https://drafts.csswg.org/css-images/#natural-width data-x-internal=natural-width>natural width</a> of the image, in <a id="the-imagebitmap-interface:'px'-2" href=https://drafts.csswg.org/css-values/#px data-x-internal="'px'">CSS
+    pixels</a>.</p>
+   <dt><code><var>imageBitmap</var>.<a id=dom-imagebitmap-height-dev href=#dom-imagebitmap-height>height</a></code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap/height title="The read-only ImageBitmap.height property returns the ImageBitmap object's height in CSS pixels.">ImageBitmap/height</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>42+</span></span><span class="safari yes"><span>Safari</span><span>15+</span></span><span class="chrome yes"><span>Chrome</span><span>50+</span></span><hr><span class="opera unknown"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge unknown"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>Internet Explorer</span><span>No</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div><dd>
+    <p>Returns the <a id=the-imagebitmap-interface:natural-height href=https://drafts.csswg.org/css-images/#natural-height data-x-internal=natural-height>natural height</a> of the image, in <a id="the-imagebitmap-interface:'px'-3" href=https://drafts.csswg.org/css-values/#px data-x-internal="'px'">CSS
+    pixels</a>.</p>
+   </dl>
+
+  
+
+  <p>An <code id=the-imagebitmap-interface:imagebitmap-8><a href=#imagebitmap>ImageBitmap</a></code> object whose <a id=the-imagebitmap-interface:detached-2 href=structured-data.html#detached>[[Detached]]</a> internal slot value
+  is false always has associated <dfn id=concept-imagebitmap-bitmap-data>bitmap data</dfn>,
+  with a width and a height. However, it is possible for this data to be corrupted. If an
+  <code id=the-imagebitmap-interface:imagebitmap-9><a href=#imagebitmap>ImageBitmap</a></code> object's media data can be decoded without errors, it is said to be <dfn id=concept-imagebitmap-good>fully decodable</dfn>.</p>
+
+  <p>An <code id=the-imagebitmap-interface:imagebitmap-10><a href=#imagebitmap>ImageBitmap</a></code> object's bitmap has an <a id=the-imagebitmap-interface:concept-canvas-origin-clean href=canvas.html#concept-canvas-origin-clean>origin-clean</a> flag, which indicates whether the
+  bitmap is tainted by content from a different <a id=the-imagebitmap-interface:concept-origin href=browsers.html#concept-origin>origin</a>. The flag is initially set to
+  true and may be changed to false by the steps of <code id=the-imagebitmap-interface:dom-createimagebitmap-2><a href=#dom-createimagebitmap>createImageBitmap()</a></code>.</p>
+
+  <hr>
+
+  <p><code id=the-imagebitmap-interface:imagebitmap-11><a href=#imagebitmap>ImageBitmap</a></code> objects are <a id=the-imagebitmap-interface:serializable-objects href=structured-data.html#serializable-objects>serializable objects</a> and <a id=the-imagebitmap-interface:transferable-objects href=structured-data.html#transferable-objects>transferable
+  objects</a>.</p>
+
+  <div algorithm="">
+  <p>Their <a id=the-imagebitmap-interface:serialization-steps href=structured-data.html#serialization-steps>serialization steps</a>, given <var>value</var> and <var>serialized</var>,
+  are:</p>
+
+  <ol><li><p>If <var>value</var>'s <a id=the-imagebitmap-interface:concept-canvas-origin-clean-2 href=canvas.html#concept-canvas-origin-clean>origin-clean</a>
+   flag is not set, then throw a <a id=the-imagebitmap-interface:datacloneerror href=https://webidl.spec.whatwg.org/#datacloneerror data-x-internal=datacloneerror>"<code>DataCloneError</code>"</a>
+   <code id=the-imagebitmap-interface:domexception-2><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.
+
+   <li><p>Set <var>serialized</var>.[[BitmapData]] to a copy of <var>value</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-3 href=#concept-imagebitmap-bitmap-data>bitmap data</a>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>Their <a id=the-imagebitmap-interface:deserialization-steps href=structured-data.html#deserialization-steps>deserialization steps</a>, given <var>serialized</var>, <var>value</var>,
+  and <var>targetRealm</var>, are:</p>
+
+  <ol><li><p>Set <var>value</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-4 href=#concept-imagebitmap-bitmap-data>bitmap data</a>
+   to <var>serialized</var>.[[BitmapData]].</ol>
+  </div>
+
+  <div algorithm="">
+  <p>Their <a id=the-imagebitmap-interface:transfer-steps href=structured-data.html#transfer-steps>transfer steps</a>, given <var>value</var> and <var>dataHolder</var>, are:</p>
+
+  <ol><li><p>If <var>value</var>'s <a id=the-imagebitmap-interface:concept-canvas-origin-clean-3 href=canvas.html#concept-canvas-origin-clean>origin-clean</a>
+   flag is not set, then throw a <a id=the-imagebitmap-interface:datacloneerror-2 href=https://webidl.spec.whatwg.org/#datacloneerror data-x-internal=datacloneerror>"<code>DataCloneError</code>"</a>
+   <code id=the-imagebitmap-interface:domexception-3><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.
+
+   <li><p>Set <var>dataHolder</var>.[[BitmapData]] to <var>value</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-5 href=#concept-imagebitmap-bitmap-data>bitmap data</a>.<li><p>Unset <var>value</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-6 href=#concept-imagebitmap-bitmap-data>bitmap
+   data</a>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>Their <a id=the-imagebitmap-interface:transfer-receiving-steps href=structured-data.html#transfer-receiving-steps>transfer-receiving steps</a>, given <var>dataHolder</var> and <var>value</var>,
+  are:</p>
+
+  <ol><li><p>Set <var>value</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-7 href=#concept-imagebitmap-bitmap-data>bitmap data</a>
+   to <var>dataHolder</var>.[[BitmapData]].</ol>
+  </div>
+
+  <hr>
+
+  <p>The <a id=the-imagebitmap-interface:dom-createimagebitmap-3 href=#dom-createimagebitmap>createImageBitmap</a> method uses the <dfn id=bitmap-task-source>bitmap
+  task source</dfn> to settle its returned Promise.</p>
+
+  <div var-scope="">
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=WindowOrWorkerGlobalScope data-dfn-type=method id=dom-createimagebitmap><code>createImageBitmap(<var>image</var>,
+  <var>options</var>)</code></dfn> and <code>createImageBitmap(<var>image</var>,
+  <var>sx</var>, <var>sy</var>, <var>sw</var>, <var>sh</var>, <var>options</var>)</code> methods,
+  when invoked, must run these steps:</p>
+
+  <ol><li><p>If either <var>sw</var> or <var>sh</var> is given and is 0, then return <a id=the-imagebitmap-interface:a-promise-rejected-with href=https://webidl.spec.whatwg.org/#a-promise-rejected-with data-x-internal=a-promise-rejected-with>a promise
+   rejected with</a> a <code id=the-imagebitmap-interface:js-rangeerror><a href=https://tc39.es/ecma262/#sec-native-error-types-used-in-this-standard-rangeerror data-x-internal=js-rangeerror>RangeError</a></code>.<li><p>If either <var>options</var>'s <dfn data-dfn-for=ImageBitmapOptions data-dfn-type=dict-member id=dom-imagebitmapoptions-resizewidth><code>resizeWidth</code></dfn> or <var>options</var>'s
+   <dfn data-dfn-for=ImageBitmapOptions data-dfn-type=dict-member id=dom-imagebitmapoptions-resizeheight><code>resizeHeight</code></dfn> is present and is 0, then
+   return <a id=the-imagebitmap-interface:a-promise-rejected-with-2 href=https://webidl.spec.whatwg.org/#a-promise-rejected-with data-x-internal=a-promise-rejected-with>a promise rejected with</a> an <a id=the-imagebitmap-interface:invalidstateerror-2 href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a>
+   <code id=the-imagebitmap-interface:domexception-4><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.<li><p><a id=the-imagebitmap-interface:check-the-usability-of-the-image-argument href=canvas.html#check-the-usability-of-the-image-argument>Check the usability of the <var>image</var> argument</a>. If this throws an
+   exception or returns <i>bad</i>, then return <a id=the-imagebitmap-interface:a-promise-rejected-with-3 href=https://webidl.spec.whatwg.org/#a-promise-rejected-with data-x-internal=a-promise-rejected-with>a promise rejected with</a> an
+   <a id=the-imagebitmap-interface:invalidstateerror-3 href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=the-imagebitmap-interface:domexception-5><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.
+
+   <li><p>Let <var>promise</var> be a new promise.<li><p>Let <var>imageBitmap</var> be a new <code id=the-imagebitmap-interface:imagebitmap-12><a href=#imagebitmap>ImageBitmap</a></code> object.<li>
+    <p>Switch on <var>image</var>:</p>
+
+    <dl class=switch><dt><code id=the-imagebitmap-interface:the-img-element-3><a href=embedded-content.html#the-img-element>img</a></code>
+     <dt><a id=the-imagebitmap-interface:svg-image-2 href=https://w3c.github.io/svgwg/svg2-draft/embedded.html#elementdef-image data-x-internal=svg-image>SVG <code>image</code></a>
+     <dd>
+      <ol><li><p>If <var>image</var>'s media data has no <a id=the-imagebitmap-interface:natural-dimensions href=https://drafts.csswg.org/css-images/#natural-dimensions data-x-internal=natural-dimensions>natural dimensions</a> (e.g., it's
+       a vector graphic with no specified content size) and either <var>options</var>'s <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizewidth-2><a href=#dom-imagebitmapoptions-resizewidth>resizeWidth</a></code> or <var>options</var>'s <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizeheight-2><a href=#dom-imagebitmapoptions-resizeheight>resizeHeight</a></code> is not present, then return
+       <a id=the-imagebitmap-interface:a-promise-rejected-with-4 href=https://webidl.spec.whatwg.org/#a-promise-rejected-with data-x-internal=a-promise-rejected-with>a promise rejected with</a> an <a id=the-imagebitmap-interface:invalidstateerror-4 href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a>
+       <code id=the-imagebitmap-interface:domexception-6><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.<li><p>If <var>image</var>'s media data has no <a id=the-imagebitmap-interface:natural-dimensions-2 href=https://drafts.csswg.org/css-images/#natural-dimensions data-x-internal=natural-dimensions>natural dimensions</a> (e.g., it's
+       a vector graphic with no specified content size), it should be rendered to a bitmap of the
+       size specified by the <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizewidth-3><a href=#dom-imagebitmapoptions-resizewidth>resizeWidth</a></code>
+       and the <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizeheight-3><a href=#dom-imagebitmapoptions-resizeheight>resizeHeight</a></code>
+       options.<li><p>Set <var>imageBitmap</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-8 href=#concept-imagebitmap-bitmap-data>bitmap
+       data</a> to a copy of <var>image</var>'s media data, <a id=the-imagebitmap-interface:cropped-to-the-source-rectangle-with-formatting href=#cropped-to-the-source-rectangle-with-formatting>cropped to the source rectangle
+       with formatting</a>. If this is an animated image, <var>imageBitmap</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-9 href=#concept-imagebitmap-bitmap-data>bitmap data</a> must only be taken from the
+       default image of the animation (the one that the format defines is to be used when animation
+       is not supported or is disabled), or, if there is no such image, the first frame of the
+       animation.<li><p>If <var>image</var> <a id=the-imagebitmap-interface:the-image-argument-is-not-origin-clean href=canvas.html#the-image-argument-is-not-origin-clean>is not origin-clean</a>, then set the <a id=the-imagebitmap-interface:concept-canvas-origin-clean-4 href=canvas.html#concept-canvas-origin-clean>origin-clean</a> flag of <var>imageBitmap</var>'s
+       bitmap to false.<li><p><a id=the-imagebitmap-interface:queue-a-global-task href=webappapis.html#queue-a-global-task>Queue a global task</a>, using the <a id=the-imagebitmap-interface:bitmap-task-source href=#bitmap-task-source>bitmap task source</a>, to
+       resolve <var>promise</var> with <var>imageBitmap</var>.</ol>
+     <dt><code id=the-imagebitmap-interface:the-video-element-2><a href=media.html#the-video-element>video</a></code>
+     <dd>
+      <ol><li><p>If <var>image</var>'s <code id=the-imagebitmap-interface:dom-media-networkstate><a href=media.html#dom-media-networkstate>networkState</a></code>
+       attribute is <code id=the-imagebitmap-interface:dom-media-network_empty><a href=media.html#dom-media-network_empty>NETWORK_EMPTY</a></code>, then return
+       <a id=the-imagebitmap-interface:a-promise-rejected-with-5 href=https://webidl.spec.whatwg.org/#a-promise-rejected-with data-x-internal=a-promise-rejected-with>a promise rejected with</a> an <a id=the-imagebitmap-interface:invalidstateerror-5 href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a>
+       <code id=the-imagebitmap-interface:domexception-7><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.<li><p>Set <var>imageBitmap</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-10 href=#concept-imagebitmap-bitmap-data>bitmap
+       data</a> to a copy of the frame at the <a id=the-imagebitmap-interface:current-playback-position href=media.html#current-playback-position>current playback position</a>, at the
+       <a id=the-imagebitmap-interface:media-resource href=media.html#media-resource>media resource</a>'s <a id=the-imagebitmap-interface:concept-video-intrinsic-width href=media.html#concept-video-intrinsic-width>natural
+       width</a> and <a id=the-imagebitmap-interface:concept-video-intrinsic-height href=media.html#concept-video-intrinsic-height>natural height</a> (i.e.,
+       after any aspect-ratio correction has been applied), <a id=the-imagebitmap-interface:cropped-to-the-source-rectangle-with-formatting-2 href=#cropped-to-the-source-rectangle-with-formatting>cropped to the source rectangle
+       with formatting</a>.</p>
+
+       <li><p>If <var>image</var> <a id=the-imagebitmap-interface:the-image-argument-is-not-origin-clean-2 href=canvas.html#the-image-argument-is-not-origin-clean>is not origin-clean</a>, then set the <a id=the-imagebitmap-interface:concept-canvas-origin-clean-5 href=canvas.html#concept-canvas-origin-clean>origin-clean</a> flag of <var>imageBitmap</var>'s
+       bitmap to false.<li><p><a id=the-imagebitmap-interface:queue-a-global-task-2 href=webappapis.html#queue-a-global-task>Queue a global task</a>, using the <a id=the-imagebitmap-interface:bitmap-task-source-2 href=#bitmap-task-source>bitmap task source</a>, to
+       resolve <var>promise</var> with <var>imageBitmap</var>.</ol>
+     <dt><code id=the-imagebitmap-interface:the-canvas-element-2><a href=canvas.html#the-canvas-element>canvas</a></code>
+     <dd>
+      <ol><li><p>Set <var>imageBitmap</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-11 href=#concept-imagebitmap-bitmap-data>bitmap
+       data</a> to a copy of <var>image</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-12 href=#concept-imagebitmap-bitmap-data>bitmap data</a>, <a id=the-imagebitmap-interface:cropped-to-the-source-rectangle-with-formatting-3 href=#cropped-to-the-source-rectangle-with-formatting>cropped to the source
+       rectangle with formatting</a>.<li><p>Set the <a id=the-imagebitmap-interface:concept-canvas-origin-clean-6 href=canvas.html#concept-canvas-origin-clean>origin-clean</a> flag of the
+       <var>imageBitmap</var>'s bitmap to the same value as the <a id=the-imagebitmap-interface:concept-canvas-origin-clean-7 href=canvas.html#concept-canvas-origin-clean>origin-clean</a> flag of <var>image</var>'s
+       bitmap.<li><p><a id=the-imagebitmap-interface:queue-a-global-task-3 href=webappapis.html#queue-a-global-task>Queue a global task</a>, using the <a id=the-imagebitmap-interface:bitmap-task-source-3 href=#bitmap-task-source>bitmap task source</a>, to
+       resolve <var>promise</var> with <var>imageBitmap</var>.</ol>
+     <dt><code id=the-imagebitmap-interface:blob-4><a href=https://w3c.github.io/FileAPI/#dfn-Blob data-x-internal=blob>Blob</a></code>
+     <dd>
+      <p>Run these steps <a id=the-imagebitmap-interface:in-parallel href=infrastructure.html#in-parallel>in parallel</a>:</p>
+
+      <ol><li><p>Let <var>imageData</var> be the result of reading <var>image</var>'s data. If an <a id=the-imagebitmap-interface:file-error-read href=infrastructure.html#file-error-read>error occurs during reading of the object</a>, then <a id=the-imagebitmap-interface:queue-a-global-task-4 href=webappapis.html#queue-a-global-task>queue a
+       global task</a>, using the <a id=the-imagebitmap-interface:bitmap-task-source-4 href=#bitmap-task-source>bitmap task source</a>, to reject <var>promise</var>
+       with an <a id=the-imagebitmap-interface:invalidstateerror-6 href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=the-imagebitmap-interface:domexception-8><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> and abort
+       these steps.<li><p>Apply the <a id=the-imagebitmap-interface:content-type-sniffing:-image href=https://mimesniff.spec.whatwg.org/#rules-for-sniffing-images-specifically data-x-internal=content-type-sniffing:-image>image sniffing rules</a> to
+       determine the file format of <var>imageData</var>, with MIME type of <var>image</var> (as
+       given by <var>image</var>'s <code id=the-imagebitmap-interface:dom-blob-type><a href=https://w3c.github.io/FileAPI/#dfn-type data-x-internal=dom-blob-type>type</a></code> attribute) giving the
+       official type.<li><p>If <var>imageData</var> is not in a supported image file format (e.g., it's not an
+       image at all), or if <var>imageData</var> is corrupted in some fatal way such that the image
+       dimensions cannot be obtained (e.g., a vector graphic with no natural size), then <a id=the-imagebitmap-interface:queue-a-global-task-5 href=webappapis.html#queue-a-global-task>queue
+       a global task</a>, using the <a id=the-imagebitmap-interface:bitmap-task-source-5 href=#bitmap-task-source>bitmap task source</a>, to reject <var>promise</var>
+       with an <a id=the-imagebitmap-interface:invalidstateerror-7 href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=the-imagebitmap-interface:domexception-9><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> and abort
+       these steps.<li><p>Set <var>imageBitmap</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-13 href=#concept-imagebitmap-bitmap-data>bitmap
+       data</a> to <var>imageData</var>, <a id=the-imagebitmap-interface:cropped-to-the-source-rectangle-with-formatting-4 href=#cropped-to-the-source-rectangle-with-formatting>cropped to the source rectangle with
+       formatting</a>. If this is an animated image, <var>imageBitmap</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-14 href=#concept-imagebitmap-bitmap-data>bitmap data</a> must only be taken from the
+       default image of the animation (the one that the format defines is to be used when animation
+       is not supported or is disabled), or, if there is no such image, the first frame of the
+       animation.<li><p><a id=the-imagebitmap-interface:queue-a-global-task-6 href=webappapis.html#queue-a-global-task>Queue a global task</a>, using the <a id=the-imagebitmap-interface:bitmap-task-source-6 href=#bitmap-task-source>bitmap task source</a>, to
+       resolve <var>promise</var> with <var>imageBitmap</var>.</ol>
+     <dt><code id=the-imagebitmap-interface:imagedata-4><a href=#imagedata>ImageData</a></code>
+     <dd>
+      <ol><li><p>Let <var>buffer</var> be <var>image</var>'s <code id=the-imagebitmap-interface:dom-imagedata-data-2><a href=#dom-imagedata-data>data</a></code> attribute value's [[ViewedArrayBuffer]] internal
+       slot.<li><p>If <a id=the-imagebitmap-interface:isdetachedbuffer href=https://tc39.es/ecma262/#sec-isdetachedbuffer data-x-internal=isdetachedbuffer>IsDetachedBuffer</a>(<var>buffer</var>) is true, then return <a id=the-imagebitmap-interface:a-promise-rejected-with-6 href=https://webidl.spec.whatwg.org/#a-promise-rejected-with data-x-internal=a-promise-rejected-with>a
+       promise rejected with</a> an <a id=the-imagebitmap-interface:invalidstateerror-8 href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a>
+       <code id=the-imagebitmap-interface:domexception-10><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.<li><p>Set <var>imageBitmap</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-15 href=#concept-imagebitmap-bitmap-data>bitmap
+       data</a> to <var>image</var>'s image data, <a id=the-imagebitmap-interface:cropped-to-the-source-rectangle-with-formatting-5 href=#cropped-to-the-source-rectangle-with-formatting>cropped to the source rectangle with
+       formatting</a>.<li><p><a id=the-imagebitmap-interface:queue-a-global-task-7 href=webappapis.html#queue-a-global-task>Queue a global task</a>, using the <a id=the-imagebitmap-interface:bitmap-task-source-7 href=#bitmap-task-source>bitmap task source</a>, to
+       resolve <var>promise</var> with <var>imageBitmap</var>.</ol>
+     <dt><code id=the-imagebitmap-interface:imagebitmap-13><a href=#imagebitmap>ImageBitmap</a></code>
+     <dd>
+      <ol><li><p>Set <var>imageBitmap</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-16 href=#concept-imagebitmap-bitmap-data>bitmap
+       data</a> to a copy of <var>image</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-17 href=#concept-imagebitmap-bitmap-data>bitmap data</a>, <a id=the-imagebitmap-interface:cropped-to-the-source-rectangle-with-formatting-6 href=#cropped-to-the-source-rectangle-with-formatting>cropped to the source
+       rectangle with formatting</a>.<li><p>Set the <a id=the-imagebitmap-interface:concept-canvas-origin-clean-8 href=canvas.html#concept-canvas-origin-clean>origin-clean</a> flag of
+       <var>imageBitmap</var>'s bitmap to the same value as the <a id=the-imagebitmap-interface:concept-canvas-origin-clean-9 href=canvas.html#concept-canvas-origin-clean>origin-clean</a> flag of <var>image</var>'s
+       bitmap.<li><p><a id=the-imagebitmap-interface:queue-a-global-task-8 href=webappapis.html#queue-a-global-task>Queue a global task</a>, using the <a id=the-imagebitmap-interface:bitmap-task-source-8 href=#bitmap-task-source>bitmap task source</a>, to
+       resolve <var>promise</var> with <var>imageBitmap</var>.</ol>
+     <dt><code id=the-imagebitmap-interface:videoframe><a href=https://w3c.github.io/webcodecs/#videoframe-interface data-x-internal=videoframe>VideoFrame</a></code>
+     <dd>
+      <ol><li><p>Set <var>imageBitmap</var>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-18 href=#concept-imagebitmap-bitmap-data>bitmap
+       data</a> to a copy of <var>image</var>'s visible pixel data, <a id=the-imagebitmap-interface:cropped-to-the-source-rectangle-with-formatting-7 href=#cropped-to-the-source-rectangle-with-formatting>cropped to the source
+       rectangle with formatting</a>.<li><p><a id=the-imagebitmap-interface:queue-a-global-task-9 href=webappapis.html#queue-a-global-task>Queue a global task</a>, using the <a id=the-imagebitmap-interface:bitmap-task-source-9 href=#bitmap-task-source>bitmap task source</a>, to
+       resolve <var>promise</var> with <var>imageBitmap</var>.</ol>
+     </dl>
+   <li><p>Return <var>promise</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>When the steps above require that the user agent <dfn id=cropped-to-the-source-rectangle-with-formatting>crop bitmap data to the source rectangle with formatting</dfn>,
+  the user agent must run the following steps:</p>
+
+  <ol><li><p>Let <var>input</var> be the <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-19 href=#concept-imagebitmap-bitmap-data>bitmap
+   data</a> being transformed.<li>
+    <p>If <var>sx</var>, <var>sy</var>, <var>sw</var> and <var>sh</var> are specified, let
+    <var>sourceRectangle</var> be a rectangle whose corners are the four points (<var>sx</var>,
+    <var>sy</var>), (<var>sx</var>+<var>sw</var>, <var>sy</var>), (<var>sx</var>+<var>sw</var>,
+    <var>sy</var>+<var>sh</var>), (<var>sx</var>, <var>sy</var>+<var>sh</var>). Otherwise, let
+    <var>sourceRectangle</var> be a rectangle whose corners are the four points (0, 0), (width of
+    <var>input</var>, 0), (width of <var>input</var>, height of <var>input</var>), (0, height of
+    <var>input</var>).</p>
+
+    <p class=note>If either <var>sw</var> or <var>sh</var> are negative, then
+    the top-left corner of this rectangle will be to the left or above the (<var>sx</var>,
+    <var>sy</var>) point.</p>
+   <li>
+    <p>Let <var>outputWidth</var> be determined as follows:</p>
+
+    <dl class=switch><dt>If the <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizewidth-4><a href=#dom-imagebitmapoptions-resizewidth>resizeWidth</a></code> member of
+     <var>options</var> is specified<dd>the value of the <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizewidth-5><a href=#dom-imagebitmapoptions-resizewidth>resizeWidth</a></code>
+     member of <var>options</var><dt>If the <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizewidth-6><a href=#dom-imagebitmapoptions-resizewidth>resizeWidth</a></code> member of
+     <var>options</var> is not specified, but the <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizeheight-4><a href=#dom-imagebitmapoptions-resizeheight>resizeHeight</a></code> member is specified<dd>the width of <var>sourceRectangle</var>, times the value of the <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizeheight-5><a href=#dom-imagebitmapoptions-resizeheight>resizeHeight</a></code> member of <var>options</var>,
+     divided by the height of <var>sourceRectangle</var>, rounded up to the nearest integer<dt>If neither <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizewidth-7><a href=#dom-imagebitmapoptions-resizewidth>resizeWidth</a></code> nor <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizeheight-6><a href=#dom-imagebitmapoptions-resizeheight>resizeHeight</a></code> are specified<dd>the width of <var>sourceRectangle</var></dl>
+   <li>
+    <p>Let <var>outputHeight</var> be determined as follows:</p>
+
+    <dl class=switch><dt>If the <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizeheight-7><a href=#dom-imagebitmapoptions-resizeheight>resizeHeight</a></code> member of
+     <var>options</var> is specified<dd>the value of the <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizeheight-8><a href=#dom-imagebitmapoptions-resizeheight>resizeHeight</a></code>
+     member of <var>options</var><dt>If the <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizeheight-9><a href=#dom-imagebitmapoptions-resizeheight>resizeHeight</a></code> member of
+     <var>options</var> is not specified, but the <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizewidth-8><a href=#dom-imagebitmapoptions-resizewidth>resizeWidth</a></code> member is specified<dd>the height of <var>sourceRectangle</var>, times the value of the <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizewidth-9><a href=#dom-imagebitmapoptions-resizewidth>resizeWidth</a></code> member of <var>options</var>,
+     divided by the width of <var>sourceRectangle</var>, rounded up to the nearest integer<dt>If neither <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizewidth-10><a href=#dom-imagebitmapoptions-resizewidth>resizeWidth</a></code> nor <code id=the-imagebitmap-interface:dom-imagebitmapoptions-resizeheight-10><a href=#dom-imagebitmapoptions-resizeheight>resizeHeight</a></code> are specified<dd>the height of <var>sourceRectangle</var></dl>
+   <li><p>Place <var>input</var> on an infinite <a id=the-imagebitmap-interface:transparent-black-2 href=https://drafts.csswg.org/css-color/#transparent-black data-x-internal=transparent-black>transparent black</a> grid plane,
+   positioned so that its top left corner is at the origin of the plane, with the
+   <var>x</var>-coordinate increasing to the right, and the <var>y</var>-coordinate increasing down,
+   and with each pixel in the <var>input</var> image data occupying a cell on the plane's
+   grid.<li><p>Let <var>output</var> be the rectangle on the plane denoted by
+   <var>sourceRectangle</var>.<li><p>Scale <var>output</var> to the size specified by <var>outputWidth</var> and
+   <var>outputHeight</var>. The user agent should use the value of the <dfn data-dfn-for=ImageBitmapOptions data-dfn-type=dict-member id=dom-imagebitmapoptions-resizequality><code>resizeQuality</code></dfn> option to guide the
+   choice of scaling algorithm.<li>
+    <p>If the value of the <dfn data-dfn-for=ImageBitmapOptions data-dfn-type=dict-member id=dom-imagebitmapoptions-imageorientation><code>imageOrientation</code></dfn> member of
+    <var>options</var> is "<dfn data-dfn-for=ImageOrientation data-dfn-type=enum-value id=dom-imageorientation-flipy><code>flipY</code></dfn>", <var>output</var> must be flipped
+    vertically, disregarding any image orientation metadata of the source (such as EXIF metadata),
+    if any. <a href=references.html#refsEXIF>[EXIF]</a></p>
+
+    <p class=note>If the value is "<dfn data-dfn-for=ImageOrientation data-dfn-type=enum-value id=dom-imageorientation-from-image><code>from-image</code></dfn>", no extra step is needed.</p>
+
+    <p class=note>There used to be a "<dfn id=dom-imagebitmapoptions-imageorientation-none><code>none</code></dfn>" enum value. It was
+    renamed to "<code id=the-imagebitmap-interface:dom-imageorientation-from-image-3><a href=#dom-imageorientation-from-image>from-image</a></code>". In the future,
+    "<code id=the-imagebitmap-interface:dom-imagebitmapoptions-imageorientation-none><a href=#dom-imagebitmapoptions-imageorientation-none>none</a></code>" will be added back
+    with a different meaning.</p>
+   <li>
+    <p>If <var>image</var> is an <code id=the-imagebitmap-interface:the-img-element-4><a href=embedded-content.html#the-img-element>img</a></code> element or a <code id=the-imagebitmap-interface:blob-5><a href=https://w3c.github.io/FileAPI/#dfn-Blob data-x-internal=blob>Blob</a></code> object, let
+    <var>val</var> be the value of the <dfn data-dfn-for=ImageBitmapOptions data-dfn-type=dict-member id=dom-imagebitmapoptions-colorspaceconversion><code>colorSpaceConversion</code></dfn> member
+    of <var>options</var>, and then run these substeps:</p>
+
+    <ol><li><p>If <var>val</var> is "<dfn data-dfn-for=ColorSpaceConversion data-dfn-type=enum-value id=dom-colorspaceconversion-default><code>default</code></dfn>",
+     the color space conversion behavior is implementation-specific, and should be chosen according
+     to the default color space that the implementation uses for drawing images onto the canvas.</p>
+     <li><p>If <var>val</var> is "<dfn data-dfn-for=ColorSpaceConversion data-dfn-type=enum-value id=dom-colorspaceconversion-none><code>none</code></dfn>", <var>output</var> must be decoded
+     without performing any color space conversions. This means that the image decoding algorithm
+     must ignore color profile metadata embedded in the source data as well as the display device
+     color profile.</ol>
+   <li>
+    <p>Let <var>val</var> be the value of <dfn data-dfn-for=ImageBitmapOptions data-dfn-type=dict-member id=dom-imagebitmapoptions-premultiplyalpha><code>premultiplyAlpha</code></dfn> member of
+    <var>options</var>, and then run these substeps:</p>
+
+    <ol><li><p>If <var>val</var> is "<dfn data-dfn-for=PremultiplyAlpha data-dfn-type=enum-value id=dom-premultiplyalpha-default><code>default</code></dfn>", the alpha premultiplication
+     behavior is implementation-specific, and should be chosen according to implementation deems
+     optimal for drawing images onto the canvas.<li><p>If <var>val</var> is "<dfn data-dfn-for=PremultiplyAlpha data-dfn-type=enum-value id=dom-premultiplyalpha-premultiply><code>premultiply</code></dfn>", the <var>output</var> that
+     is not premultiplied by alpha must have its color components <a id=the-imagebitmap-interface:convert-to-premultiplied href=canvas.html#convert-to-premultiplied>multiplied by alpha</a> and that is premultiplied by alpha
+     must be left untouched.<li><p>If <var>val</var> is "<dfn data-dfn-for=PremultiplyAlpha data-dfn-type=enum-value id=dom-premultiplyalpha-none><code>none</code></dfn>", the <var>output</var> that is not
+     premultiplied by alpha must be left untouched and that is premultiplied by alpha must have its
+     color components <a id=the-imagebitmap-interface:convert-from-premultiplied href=canvas.html#convert-from-premultiplied>divided by alpha</a>.</ol>
+   <li><p>Return <var>output</var>.</ol>
+  </div>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=ImageBitmap data-dfn-type=method id=dom-imagebitmap-close><code>close()</code></dfn>
+  method steps are:</p>
+
+  <ol><li><p>Set <a id=the-imagebitmap-interface:this href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-imagebitmap-interface:detached-3 href=structured-data.html#detached>[[Detached]]</a> internal slot value to true.<li><p>Unset <a id=the-imagebitmap-interface:this-2 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-imagebitmap-interface:concept-imagebitmap-bitmap-data-20 href=#concept-imagebitmap-bitmap-data>bitmap
+   data</a>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=ImageBitmap data-dfn-type=attribute id=dom-imagebitmap-width><code>width</code></dfn>
+  getter steps are:</p>
+
+  <ol><li><p>If <a id=the-imagebitmap-interface:this-3 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-imagebitmap-interface:detached-4 href=structured-data.html#detached>[[Detached]]</a> internal slot's value is true, then
+   return 0.<li><p>Return <a id=the-imagebitmap-interface:this-4 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s width, in <a id="the-imagebitmap-interface:'px'-4" href=https://drafts.csswg.org/css-values/#px data-x-internal="'px'">CSS pixels</a>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=ImageBitmap data-dfn-type=attribute id=dom-imagebitmap-height><code>height</code></dfn>
+  getter steps are:</p>
+
+  <ol><li><p>If <a id=the-imagebitmap-interface:this-5 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-imagebitmap-interface:detached-5 href=structured-data.html#detached>[[Detached]]</a> internal slot's value is true, then
+   return 0.<li><p>Return <a id=the-imagebitmap-interface:this-6 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s height, in <a id="the-imagebitmap-interface:'px'-5" href=https://drafts.csswg.org/css-values/#px data-x-internal="'px'">CSS pixels</a>.</ol>
+  </div>
+
+  <p>The <code id=the-imagebitmap-interface:resizequality-2><a href=#resizequality>ResizeQuality</a></code> enumeration is used to express a preference for the
+  interpolation quality to use when scaling images.</p>
+
+  <p>The "<dfn data-dfn-for=ResizeQuality data-dfn-type=enum-value id=dom-resizequality-pixelated><code>pixelated</code></dfn>" value indicates a preference for
+  scaling the image to preserve the pixelation of the original as much as possible, with minor
+  smoothing as necessary to avoid distorting the image when the target size is not a clean multiple
+  of the original.</p>
+
+  <p>To implement "<code id=the-imagebitmap-interface:dom-resizequality-pixelated-2><a href=#dom-resizequality-pixelated>pixelated</a></code>", for each axis
+  independently, first determine the integer multiple of its natural size that puts it closest to
+  the target size and is greater than zero. Scale it to this integer-multiple-size using nearest
+  neighbor, then scale it the rest of the way to the target size using bilinear interpolation.</p>
+
+  <p>The "<dfn data-dfn-for=ResizeQuality data-dfn-type=enum-value id=dom-resizequality-low><code>low</code></dfn>"
+  value indicates a preference for a low level of image interpolation quality. Low-quality image
+  interpolation may be more computationally efficient than higher settings.</p>
+
+  <p>The "<dfn data-dfn-for=ResizeQuality data-dfn-type=enum-value id=dom-resizequality-medium><code>medium</code></dfn>" value indicates a preference for a medium
+  level of image interpolation quality.</p>
+
+  <p>The "<dfn data-dfn-for=ResizeQuality data-dfn-type=enum-value id=dom-resizequality-high><code>high</code></dfn>" value indicates a preference for a high level
+  of image interpolation quality. High-quality image interpolation may be more computationally
+  expensive than lower settings.</p>
+
+  <p class=note>Bilinear scaling is an example of a relatively fast, lower-quality image-smoothing
+  algorithm. Bicubic or Lanczos scaling are examples of image-scaling algorithms that produce
+  higher-quality output. This specification does not mandate that specific interpolation algorithms
+  be used, except for "<code id=the-imagebitmap-interface:dom-resizequality-pixelated-3><a href=#dom-resizequality-pixelated>pixelated</a></code>" as described
+  above.</p>
+
+  
+
+  <div class=example>
+
+   <p>Using this API, a sprite sheet can be precut and prepared:</p>
+
+   <pre><code class=js>var sprites = {};
+function loadMySprites() {
+  var image = new Image();
+  image.src = 'mysprites.png';
+  var resolver;
+  var promise = new Promise(function (arg) { resolver = arg });
+  image.onload = function () {
+    resolver(Promise.all([
+      createImageBitmap(image,  0,  0, 40, 40).then(function (image) { sprites.person = image }),
+      createImageBitmap(image, 40,  0, 40, 40).then(function (image) { sprites.grass  = image }),
+      createImageBitmap(image, 80,  0, 40, 40).then(function (image) { sprites.tree   = image }),
+      createImageBitmap(image,  0, 40, 40, 40).then(function (image) { sprites.hut    = image }),
+      createImageBitmap(image, 40, 40, 40, 40).then(function (image) { sprites.apple  = image }),
+      createImageBitmap(image, 80, 40, 40, 40).then(function (image) { sprites.snake  = image })
+    ]));
+  };
+  return promise;
+}
+
+function runDemo() {
+  var canvas = document.querySelector('canvas#demo');
+  var context = canvas.getContext('2d');
+  context.drawImage(sprites.tree, 30, 10);
+  context.drawImage(sprites.snake, 70, 10);
+}
+
+loadMySprites().then(runDemo);</code></pre>
+
+  </div>
+
+
+
+  <h3 id=animation-frames><span class=secno>2026</span> Animation frames<a class=self-link href=#animation-frames></a></h3>
+
+  <p>Some objects include the <code id=animation-frames:animationframeprovider><a href=#animationframeprovider>AnimationFrameProvider</a></code> interface mixin.</p>
+
+  <pre><code class=idl>callback <dfn data-dfn-type=callback id=framerequestcallback>FrameRequestCallback</dfn> = undefined (<a id=animation-frames:domhighrestimestamp href=https://w3c.github.io/hr-time/#dom-domhighrestimestamp data-x-internal=domhighrestimestamp>DOMHighResTimeStamp</a> time);
+
+interface mixin <dfn data-dfn-type=interface id=animationframeprovider>AnimationFrameProvider</dfn> {
+  unsigned long <a id=animation-frames:dom-animationframeprovider-requestanimationframe href=#dom-animationframeprovider-requestanimationframe>requestAnimationFrame</a>(<a id=animation-frames:framerequestcallback href=#framerequestcallback>FrameRequestCallback</a> callback);
+  undefined <a id=animation-frames:animationframeprovider-cancelanimationframe href=#animationframeprovider-cancelanimationframe>cancelAnimationFrame</a>(unsigned long handle);
+};
+<a id=animation-frames:window href=nav-history-apis.html#window>Window</a> includes <a id=animation-frames:animationframeprovider-2 href=#animationframeprovider>AnimationFrameProvider</a>;
+<a id=animation-frames:dedicatedworkerglobalscope href=workers.html#dedicatedworkerglobalscope>DedicatedWorkerGlobalScope</a> includes <a id=animation-frames:animationframeprovider-3 href=#animationframeprovider>AnimationFrameProvider</a>;</code></pre>
+
+  <div algorithm="">
+  <p>Each <code id=animation-frames:animationframeprovider-4><a href=#animationframeprovider>AnimationFrameProvider</a></code> object also has a <dfn id=concept-animationframeprovider-target-object>target object</dfn> that stores the
+  provider's internal state. It is defined as follows:</p>
+
+  <dl><dt>If the <code id=animation-frames:animationframeprovider-5><a href=#animationframeprovider>AnimationFrameProvider</a></code> is a <code id=animation-frames:window-2><a href=nav-history-apis.html#window>Window</a></code><dd>The <code id=animation-frames:window-3><a href=nav-history-apis.html#window>Window</a></code>'s <a id=animation-frames:concept-document-window href=nav-history-apis.html#concept-document-window>associated
+   <code>Document</code></a><dt>If the <code id=animation-frames:animationframeprovider-6><a href=#animationframeprovider>AnimationFrameProvider</a></code> is a <code id=animation-frames:dedicatedworkerglobalscope-2><a href=workers.html#dedicatedworkerglobalscope>DedicatedWorkerGlobalScope</a></code><dd>The <code id=animation-frames:dedicatedworkerglobalscope-3><a href=workers.html#dedicatedworkerglobalscope>DedicatedWorkerGlobalScope</a></code></dl>
+  </div>
+
+  <p>Each <a id=animation-frames:concept-animationframeprovider-target-object href=#concept-animationframeprovider-target-object>target object</a> has a
+  <dfn id=list-of-animation-frame-callbacks>map of animation frame callbacks</dfn>, which is an
+  <a id=animation-frames:ordered-map href=https://infra.spec.whatwg.org/#ordered-map data-x-internal=ordered-map>ordered map</a> that must be initially empty, and an <dfn id=animation-frame-callback-identifier>animation frame callback
+  identifier</dfn>, which is a number that must initially be zero.</p>
+
+  <div algorithm="">
+  <p>An <code id=animation-frames:animationframeprovider-7><a href=#animationframeprovider>AnimationFrameProvider</a></code> <var>provider</var> is considered <dfn id=concept-animationframeprovider-supported>supported</dfn> if any of the following are
+  true:</p>
+
+  <ul><li><p><var>provider</var> is a <code id=animation-frames:window-4><a href=nav-history-apis.html#window>Window</a></code>.<li><p><var>provider</var>'s <a id=animation-frames:concept-WorkerGlobalScope-owner-set href=workers.html#concept-WorkerGlobalScope-owner-set>owner set</a> <a id=animation-frames:list-contains href=https://infra.spec.whatwg.org/#list-contain data-x-internal=list-contains>contains</a>
+   a <code id=animation-frames:document><a href=dom.html#document>Document</a></code> object.<li><p>Any of the <code id=animation-frames:dedicatedworkerglobalscope-4><a href=workers.html#dedicatedworkerglobalscope>DedicatedWorkerGlobalScope</a></code> objects in <var>provider</var>'s
+   <a id=animation-frames:concept-WorkerGlobalScope-owner-set-2 href=workers.html#concept-WorkerGlobalScope-owner-set>owner set</a> are <a id=animation-frames:concept-animationframeprovider-supported href=#concept-animationframeprovider-supported>supported</a>.</ul>
+  </div>
+
+  <hr>
+
+  <div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame title="The window.requestAnimationFrame() method tells the browser that you wish to perform an animation and requests that the browser calls a specified function to update an animation right before the next repaint. The method takes a callback as an argument to be invoked before the repaint.">Window/requestAnimationFrame</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>23+</span></span><span class="safari yes"><span>Safari</span><span>7+</span></span><span class="chrome yes"><span>Chrome</span><span>24+</span></span><hr><span class="opera unknown"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>10+</span></span><hr><span class="firefox_android yes"><span>Firefox Android</span><span>23+</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android yes"><span>WebView Android</span><span>4.4+</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div><div algorithm="">
+  <p>The <dfn data-dfn-for=AnimationFrameProvider data-dfn-type=method id=dom-animationframeprovider-requestanimationframe><code>requestAnimationFrame(<var>callback</var>)</code></dfn>
+  method steps are:</p>
+
+  <ol><li><p>If <a id=animation-frames:this href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a> is not <a id=animation-frames:concept-animationframeprovider-supported-2 href=#concept-animationframeprovider-supported>supported</a>, then throw a
+   <a id=animation-frames:notsupportederror href=https://webidl.spec.whatwg.org/#notsupportederror data-x-internal=notsupportederror>"<code>NotSupportedError</code>"</a> <code id=animation-frames:domexception><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.<li><p>Let <var>target</var> be <a id=animation-frames:this-2 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=animation-frames:concept-animationframeprovider-target-object-2 href=#concept-animationframeprovider-target-object>target object</a>.<li><p>Increment <var>target</var>'s <a id=animation-frames:animation-frame-callback-identifier href=#animation-frame-callback-identifier>animation frame callback identifier</a> by one,
+   and let <var>handle</var> be the result.<li><p>Let <var>callbacks</var> be <var>target</var>'s <a id=animation-frames:list-of-animation-frame-callbacks href=#list-of-animation-frame-callbacks>map of animation frame
+   callbacks</a>.<li><p><a id=animation-frames:map-set href=https://infra.spec.whatwg.org/#map-set data-x-internal=map-set>Set</a> <var>callbacks</var>[<var>handle</var>] to
+   <var>callback</var>.<li><p>Return <var>handle</var>.</ol>
+  </div>
+
+  <div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/Window/cancelAnimationFrame title="The window.cancelAnimationFrame() method cancels an animation frame request previously scheduled through a call to window.requestAnimationFrame().">Window/cancelAnimationFrame</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>23+</span></span><span class="safari yes"><span>Safari</span><span>7+</span></span><span class="chrome yes"><span>Chrome</span><span>24+</span></span><hr><span class="opera unknown"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>10+</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div><div algorithm="">
+  <p>The <dfn data-dfn-for=AnimationFrameProvider data-dfn-type=method id=animationframeprovider-cancelanimationframe><code>cancelAnimationFrame(<var>handle</var>)</code></dfn>
+  method steps are:</p>
+
+  <ol><li><p>If <a id=animation-frames:this-3 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a> is not <a id=animation-frames:concept-animationframeprovider-supported-3 href=#concept-animationframeprovider-supported>supported</a>, then throw a
+   <a id=animation-frames:notsupportederror-2 href=https://webidl.spec.whatwg.org/#notsupportederror data-x-internal=notsupportederror>"<code>NotSupportedError</code>"</a> <code id=animation-frames:domexception-2><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>.<li><p>Let <var>callbacks</var> be <a id=animation-frames:this-4 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=animation-frames:concept-animationframeprovider-target-object-3 href=#concept-animationframeprovider-target-object>target object</a>'s <a id=animation-frames:list-of-animation-frame-callbacks-2 href=#list-of-animation-frame-callbacks>map of
+   animation frame callbacks</a>.<li><p><a id=animation-frames:map-remove href=https://infra.spec.whatwg.org/#map-remove data-x-internal=map-remove>Remove</a> <var>callbacks</var>[<var>handle</var>].</ol>
+  </div>
+
+  <div algorithm="">
+  <p>To <dfn id=run-the-animation-frame-callbacks>run the animation frame callbacks</dfn> for a <a id=animation-frames:concept-animationframeprovider-target-object-4 href=#concept-animationframeprovider-target-object>target object</a> <var>target</var> with
+  a timestamp <var>now</var>:</p>
+
+  <ol><li><p>Let <var>callbacks</var> be <var>target</var>'s <a id=animation-frames:list-of-animation-frame-callbacks-3 href=#list-of-animation-frame-callbacks>map of animation frame
+   callbacks</a>.<li><p>Let <var>callbackHandles</var> be the result of <a id=animation-frames:map-get-the-keys href=https://infra.spec.whatwg.org/#map-getting-the-keys data-x-internal=map-get-the-keys>getting
+   the keys</a> of <var>callbacks</var>.<li>
+    <p><a id=animation-frames:list-iterate href=https://infra.spec.whatwg.org/#list-iterate data-x-internal=list-iterate>For each</a> <var>handle</var> in
+    <var>callbackHandles</var>, if <var>handle</var> <a id=animation-frames:map-exists href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a> in
+    <var>callbacks</var>:</p>
+
+    <ol><li><p>Let <var>callback</var> be <var>callbacks</var>[<var>handle</var>].<li><p><a id=animation-frames:map-remove-2 href=https://infra.spec.whatwg.org/#map-remove data-x-internal=map-remove>Remove</a>
+     <var>callbacks</var>[<var>handle</var>].<li><p><a id=animation-frames:es-invoking-callback-functions href=https://webidl.spec.whatwg.org/#invoke-a-callback-function data-x-internal=es-invoking-callback-functions>Invoke</a> <var>callback</var> with «
+     <var>now</var> » and "<code>report</code>".</ol>
+   </ol>
+  </div>
+
+  <div class=example>
+   <p>Inside workers, <code id=animation-frames:dom-animationframeprovider-requestanimationframe-2><a href=#dom-animationframeprovider-requestanimationframe>requestAnimationFrame()</a></code> can be
+   used together with an <code id=animation-frames:offscreencanvas><a href=canvas.html#offscreencanvas>OffscreenCanvas</a></code> transferred from a <code id=animation-frames:the-canvas-element><a href=canvas.html#the-canvas-element>canvas</a></code>
+   element. First, in the document, transfer control to the worker:</p>
+
+   <pre><code class=js>const offscreenCanvas = document.getElementById("c").transferControlToOffscreen();
+worker.postMessage(offscreenCanvas, [offscreenCanvas]);</code></pre>
+
+   <p>Then, in the worker, the following code will draw a rectangle moving from left to right:</p>
+
+   <pre><code class=js>let ctx, pos = 0;
+function draw(dt) {
+  ctx.clearRect(0, 0, 100, 100);
+  ctx.fillRect(pos, 0, 10, 10);
+  pos += 10 * dt;
+  requestAnimationFrame(draw);
+}
+
+self.onmessage = function(ev) {
+  const transferredCanvas = ev.data;
+  ctx = transferredCanvas.getContext("2d");
+  draw();
+};</code></pre>
+  </div>
+
+  <nav><a href=system-state.html>← 2026 System state and capabilities</a> — <a href=./>Table of Contents</a> — <a href=comms.html>2026 Communication →</a></nav>

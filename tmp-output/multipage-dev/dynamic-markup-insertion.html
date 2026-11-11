@@ -1,0 +1,1076 @@
+<!DOCTYPE html><html lang=en-US-x-hixie class=split><script src=/link-fixup.js defer=""></script><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>HTML Standard, Edition for Web Developers</title><meta name=theme-color content=#3c790a><meta name=color-scheme content="light dark"><link rel=stylesheet crossorigin="" href=https://resources.whatwg.org/standard-shared-with-dev.css><link rel=icon crossorigin="" href=https://resources.whatwg.org/logo.svg><link rel=stylesheet crossorigin="" href=/dev/styles.css><script>
+   function toggleStatus(div) {
+     div.parentNode.classList.toggle('wrapped');
+   }
+   function setLinkFragment(link) {
+     link.hash = location.hash;
+   }
+  </script><body>
+  <script src=/dev/search.js async=""></script>
+  
+  
+  
+  <header class="head with-buttons" id=head>
+   <a href=https://whatwg.org/ class=logo><img crossorigin="" width=100 height=100 alt=WHATWG src=https://resources.whatwg.org/logo.svg class=darkmode-aware></a>
+   
+   <hgroup><h1><a href=/dev/ rel=home>HTML: The Living Standard</a></h1><p id=dev-edition-h2>Edition for Web Developers — Last Updated <span class=pubdate>10 November 2026</span></hgroup>
+   
+
+   <div id=search>
+    <input name=query type=search placeholder="Search. Press '/'" autocomplete=off id=query>
+    <ol id=results></ol>
+   </div>
+  </header>
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  <nav><a href=webappapis.html>← 2026 Web application APIs</a> — <a href=./>Table of Contents</a> — <a href=timers-and-user-prompts.html>2026 Timers →</a></nav><ol class=toc><li><ol><li><a href=dynamic-markup-insertion.html#dynamic-markup-insertion><span class=secno>8.4</span> Dynamic markup insertion</a><ol><li><a href=dynamic-markup-insertion.html#opening-the-input-stream><span class=secno>8.4.1</span> Opening the input stream</a><li><a href=dynamic-markup-insertion.html#closing-the-input-stream><span class=secno>8.4.2</span> Closing the input stream</a><li><a href=dynamic-markup-insertion.html#document.write()><span class=secno>8.4.3</span> <code>document.write()</code></a><li><a href=dynamic-markup-insertion.html#document.writeln()><span class=secno>8.4.4</span> <code>document.writeln()</code></a></ol><li><a href=dynamic-markup-insertion.html#dom-parsing-and-serialization><span class=secno>8.5</span> DOM parsing and serialization APIs</a><ol><li><a href=dynamic-markup-insertion.html#the-domparser-interface><span class=secno>8.5.1</span> The <code>DOMParser</code> interface</a><li><a href=dynamic-markup-insertion.html#html-parsing-methods><span class=secno>8.5.2</span> HTML parsing methods</a><li><a href=dynamic-markup-insertion.html#html-serialization-methods><span class=secno>8.5.3</span> HTML serialization methods</a><li><a href=dynamic-markup-insertion.html#the-innerhtml-property><span class=secno>8.5.4</span> The <code>innerHTML</code> property</a><li><a href=dynamic-markup-insertion.html#the-outerhtml-property><span class=secno>8.5.5</span> The <code>outerHTML</code> property</a><li><a href=dynamic-markup-insertion.html#the-insertadjacenthtml()-method><span class=secno>8.5.6</span> The <code>insertAdjacentHTML()</code> method</a><li><a href=dynamic-markup-insertion.html#the-createcontextualfragment()-method><span class=secno>8.5.7</span> The <code>createContextualFragment()</code>
+  method</a><li><a href=dynamic-markup-insertion.html#the-xmlserializer-interface><span class=secno>8.5.8</span> The <code>XMLSerializer</code> interface</a></ol><li><a href=dynamic-markup-insertion.html#html-sanitization><span class=secno>8.6</span> HTML sanitization</a><ol><li><a href=dynamic-markup-insertion.html#introduction-11><span class=secno>8.6.1</span> Introduction</a><ol><li><a href=dynamic-markup-insertion.html#safe-and-unsafe><span class=secno>8.6.1.1</span> Safe and unsafe</a></ol><li><a href=dynamic-markup-insertion.html#the-sanitizer-interface><span class=secno>8.6.2</span> The <code>Sanitizer</code> interface</a><li><a href=dynamic-markup-insertion.html#sanitizer-configuration><span class=secno>8.6.3</span> Sanitizer configuration</a><ol><li><a href=dynamic-markup-insertion.html#configuration-invariants><span class=secno>8.6.3.1</span> Configuration invariants</a></ol><li><a href=dynamic-markup-insertion.html#sanitizer-security-considerations><span class=secno>8.6.4</span> Security considerations</a><ol><li><a href=dynamic-markup-insertion.html#sanitizer-security-server-reflected><span class=secno>8.6.4.1</span> Server-side reflected and stored XSS</a><li><a href=dynamic-markup-insertion.html#sanitizer-security-dom-clobbering><span class=secno>8.6.4.2</span> DOM clobbering</a><li><a href=dynamic-markup-insertion.html#sanitizer-security-script-gadgets><span class=secno>8.6.4.3</span> XSS with script gadgets</a><li><a href=dynamic-markup-insertion.html#sanitizer-security-mxss><span class=secno>8.6.4.4</span> Mutation XSS</a></ol></ol></ol></ol><h3 id=dynamic-markup-insertion><span class=secno>2026</span> <dfn>Dynamic markup insertion</dfn><a class=self-link href=#dynamic-markup-insertion></a></h3>
+
+  <p class=note>APIs for dynamically inserting markup into the document interact with the parser,
+  and thus their behavior varies depending on whether they are used with <a id=dynamic-markup-insertion:html-documents href=https://dom.spec.whatwg.org/#html-document data-x-internal=html-documents>HTML
+  documents</a> (and the <span>HTML parser</span>) or <a id=dynamic-markup-insertion:xml-documents href=https://dom.spec.whatwg.org/#xml-document data-x-internal=xml-documents>XML documents</a> (and the
+  <span>XML parser</span>).</p>
+
+  
+
+
+
+  <h4 id=opening-the-input-stream><span class=secno>2026</span> Opening the input stream<a class=self-link href=#opening-the-input-stream></a></h4>
+
+  <dl class=domintro><dt><code><var>document</var> = <var>document</var>.<span id=dom-document-open>open</span>()</code><dd>
+    <p>Causes the <code id=opening-the-input-stream:document><a href=dom.html#document>Document</a></code> to be replaced in-place, as if it was a new
+    <code id=opening-the-input-stream:document-2><a href=dom.html#document>Document</a></code> object, but reusing the previous object, which is then returned.</p>
+
+    <p>The resulting <code id=opening-the-input-stream:document-3><a href=dom.html#document>Document</a></code> has an HTML parser associated with it, which can be given
+    data to parse using <code id=opening-the-input-stream:dom-document-write><a href=#dom-document-write>document.write()</a></code>.</p>
+
+    <p>The method has no effect if the <code id=opening-the-input-stream:document-4><a href=dom.html#document>Document</a></code> is still being parsed.</p>
+
+    <p>Throws an <a id=opening-the-input-stream:invalidstateerror href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=opening-the-input-stream:domexception><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the
+    <code id=opening-the-input-stream:document-5><a href=dom.html#document>Document</a></code> is an <a id=opening-the-input-stream:xml-documents href=https://dom.spec.whatwg.org/#xml-document data-x-internal=xml-documents>XML document</a>.</p>
+
+    <p>Throws an <a id=opening-the-input-stream:invalidstateerror-2 href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=opening-the-input-stream:domexception-2><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the
+    parser is currently executing a <a id=opening-the-input-stream:custom-element-constructor href=custom-elements.html#custom-element-constructor>custom element constructor</a>.</p>
+   <dt><code><var>window</var> = <var>document</var>.<span>open</span>(<var>url</var>, <var>name</var>, <var>features</var>)</code><dd><p>Works like the <code id=opening-the-input-stream:dom-open><a href=nav-history-apis.html#dom-open>window.open()</a></code> method.</dl>
+
+  
+
+
+
+  <h4 id=closing-the-input-stream><span class=secno>2026</span> Closing the input stream<a class=self-link href=#closing-the-input-stream></a></h4>
+
+  <dl class=domintro><dt><code><var>document</var>.<span id=dom-document-close>close</span>()</code><dd>
+    <p>Closes the input stream that was opened by the <code id=closing-the-input-stream:dom-document-open><a href=#dom-document-open>document.open()</a></code> method.</p>
+
+    <p>Throws an <a id=closing-the-input-stream:invalidstateerror href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=closing-the-input-stream:domexception><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the
+    <code id=closing-the-input-stream:document><a href=dom.html#document>Document</a></code> is an <a id=closing-the-input-stream:xml-documents href=https://dom.spec.whatwg.org/#xml-document data-x-internal=xml-documents>XML document</a>.</p>
+
+    <p>Throws an <a id=closing-the-input-stream:invalidstateerror-2 href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=closing-the-input-stream:domexception-2><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the
+    parser is currently executing a <a id=closing-the-input-stream:custom-element-constructor href=custom-elements.html#custom-element-constructor>custom element constructor</a>.</p>
+   </dl>
+
+  
+
+
+
+  <h4 id=document.write()><span class=secno>2026</span> <code id=document.write():dom-document-write><a href=#dom-document-write>document.write()</a></code><a class=self-link href=#document.write()></a></h4>
+
+  <dl class=domintro><dt><code><var>document</var>.<span id=dom-document-write>write</span>(...<var>text</var>)</code><dd>
+    <p>In general, adds the given string(s) to the <code id=document.write():document><a href=dom.html#document>Document</a></code>'s input stream.</p>
+
+    <p class=warning>This method has very idiosyncratic behavior. In some cases, this method can
+    affect the state of the <span>HTML parser</span> while the parser is running, resulting in a DOM
+    that does not correspond to the source of the document (e.g. if the string written is the string
+    "<code>&lt;plaintext></code>" or "<code>&lt;!--</code>"). In other cases,
+    the call can clear the current page first, as if <code id=document.write():dom-document-open><a href=#dom-document-open>document.open()</a></code> had been called. In yet more cases, the method
+    is simply ignored, or throws an exception. User agents are <a href=#document-written-scripts-intervention>explicitly allowed to avoid executing
+    <code>script</code> elements inserted via this method</a>. And to make matters even worse, the
+    exact behavior of this method can in some cases be dependent on network latency, which can lead to failures that are very hard to debug. <strong>For all these reasons, use
+    of this method is strongly discouraged.</strong></p>
+
+    <p>Throws an <a id=document.write():invalidstateerror href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=document.write():domexception><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> when
+    invoked on <a id=document.write():xml-documents href=https://dom.spec.whatwg.org/#xml-document data-x-internal=xml-documents>XML documents</a>.</p>
+
+    <p>Throws an <a id=document.write():invalidstateerror-2 href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=document.write():domexception-2><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the
+    parser is currently executing a <a id=document.write():custom-element-constructor href=custom-elements.html#custom-element-constructor>custom element constructor</a>.</p>
+   </dl>
+
+  <p class=warning>This method performs no sanitization to remove potentially-dangerous elements
+  and attributes like <code id=document.write():the-script-element><a href=scripting.html#the-script-element>script</a></code> or <a id=document.write():event-handler-content-attributes href=webappapis.html#event-handler-content-attributes>event handler content attributes</a>.</p>
+
+  
+
+
+  <h4 id=document.writeln()><span class=secno>2026</span> <code id=document.writeln():dom-document-writeln><a href=#dom-document-writeln>document.writeln()</a></code><a class=self-link href=#document.writeln()></a></h4>
+
+  <dl class=domintro><dt><code><var>document</var>.<span id=dom-document-writeln>writeln</span>(...<var>text</var>)</code><dd>
+    <p>Adds the given string(s) to the <code id=document.writeln():document><a href=dom.html#document>Document</a></code>'s input stream, followed by a newline
+    character. If necessary, calls the <code id=document.writeln():dom-document-open><a href=#dom-document-open>open()</a></code> method
+    implicitly first.</p>
+
+    <p class=warning>This method has very idiosyncratic behavior. <strong>Use of this
+    method is strongly discouraged, for the same reasons as <code id=document.writeln():dom-document-write><a href=#dom-document-write>document.write()</a></code>.</strong></p>
+
+    <p>Throws an <a id=document.writeln():invalidstateerror href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=document.writeln():domexception><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> when
+    invoked on <a id=document.writeln():xml-documents href=https://dom.spec.whatwg.org/#xml-document data-x-internal=xml-documents>XML documents</a>.</p>
+
+    <p>Throws an <a id=document.writeln():invalidstateerror-2 href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=document.writeln():domexception-2><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the
+    parser is currently executing a <a id=document.writeln():custom-element-constructor href=custom-elements.html#custom-element-constructor>custom element constructor</a>.</p>
+   </dl>
+
+  <p class=warning>This method performs no sanitization to remove potentially-dangerous elements
+  and attributes like <code id=document.writeln():the-script-element><a href=scripting.html#the-script-element>script</a></code> or <a id=document.writeln():event-handler-content-attributes href=webappapis.html#event-handler-content-attributes>event handler content attributes</a>.</p>
+
+  
+
+
+  <h3 id=dom-parsing-and-serialization><span class=secno>2026</span> DOM parsing and serialization APIs<a class=self-link href=#dom-parsing-and-serialization></a></h3><div class="mdn-anno wrapped"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/DOMParser title="The DOMParser interface provides the ability to parse XML or HTML source code from a string into a DOM Document.">DOMParser</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>1+</span></span><span class="safari yes"><span>Safari</span><span>1.3+</span></span><span class="chrome yes"><span>Chrome</span><span>1+</span></span><hr><span class="opera yes"><span>Opera</span><span>8+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>9+</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>10.1+</span></span></div></div></div>
+
+  <pre><code class=idl>partial interface <a id=Element-partial href=https://dom.spec.whatwg.org/#interface-element data-x-internal=element>Element</a> {
+  [<span>CEReactions</span>] undefined <a id=dom-parsing-and-serialization:dom-element-sethtml href=#dom-element-sethtml>setHTML</a>(DOMString html, optional <a id=dom-parsing-and-serialization:sethtmloptions href=#sethtmloptions>SetHTMLOptions</a> options = {});
+  [<span>CEReactions</span>] undefined <a id=dom-parsing-and-serialization:dom-element-sethtmlunsafe href=#dom-element-sethtmlunsafe>setHTMLUnsafe</a>((<code id=dom-parsing-and-serialization:tt-trustedhtml><a href=https://w3c.github.io/trusted-types/dist/spec/#trustedhtml data-x-internal=tt-trustedhtml>TrustedHTML</a></code> or DOMString) html, optional <a id=dom-parsing-and-serialization:sethtmlunsafeoptions href=#sethtmlunsafeoptions>SetHTMLUnsafeOptions</a> options = {});
+  DOMString <a id=dom-parsing-and-serialization:dom-element-gethtml href=#dom-element-gethtml>getHTML</a>(optional <a id=dom-parsing-and-serialization:gethtmloptions href=#gethtmloptions>GetHTMLOptions</a> options = {});
+
+  [<span>CEReactions</span>] attribute (<code id=dom-parsing-and-serialization:tt-trustedhtml-2><a href=https://w3c.github.io/trusted-types/dist/spec/#trustedhtml data-x-internal=tt-trustedhtml>TrustedHTML</a></code> or [<a id=dom-parsing-and-serialization:legacynulltoemptystring href=https://webidl.spec.whatwg.org/#LegacyNullToEmptyString data-x-internal=legacynulltoemptystring>LegacyNullToEmptyString</a>] DOMString) <a id=dom-parsing-and-serialization:dom-element-innerhtml href=#dom-element-innerhtml>innerHTML</a>;
+  [<span>CEReactions</span>] attribute (<code id=dom-parsing-and-serialization:tt-trustedhtml-3><a href=https://w3c.github.io/trusted-types/dist/spec/#trustedhtml data-x-internal=tt-trustedhtml>TrustedHTML</a></code> or [<a id=dom-parsing-and-serialization:legacynulltoemptystring-2 href=https://webidl.spec.whatwg.org/#LegacyNullToEmptyString data-x-internal=legacynulltoemptystring>LegacyNullToEmptyString</a>] DOMString) <a id=dom-parsing-and-serialization:dom-element-outerhtml href=#dom-element-outerhtml>outerHTML</a>;
+  [<span>CEReactions</span>] undefined <a id=dom-parsing-and-serialization:dom-element-insertadjacenthtml href=#dom-element-insertadjacenthtml>insertAdjacentHTML</a>(DOMString position, (<code id=dom-parsing-and-serialization:tt-trustedhtml-4><a href=https://w3c.github.io/trusted-types/dist/spec/#trustedhtml data-x-internal=tt-trustedhtml>TrustedHTML</a></code> or DOMString) string);
+};
+
+partial interface <a id=ShadowRoot-partial href=https://dom.spec.whatwg.org/#interface-shadowroot data-x-internal=shadowroot>ShadowRoot</a> {
+  [<span>CEReactions</span>] undefined <a id=dom-parsing-and-serialization:dom-shadowroot-sethtml href=#dom-shadowroot-sethtml>setHTML</a>(DOMString html, optional <a id=dom-parsing-and-serialization:sethtmloptions-2 href=#sethtmloptions>SetHTMLOptions</a> options = {});
+  [<span>CEReactions</span>] undefined <a id=dom-parsing-and-serialization:dom-shadowroot-sethtmlunsafe href=#dom-shadowroot-sethtmlunsafe>setHTMLUnsafe</a>((<code id=dom-parsing-and-serialization:tt-trustedhtml-5><a href=https://w3c.github.io/trusted-types/dist/spec/#trustedhtml data-x-internal=tt-trustedhtml>TrustedHTML</a></code> or DOMString) html, optional <a id=dom-parsing-and-serialization:sethtmlunsafeoptions-2 href=#sethtmlunsafeoptions>SetHTMLUnsafeOptions</a> options = {});
+  DOMString <a id=dom-parsing-and-serialization:dom-shadowroot-gethtml href=#dom-shadowroot-gethtml>getHTML</a>(optional <a id=dom-parsing-and-serialization:gethtmloptions-2 href=#gethtmloptions>GetHTMLOptions</a> options = {});
+
+  [<span>CEReactions</span>] attribute (<code id=dom-parsing-and-serialization:tt-trustedhtml-6><a href=https://w3c.github.io/trusted-types/dist/spec/#trustedhtml data-x-internal=tt-trustedhtml>TrustedHTML</a></code> or [<a id=dom-parsing-and-serialization:legacynulltoemptystring-3 href=https://webidl.spec.whatwg.org/#LegacyNullToEmptyString data-x-internal=legacynulltoemptystring>LegacyNullToEmptyString</a>] DOMString) <a id=dom-parsing-and-serialization:dom-shadowroot-innerhtml href=#dom-shadowroot-innerhtml>innerHTML</a>;
+};
+
+enum <dfn data-dfn-type=enum id=sanitizerpresets>SanitizerPresets</dfn> { "<a id=dom-parsing-and-serialization:dom-sanitizerpresets-default href=#dom-sanitizerpresets-default>default</a>" };
+dictionary <dfn data-dfn-type=dictionary id=sethtmloptions>SetHTMLOptions</dfn> {
+  (<a id=dom-parsing-and-serialization:sanitizer href=#sanitizer>Sanitizer</a> or <a id=dom-parsing-and-serialization:sanitizerconfig href=#sanitizerconfig>SanitizerConfig</a> or <a id=dom-parsing-and-serialization:sanitizerpresets href=#sanitizerpresets>SanitizerPresets</a>) <dfn data-dfn-for=SetHTMLOptions data-dfn-type=dict-member id=dom-sethtmloptions-sanitizer>sanitizer</dfn> = "<a id=dom-parsing-and-serialization:dom-sanitizerpresets-default-2 href=#dom-sanitizerpresets-default>default</a>";
+};
+dictionary <dfn data-dfn-type=dictionary id=sethtmlunsafeoptions>SetHTMLUnsafeOptions</dfn> {
+  (<a id=dom-parsing-and-serialization:sanitizer-2 href=#sanitizer>Sanitizer</a> or <a id=dom-parsing-and-serialization:sanitizerconfig-2 href=#sanitizerconfig>SanitizerConfig</a> or <a id=dom-parsing-and-serialization:sanitizerpresets-2 href=#sanitizerpresets>SanitizerPresets</a>) <dfn data-dfn-for=SetHTMLUnsafeOptions data-dfn-type=dict-member id=dom-sethtmlunsafeoptions-sanitizer>sanitizer</dfn> = {};
+  boolean <dfn data-dfn-for=SetHTMLUnsafeOptions data-dfn-type=dict-member id=dom-sethtmlunsafeoptions-runscripts>runScripts</dfn> = false;
+};
+dictionary <dfn data-dfn-type=dictionary id=parsehtmlunsafeoptions>ParseHTMLUnsafeOptions</dfn> {
+  (<a id=dom-parsing-and-serialization:sanitizer-3 href=#sanitizer>Sanitizer</a> or <a id=dom-parsing-and-serialization:sanitizerconfig-3 href=#sanitizerconfig>SanitizerConfig</a> or <a id=dom-parsing-and-serialization:sanitizerpresets-3 href=#sanitizerpresets>SanitizerPresets</a>) <dfn data-dfn-for=ParseHTMLUnsafeOptions data-dfn-type=dict-member id=dom-parsehtmlunsafeoptions-sanitizer>sanitizer</dfn> = {};
+};
+
+dictionary <dfn data-dfn-type=dictionary id=gethtmloptions>GetHTMLOptions</dfn> {
+  boolean <dfn data-dfn-for=GetHTMLOptions data-dfn-type=dict-member id=dom-gethtmloptions-serializableshadowroots>serializableShadowRoots</dfn> = false;
+  sequence&lt;ShadowRoot> <dfn data-dfn-for=GetHTMLOptions data-dfn-type=dict-member id=dom-gethtmloptions-shadowroots>shadowRoots</dfn> = [];
+};</code></pre>
+
+  <h4 id=the-domparser-interface><span class=secno>2026</span> The <code id=the-domparser-interface:domparser><a href=#domparser>DOMParser</a></code> interface<a class=self-link href=#the-domparser-interface></a></h4>
+
+  <p>The <code id=the-domparser-interface:domparser-2><a href=#domparser>DOMParser</a></code> interface allows authors to create new <code id=the-domparser-interface:document><a href=dom.html#document>Document</a></code> objects
+  by parsing strings, as either HTML or XML.</p>
+
+  <dl class=domintro><dt><code><var>parser</var> = new <span id=dom-domparser-constructor>DOMParser</span>()</code><dd><p>Constructs a new <code id=the-domparser-interface:domparser-3><a href=#domparser>DOMParser</a></code> object.<dt><code><var>document</var> = <var>parser</var>.<span id=dom-domparser-parsefromstring>parseFromString</span>(<var>string</var>, <var>type</var>)</code><dd>
+    <p>Parses <var>string</var> using either the HTML or XML parser, according to <var>type</var>,
+    and returns the resulting <code id=the-domparser-interface:document-2><a href=dom.html#document>Document</a></code>. <var>type</var> can be "<code>text/html</code>"
+    (which will invoke the HTML parser), or any of "<code id=the-domparser-interface:text/xml><a href=indices.html#text/xml>text/xml</a></code>",
+    "<code id=the-domparser-interface:application/xml><a href=indices.html#application/xml>application/xml</a></code>", "<code>application/xhtml+xml</code>", or
+    "<code id=the-domparser-interface:image/svg+xml><a href=indices.html#image/svg+xml>image/svg+xml</a></code>" (which will invoke the XML parser).</p>
+
+    <p>For the XML parser, if <var>string</var> cannot be parsed, then the returned
+    <code id=the-domparser-interface:document-3><a href=dom.html#document>Document</a></code> will contain elements describing the resulting error.</p>
+
+    <p>Note that <code id=the-domparser-interface:the-script-element><a href=scripting.html#the-script-element>script</a></code> elements are not evaluated during parsing, and the resulting
+    document's <a id="the-domparser-interface:document's-character-encoding" href=https://dom.spec.whatwg.org/#concept-document-encoding data-x-internal="document's-character-encoding">encoding</a> will always be
+    <span>UTF-8</span>. The document's <a id="the-domparser-interface:the-document's-address" href=https://dom.spec.whatwg.org/#concept-document-url data-x-internal="the-document's-address">URL</a> will be
+    inherited from <var>parser</var>'s <span>relevant global object</span>.</p>
+
+    <p>Values other than the above for <var>type</var> will cause a <code id=the-domparser-interface:typeerror><a href=https://tc39.es/ecma262/#sec-native-error-types-used-in-this-standard-typeerror data-x-internal=typeerror>TypeError</a></code> exception
+    to be thrown.</p>
+   </dl>
+
+  <p class=note>The design of <code id=the-domparser-interface:domparser-4><a href=#domparser>DOMParser</a></code>, as a class that needs to be constructed and
+  then have its <code id=the-domparser-interface:dom-domparser-parsefromstring><a href=#dom-domparser-parsefromstring>parseFromString()</a></code> method
+  called, is an unfortunate historical artifact. If we were designing this functionality today it
+  would be a standalone function. For parsing HTML, the modern alternative is <code>Document.parseHTMLUnsafe()</code>.</p>
+
+  <p class=warning>This method performs no sanitization to remove potentially-dangerous elements
+  and attributes like <code id=the-domparser-interface:the-script-element-2><a href=scripting.html#the-script-element>script</a></code> or <a id=the-domparser-interface:event-handler-content-attributes href=webappapis.html#event-handler-content-attributes>event handler content attributes</a>.</p>
+
+  <pre><code class=idl>[Exposed=Window]
+interface <dfn data-dfn-type=interface id=domparser>DOMParser</dfn> {
+  <a id=the-domparser-interface:dom-domparser-constructor href=#dom-domparser-constructor>constructor</a>();
+
+  [NewObject] <code id=the-domparser-interface:document-4><a href=dom.html#document>Document</a></code> <a id=the-domparser-interface:dom-domparser-parsefromstring-2 href=#dom-domparser-parsefromstring>parseFromString</a>((<code id=the-domparser-interface:tt-trustedhtml><a href=https://w3c.github.io/trusted-types/dist/spec/#trustedhtml data-x-internal=tt-trustedhtml>TrustedHTML</a></code> or DOMString) string, <a id=the-domparser-interface:domparsersupportedtype href=#domparsersupportedtype>DOMParserSupportedType</a> type);
+};
+
+enum <dfn data-dfn-type=enum id=domparsersupportedtype>DOMParserSupportedType</dfn> {
+  "<span>text/html</span>",
+  "<span>text/xml</span>",
+  "<span>application/xml</span>",
+  "<span>application/xhtml+xml</span>",
+  "<span>image/svg+xml</span>"
+};</code></pre>
+
+  
+
+  <h4 id=html-parsing-methods><span class=secno>2026</span> HTML parsing methods<a class=self-link href=#html-parsing-methods></a></h4>
+
+  <dl class=domintro><dt><code><var>element</var>.<span id=dom-element-sethtml>setHTML</span>(<var>html</var>, <var>options</var>)</code><dd><p>Parses <var>html</var> using the HTML parser with options <var>options</var>, and replaces
+   the children of <var>element</var> with the result. <var>element</var> provides context for the
+   HTML parser. The parsed fragment is <span>sanitized</span> based on the
+   <var>options</var>'s "<code id=html-parsing-methods:dom-sethtmloptions-sanitizer><a href=#dom-sethtmloptions-sanitizer>sanitizer</a></code>" member, and
+   <a id=html-parsing-methods:dom-sanitizer-removeunsafe href=#dom-sanitizer-removeunsafe>unsafe content is removed</a>.<dt><code><var>shadowRoot</var>.<span id=dom-shadowroot-sethtml>setHTML</span>(<var>html</var>, <var>options</var>)</code><dd><p>Parses <var>html</var> using the HTML parser with options <var>options</var>, and replaces
+   the children of <var>shadowRoot</var> with the result. <var>shadowRoot</var>'s <a id=html-parsing-methods:concept-documentfragment-host href=https://dom.spec.whatwg.org/#concept-documentfragment-host data-x-internal=concept-documentfragment-host>host</a> provides context for the HTML parser. The
+   parsed fragment is <span>sanitized</span> based on the <var>options</var>'s
+   "<code id=html-parsing-methods:dom-sethtmloptions-sanitizer-2><a href=#dom-sethtmloptions-sanitizer>sanitizer</a></code>" member, and <a id=html-parsing-methods:dom-sanitizer-removeunsafe-2 href=#dom-sanitizer-removeunsafe>unsafe content is removed</a>.<dt><code><var>element</var>.<span id=dom-element-sethtmlunsafe>setHTMLUnsafe</span>(<var>html</var>, <var>options</var>)</code><dd><p>Parses <var>html</var> using the HTML parser with options <var>options</var>, and replaces
+   the children of <var>element</var> with the result. <var>element</var> provides context for the
+   HTML parser. If the <var>options</var> dictionary contains a "<code id=html-parsing-methods:dom-sethtmlunsafeoptions-sanitizer><a href=#dom-sethtmlunsafeoptions-sanitizer>sanitizer</a></code>" member, it is used to
+   <span>sanitize</span> the parsed fragment before it is inserted into <var>element</var>. If the
+   <var>options</var> dictionary's "<code id=html-parsing-methods:dom-sethtmlunsafeoptions-runscripts><a href=#dom-sethtmlunsafeoptions-runscripts>runScripts</a></code>" member is true, scripts contained
+   in <var>html</var> will be executed immediately after the node tree is updated.<dt><code><var>shadowRoot</var>.<span id=dom-shadowroot-sethtmlunsafe>setHTMLUnsafe</span>(<var>html</var>, <var>options</var>)</code><dd><p>Parses <var>html</var> using the HTML parser with options <var>options</var>, and replaces
+   the children of <var>shadowRoot</var> with the result. <var>shadowRoot</var>'s <a id=html-parsing-methods:concept-documentfragment-host-2 href=https://dom.spec.whatwg.org/#concept-documentfragment-host data-x-internal=concept-documentfragment-host>host</a> provides context for the HTML parser. If the
+   <var>options</var> dictionary contains a "<code id=html-parsing-methods:dom-sethtmlunsafeoptions-sanitizer-2><a href=#dom-sethtmlunsafeoptions-sanitizer>sanitizer</a></code>" member, it is used to
+   <span>sanitize</span> the parsed fragment before it is inserted into <var>shadowRoot</var>. If
+   the <var>options</var> dictionary's "<code id=html-parsing-methods:dom-sethtmlunsafeoptions-runscripts-2><a href=#dom-sethtmlunsafeoptions-runscripts>runScripts</a></code>" member is true, scripts contained
+   in <var>html</var> will be executed immediately after the node tree is updated.</p>
+   <dt><code><var>doc</var> = Document.<span id=dom-parsehtml>parseHTML</span>(<var>html</var>, <var>options</var>)</code><dd><p>Parses <var>html</var> using the HTML parser with options <var>options</var>, and returns
+   a new <code id=html-parsing-methods:document><a href=dom.html#document>Document</a></code> containing the result. The resulting document is <span>sanitized</span> based on the <var>options</var>'s "<code id=html-parsing-methods:dom-sethtmloptions-sanitizer-3><a href=#dom-sethtmloptions-sanitizer>sanitizer</a></code>" member, and <a id=html-parsing-methods:dom-sanitizer-removeunsafe-3 href=#dom-sanitizer-removeunsafe>unsafe content is removed</a>.<dt><code><var>doc</var> = Document.<span>parseHTMLUnsafe</span>(<var>html</var>, <var>options</var>)</code><dd>
+    <p>Parses <var>html</var> using the HTML parser with options <var>options</var>, and returns the
+    resulting <code id=html-parsing-methods:document-2><a href=dom.html#document>Document</a></code>.</p>
+
+    <p>Note that <code id=html-parsing-methods:the-script-element><a href=scripting.html#the-script-element>script</a></code> elements are not evaluated during parsing, and the resulting
+    document's <a id="html-parsing-methods:document's-character-encoding" href=https://dom.spec.whatwg.org/#concept-document-encoding data-x-internal="document's-character-encoding">encoding</a> will always be
+    <span>UTF-8</span>. The document's <a id="html-parsing-methods:the-document's-address" href=https://dom.spec.whatwg.org/#concept-document-url data-x-internal="the-document's-address">URL</a> will be
+    <code id=html-parsing-methods:about:blank><a href=infrastructure.html#about:blank>about:blank</a></code>. If the <var>options</var> dictionary contains a "<code id=html-parsing-methods:dom-parsehtmlunsafeoptions-sanitizer><a href=#dom-parsehtmlunsafeoptions-sanitizer>sanitizer</a></code>" member, it is used to
+    <span>sanitize</span> the resulting DOM.</p>
+   </dl>
+
+  <p class=warning>The methods with an <code>Unsafe</code> suffix perform no
+  sanitization to remove potentially-dangerous elements and attributes like <code id=html-parsing-methods:the-script-element-2><a href=scripting.html#the-script-element>script</a></code> or
+  <a id=html-parsing-methods:event-handler-content-attributes href=webappapis.html#event-handler-content-attributes>event handler content attributes</a>.</p>
+
+  
+
+  <h4 id=html-serialization-methods><span class=secno>2026</span> HTML serialization methods<a class=self-link href=#html-serialization-methods></a></h4>
+
+  <dl class=domintro><dt><code><var>html</var> = <var>element</var>.<span id=dom-element-gethtml>getHTML</span>({ <a id=html-serialization-methods:dom-gethtmloptions-serializableshadowroots href=#dom-gethtmloptions-serializableshadowroots>serializableShadowRoots</a>, <a id=html-serialization-methods:dom-gethtmloptions-shadowroots href=#dom-gethtmloptions-shadowroots>shadowRoots</a> })</code><dd>
+    <p>Returns the result of serializing <var>element</var> to HTML. <a id=html-serialization-methods:shadow-root href=https://dom.spec.whatwg.org/#concept-shadow-root data-x-internal=shadow-root>Shadow roots</a> within <var>element</var> are serialized according to the provided options:</p>
+
+    <ul><li><p>If <code id=html-serialization-methods:dom-gethtmloptions-serializableshadowroots-2><a href=#dom-gethtmloptions-serializableshadowroots>serializableShadowRoots</a></code> is true, then all shadow roots marked as <a id=html-serialization-methods:shadow-serializable href=https://dom.spec.whatwg.org/#shadowroot-serializable data-x-internal=shadow-serializable>serializable</a> are serialized.<li><p>If the <code id=html-serialization-methods:dom-gethtmloptions-shadowroots-2><a href=#dom-gethtmloptions-shadowroots>shadowRoots</a></code> array is provided, then all shadow roots specified in the array are serialized, regardless of whether or not they are marked as serializable.</ul>
+
+    <p>If neither option is provided, then no shadow roots are serialized.</p>
+   <dt><code><var>html</var> = <var>shadowRoot</var>.<span id=dom-shadowroot-gethtml>getHTML</span>({ <a id=html-serialization-methods:dom-gethtmloptions-serializableshadowroots-3 href=#dom-gethtmloptions-serializableshadowroots>serializableShadowRoots</a>, <a id=html-serialization-methods:dom-gethtmloptions-shadowroots-3 href=#dom-gethtmloptions-shadowroots>shadowRoots</a> })</code><dd>
+    <p>Returns the result of serializing <var>shadowRoot</var> to HTML, using its <a id=html-serialization-methods:concept-documentfragment-host href=https://dom.spec.whatwg.org/#concept-documentfragment-host data-x-internal=concept-documentfragment-host>shadow host</a> as the context element. <a id=html-serialization-methods:shadow-root-2 href=https://dom.spec.whatwg.org/#concept-shadow-root data-x-internal=shadow-root>Shadow roots</a> within <var>shadowRoot</var> are serialized according to the provided options, as above.</p>
+   </dl>
+
+  
+
+  <h4 id=the-innerhtml-property><span class=secno>2026</span> The <code id=the-innerhtml-property:dom-element-innerhtml><a href=#dom-element-innerhtml>innerHTML</a></code> property<a class=self-link href=#the-innerhtml-property></a></h4>
+
+  <p class=XXX>The <code id=the-innerhtml-property:dom-element-innerhtml-2><a href=#dom-element-innerhtml>innerHTML</a></code> property has a number of outstanding issues
+  in the <cite>DOM Parsing and Serialization</cite> <a href=https://github.com/w3c/DOM-Parsing/issues>issue
+  tracker</a>, documenting various problems with its specification.</p>
+
+  <dl class=domintro><dt><code><var>element</var>.<span id=dom-element-innerhtml>innerHTML</span></code><dd>
+    <p>Returns a fragment of HTML or XML that represents the element's contents.</p>
+
+    <p>In the case of an XML document, throws an <a id=the-innerhtml-property:invalidstateerror href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a>
+    <code id=the-innerhtml-property:domexception><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the element cannot be serialized to XML.</p>
+   <dt><code><var>element</var>.<a id=the-innerhtml-property:dom-element-innerhtml-3 href=#dom-element-innerhtml>innerHTML</a> = <var>value</var></code><dd>
+    <p>Replaces the contents of the element with nodes parsed from the given string.</p>
+
+    <p>In the case of an XML document, throws a <a id=the-innerhtml-property:syntaxerror href=https://webidl.spec.whatwg.org/#syntaxerror data-x-internal=syntaxerror>"<code>SyntaxError</code>"</a>
+    <code id=the-innerhtml-property:domexception-2><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the given string is not well-formed.</p>
+   <dt><code><var>shadowRoot</var>.<span id=dom-shadowroot-innerhtml>innerHTML</span></code><dd>
+    <p>Returns a fragment of HTML that represents the shadow roots's contents.</p>
+   <dt><code><var>shadowRoot</var>.<a id=the-innerhtml-property:dom-shadowroot-innerhtml href=#dom-shadowroot-innerhtml>innerHTML</a> = <var>value</var></code><dd>
+    <p>Replaces the contents of the shadow root with nodes parsed from the given string.</p>
+   </dl>
+
+  <p class=warning>These properties' setters perform no sanitization to remove
+  potentially-dangerous elements and attributes like <code id=the-innerhtml-property:the-script-element><a href=scripting.html#the-script-element>script</a></code> or <a id=the-innerhtml-property:event-handler-content-attributes href=webappapis.html#event-handler-content-attributes>event handler
+  content attributes</a>.</p>
+
+  
+
+  <h4 id=the-outerhtml-property><span class=secno>2026</span> The <code id=the-outerhtml-property:dom-element-outerhtml><a href=#dom-element-outerhtml>outerHTML</a></code> property<a class=self-link href=#the-outerhtml-property></a></h4>
+
+  <p class=XXX>The <code id=the-outerhtml-property:dom-element-outerhtml-2><a href=#dom-element-outerhtml>outerHTML</a></code> property has a number of outstanding issues
+  in the <cite>DOM Parsing and Serialization</cite> <a href=https://github.com/w3c/DOM-Parsing/issues>issue
+  tracker</a>, documenting various problems with its specification.</p>
+
+  <dl class=domintro><dt><code><var>element</var>.<span id=dom-element-outerhtml>outerHTML</span></code><dd>
+    <p>Returns a fragment of HTML or XML that represents the element and its contents.</p>
+
+    <p>In the case of an XML document, throws an <a id=the-outerhtml-property:invalidstateerror href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a>
+    <code id=the-outerhtml-property:domexception><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the element cannot be serialized to XML.</p>
+   <dt><code><var>element</var>.<a id=the-outerhtml-property:dom-element-outerhtml-3 href=#dom-element-outerhtml>outerHTML</a> = <var>value</var></code><dd>
+    <p>Replaces the element with nodes parsed from the given string.</p>
+
+    <p>In the case of an XML document, throws a <a id=the-outerhtml-property:syntaxerror href=https://webidl.spec.whatwg.org/#syntaxerror data-x-internal=syntaxerror>"<code>SyntaxError</code>"</a>
+    <code id=the-outerhtml-property:domexception-2><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the given string is not well-formed.</p>
+
+    <p>Throws a <a id=the-outerhtml-property:nomodificationallowederror href=https://webidl.spec.whatwg.org/#nomodificationallowederror data-x-internal=nomodificationallowederror>"<code>NoModificationAllowedError</code>"</a> <code id=the-outerhtml-property:domexception-3><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if
+    the parent of the element is a <a id=the-outerhtml-property:document href=dom.html#document><code>Document</code></a>.</p>
+   </dl>
+
+  <p class=warning>This property's setter performs no sanitization to remove potentially-dangerous
+  elements and attributes like <code id=the-outerhtml-property:the-script-element><a href=scripting.html#the-script-element>script</a></code> or <a id=the-outerhtml-property:event-handler-content-attributes href=webappapis.html#event-handler-content-attributes>event handler content
+  attributes</a>.</p>
+
+  
+
+  <h4 id=the-insertadjacenthtml()-method><span class=secno>2026</span> The <code id=the-insertadjacenthtml()-method:dom-element-insertadjacenthtml><a href=#dom-element-insertadjacenthtml>insertAdjacentHTML()</a></code> method<a class=self-link href=#the-insertadjacenthtml()-method></a></h4>
+
+  <p class=XXX>The <code id=the-insertadjacenthtml()-method:dom-element-insertadjacenthtml-2><a href=#dom-element-insertadjacenthtml>insertAdjacentHTML()</a></code>
+  method has a number of outstanding issues in the <cite>DOM Parsing and Serialization</cite> <a href=https://github.com/w3c/DOM-Parsing/issues>issue tracker</a>, documenting various problems
+  with its specification.</p>
+
+  <dl class=domintro><dt><code><var>element</var>.<span id=dom-element-insertadjacenthtml>insertAdjacentHTML</span>(<var>position</var>, <var>string</var>)</code><dd>
+    <p>Parses <var>string</var> as HTML or XML and inserts the resulting nodes into the tree in
+    the position given by the <var>position</var> argument, as follows:</p>
+
+    <dl><dt>"<code>beforebegin</code>"<dd>Before the element itself (i.e., after <var>element</var>'s previous sibling)<dt>"<code>afterbegin</code>"<dd>Just inside the element, before its first child.<dt>"<code>beforeend</code>"<dd>Just inside the element, after its last child.<dt>"<code>afterend</code>"<dd>After the element itself (i.e., before <var>element</var>'s next sibling)</dl>
+
+    <p>Throws a <a id=the-insertadjacenthtml()-method:syntaxerror href=https://webidl.spec.whatwg.org/#syntaxerror data-x-internal=syntaxerror>"<code>SyntaxError</code>"</a> <code id=the-insertadjacenthtml()-method:domexception><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if the arguments
+    have invalid values (e.g., in the case of an <a id=the-insertadjacenthtml()-method:xml-documents href=https://dom.spec.whatwg.org/#xml-document data-x-internal=xml-documents>XML document</a>,
+    if the given string is not well-formed).</p>
+
+    <p>Throws a <a id=the-insertadjacenthtml()-method:nomodificationallowederror href=https://webidl.spec.whatwg.org/#nomodificationallowederror data-x-internal=nomodificationallowederror>"<code>NoModificationAllowedError</code>"</a> <code id=the-insertadjacenthtml()-method:domexception-2><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code>
+    if the given position isn't possible (e.g. inserting elements after the root element of a
+    <code id=the-insertadjacenthtml()-method:document><a href=dom.html#document>Document</a></code>).</p>
+   </dl>
+
+  <p class=warning>This method performs no sanitization to remove potentially-dangerous elements
+  and attributes like <code id=the-insertadjacenthtml()-method:the-script-element><a href=scripting.html#the-script-element>script</a></code> or <a id=the-insertadjacenthtml()-method:event-handler-content-attributes href=webappapis.html#event-handler-content-attributes>event handler content attributes</a>.</p>
+
+  
+
+  <h4 id=the-createcontextualfragment()-method><span class=secno>2026</span> The <code id=the-createcontextualfragment()-method:dom-range-createcontextualfragment><a href=#dom-range-createcontextualfragment>createContextualFragment()</a></code>
+  method<a class=self-link href=#the-createcontextualfragment()-method></a></h4>
+
+  <p class=XXX>The <code id=the-createcontextualfragment()-method:dom-range-createcontextualfragment-2><a href=#dom-range-createcontextualfragment>createContextualFragment()</a></code> method has a number
+  of outstanding issues in the <cite>DOM Parsing and Serialization</cite> <a href=https://github.com/w3c/DOM-Parsing/issues>issue tracker</a>, documenting various problems
+  with its specification.</p>
+
+  <dl class=domintro><dt><code><var>docFragment</var> = <var>range</var>.<span id=dom-range-createcontextualfragment>createContextualFragment</span>(<var>string</var>)</code><dd>
+    <p>Returns a <code id=the-createcontextualfragment()-method:documentfragment><a href=https://dom.spec.whatwg.org/#interface-documentfragment data-x-internal=documentfragment>DocumentFragment</a></code> created from the markup string <var>string</var> using
+    <var>range</var>'s <a id=the-createcontextualfragment()-method:concept-range-start-node href=https://dom.spec.whatwg.org/#concept-range-start-node data-x-internal=concept-range-start-node>start node</a> as the context in
+    which <var>fragment</var> is parsed.</p>
+   </dl>
+
+  <p class=warning>This method performs no sanitization to remove potentially-dangerous elements
+  and attributes like <code id=the-createcontextualfragment()-method:the-script-element><a href=scripting.html#the-script-element>script</a></code> or <a id=the-createcontextualfragment()-method:event-handler-content-attributes href=webappapis.html#event-handler-content-attributes>event handler content attributes</a>.</p>
+
+  <pre><code class=idl>partial interface <a id=Range-partial href=https://dom.spec.whatwg.org/#interface-range data-x-internal=range>Range</a> {
+  [<span>CEReactions</span>, NewObject] <code id=the-createcontextualfragment()-method:documentfragment-2><a href=https://dom.spec.whatwg.org/#interface-documentfragment data-x-internal=documentfragment>DocumentFragment</a></code> <a id=the-createcontextualfragment()-method:dom-range-createcontextualfragment-3 href=#dom-range-createcontextualfragment>createContextualFragment</a>((<code id=the-createcontextualfragment()-method:tt-trustedhtml><a href=https://w3c.github.io/trusted-types/dist/spec/#trustedhtml data-x-internal=tt-trustedhtml>TrustedHTML</a></code> or DOMString) string);
+};</code></pre>
+
+  
+
+  <h4 id=the-xmlserializer-interface><span class=secno>2026</span> The <code id=the-xmlserializer-interface:xmlserializer><a href=#xmlserializer>XMLSerializer</a></code> interface<a class=self-link href=#the-xmlserializer-interface></a></h4>
+
+  <p class=XXX>The <code id=the-xmlserializer-interface:xmlserializer-2><a href=#xmlserializer>XMLSerializer</a></code> interface has a number of outstanding issues in the
+  <cite>DOM Parsing and Serialization</cite> <a href=https://github.com/w3c/DOM-Parsing/issues>issue tracker</a>, documenting various problems
+  with its specification. The remainder of <cite>DOM Parsing and Serialization</cite> will be
+  gradually upstreamed to this specification.</p>
+
+  <dl class=domintro><dt><code><var>xmlSerializer</var> = new <span id=dom-xmlserializer-constructor>XMLSerializer</span>()</code><dd><p>Constructs a new <code id=the-xmlserializer-interface:xmlserializer-3><a href=#xmlserializer>XMLSerializer</a></code> object.<dt><code><var>string</var> = <var>xmlSerializer</var>.<span id=dom-xmlserializer-serializetostring>serializeToString</span>(<var>root</var>)</code><dd>
+    <p>Returns the result of serializing <var>root</var> to XML.</p>
+
+    <p>Throws an <a id=the-xmlserializer-interface:invalidstateerror href=https://webidl.spec.whatwg.org/#invalidstateerror data-x-internal=invalidstateerror>"<code>InvalidStateError</code>"</a> <code id=the-xmlserializer-interface:domexception><a href=https://webidl.spec.whatwg.org/#dfn-DOMException data-x-internal=domexception>DOMException</a></code> if
+    <var>root</var> cannot be serialized to XML.</p>
+   </dl>
+
+  <p class=note>The design of <code id=the-xmlserializer-interface:xmlserializer-4><a href=#xmlserializer>XMLSerializer</a></code>, as a class that needs to be constructed
+  and then have its <code id=the-xmlserializer-interface:dom-xmlserializer-serializetostring><a href=#dom-xmlserializer-serializetostring>serializeToString()</a></code>
+  method called, is an unfortunate historical artifact. If we were designing this functionality
+  today it would be a standalone function.</p>
+
+  <pre><code class=idl>[Exposed=Window]
+interface <dfn data-dfn-type=interface id=xmlserializer>XMLSerializer</dfn> {
+  <a id=the-xmlserializer-interface:dom-xmlserializer-constructor href=#dom-xmlserializer-constructor>constructor</a>();
+
+  DOMString <a id=the-xmlserializer-interface:dom-xmlserializer-serializetostring-2 href=#dom-xmlserializer-serializetostring>serializeToString</a>(<code id=the-xmlserializer-interface:node><a href=https://dom.spec.whatwg.org/#interface-node data-x-internal=node>Node</a></code> root);
+};</code></pre>
+
+  
+
+  <h3 id=html-sanitization><span class=secno>2026</span> HTML sanitization<a class=self-link href=#html-sanitization></a></h3>
+
+  <h4 id=introduction-11><span class=secno>2026</span> Introduction<a class=self-link href=#introduction-11></a></h4>
+
+  
+
+  <p>Web applications often need to process untrusted HTML strings, such as when rendering
+  user-generated content or using client-side templates. Safely inserting these strings into the DOM
+  requires careful sanitization to prevent DOM-based cross-site scripting (XSS) attacks.</p>
+
+  <p>HTML sanitization provides a native mechanism for safely parsing and sanitizing HTML strings.
+  By using the user agent's own HTML parser, they ensure the sanitized output accurately reflects
+  how the browser will render the content, preventing script execution and mitigating advanced
+  attacks such as <a href=https://github.com/google/security-research-pocs/tree/master/script-gadgets>script
+  gadgets</a>.</p>
+
+  <p>These APIs offer functionality to parse a string containing HTML into a DOM tree, and to filter
+  the resulting tree according to a user-supplied configuration. The methods come in two main
+  flavors: "safe" and "unsafe".</p>
+
+  <h5 id=safe-and-unsafe><span class=secno>2026</span> Safe and unsafe<a class=self-link href=#safe-and-unsafe></a></h5>
+
+  <p>The "safe" methods will not generate any markup that executes script. That is, they are
+  intended to be safe from XSS. The "unsafe" methods will parse and filter based on the provided
+  configuration, but do not have the same safety guarantees by default.</p>
+
+  <h4 id=the-sanitizer-interface><span class=secno>2026</span> The <code id=the-sanitizer-interface:sanitizer><a href=#sanitizer>Sanitizer</a></code> interface<a class=self-link href=#the-sanitizer-interface></a></h4>
+
+  <pre><code class=idl>[Exposed=Window]
+interface <dfn data-dfn-type=interface id=sanitizer>Sanitizer</dfn> {
+  <a id=the-sanitizer-interface:dom-sanitizer-constructor href=#dom-sanitizer-constructor>constructor</a>(optional (<a id=the-sanitizer-interface:sanitizerconfig href=#sanitizerconfig>SanitizerConfig</a> or <a id=the-sanitizer-interface:sanitizerpresets href=#sanitizerpresets>SanitizerPresets</a>) configuration = "<a id=the-sanitizer-interface:dom-sanitizerpresets-default href=#dom-sanitizerpresets-default>default</a>");
+
+  // Query configuration:
+  <a id=the-sanitizer-interface:sanitizerconfig-2 href=#sanitizerconfig>SanitizerConfig</a> <a id=the-sanitizer-interface:dom-sanitizer-get href=#dom-sanitizer-get>get</a>();
+
+  // Modify a Sanitizer's lists and fields:
+  boolean <a id=the-sanitizer-interface:dom-sanitizer-allowelement href=#dom-sanitizer-allowelement>allowElement</a>(<a id=the-sanitizer-interface:sanitizerelementwithattributes href=#sanitizerelementwithattributes>SanitizerElementWithAttributes</a> element);
+  boolean <a id=the-sanitizer-interface:dom-sanitizer-removeelement href=#dom-sanitizer-removeelement>removeElement</a>(<a id=the-sanitizer-interface:sanitizerelement href=#sanitizerelement>SanitizerElement</a> element);
+  boolean <a id=the-sanitizer-interface:dom-sanitizer-replaceelementwithchildren href=#dom-sanitizer-replaceelementwithchildren>replaceElementWithChildren</a>(<a id=the-sanitizer-interface:sanitizerelement-2 href=#sanitizerelement>SanitizerElement</a> element);
+  boolean <a id=the-sanitizer-interface:dom-sanitizer-allowprocessinginstruction href=#dom-sanitizer-allowprocessinginstruction>allowProcessingInstruction</a>(<a id=the-sanitizer-interface:sanitizerpi href=#sanitizerpi>SanitizerPI</a> pi);
+  boolean <a id=the-sanitizer-interface:dom-sanitizer-removeprocessinginstruction href=#dom-sanitizer-removeprocessinginstruction>removeProcessingInstruction</a>(<a id=the-sanitizer-interface:sanitizerpi-2 href=#sanitizerpi>SanitizerPI</a> pi);
+  boolean <a id=the-sanitizer-interface:dom-sanitizer-allowattribute href=#dom-sanitizer-allowattribute>allowAttribute</a>(<a id=the-sanitizer-interface:sanitizerattribute href=#sanitizerattribute>SanitizerAttribute</a> attribute);
+  boolean <a id=the-sanitizer-interface:dom-sanitizer-removeattribute href=#dom-sanitizer-removeattribute>removeAttribute</a>(<a id=the-sanitizer-interface:sanitizerattribute-2 href=#sanitizerattribute>SanitizerAttribute</a> attribute);
+  boolean <a id=the-sanitizer-interface:dom-sanitizer-setcomments href=#dom-sanitizer-setcomments>setComments</a>(boolean allow);
+  boolean <a id=the-sanitizer-interface:dom-sanitizer-setdataattributes href=#dom-sanitizer-setdataattributes>setDataAttributes</a>(boolean allow);
+
+  // Remove markup that executes script.
+  boolean <a id=the-sanitizer-interface:dom-sanitizer-removeunsafe href=#dom-sanitizer-removeunsafe>removeUnsafe</a>();
+};</code></pre>
+
+  <dl class=domintro><dt><code><var>config</var> = <var>sanitizer</var>.<a id=the-sanitizer-interface:dom-sanitizer-get-2 href=#dom-sanitizer-get>get</a>()</code><dd><p>Returns a copy of the sanitizer's <a id=the-sanitizer-interface:sanitizerconfig-3 href=#sanitizerconfig>configuration</a>.<dt><code><var>sanitizer</var>.<a id=the-sanitizer-interface:dom-sanitizer-allowelement-2 href=#dom-sanitizer-allowelement>allowElement</a>(<var>element</var>)</code><dd><p>Ensures that the sanitizer configuration allows the specified element.<dt><code><var>sanitizer</var>.<a id=the-sanitizer-interface:dom-sanitizer-removeelement-2 href=#dom-sanitizer-removeelement>removeElement</a>(<var>element</var>)</code><dd><p>Ensures that the sanitizer configuration blocks the specified element.<dt><code><var>sanitizer</var>.<a id=the-sanitizer-interface:dom-sanitizer-replaceelementwithchildren-2 href=#dom-sanitizer-replaceelementwithchildren>replaceElementWithChildren</a>(<var>element</var>)</code><dd><p>Configures the sanitizer to remove the specified element but keep its child
+   nodes.<dt><code><var>sanitizer</var>.<a id=the-sanitizer-interface:dom-sanitizer-allowattribute-2 href=#dom-sanitizer-allowattribute>allowAttribute</a>(<var>attribute</var>)</code><dd><p>Configures the sanitizer to allow the specified attribute globally.<dt><code><var>sanitizer</var>.<a id=the-sanitizer-interface:dom-sanitizer-removeattribute-2 href=#dom-sanitizer-removeattribute>removeAttribute</a>(<var>attribute</var>)</code><dd><p>Configures the sanitizer to block the specified attribute globally.<dt><code><var>sanitizer</var>.<a id=the-sanitizer-interface:dom-sanitizer-allowprocessinginstruction-2 href=#dom-sanitizer-allowprocessinginstruction>allowProcessingInstruction</a>(<var>pi</var>)</code><dd><p>Configures the sanitizer to allow the specified processing instruction.<dt><code><var>sanitizer</var>.<a id=the-sanitizer-interface:dom-sanitizer-removeprocessinginstruction-2 href=#dom-sanitizer-removeprocessinginstruction>removeProcessingInstruction</a>(<var>pi</var>)</code><dd><p>Configures the sanitizer to block the specified processing instruction.<dt><code><var>sanitizer</var>.<a id=the-sanitizer-interface:dom-sanitizer-setcomments-2 href=#dom-sanitizer-setcomments>setComments</a>(<var>allow</var>)</code><dd><p>Sets whether the sanitizer preserves comments.<dt><code><var>sanitizer</var>.<a id=the-sanitizer-interface:dom-sanitizer-setdataattributes-2 href=#dom-sanitizer-setdataattributes>setDataAttributes</a>(<var>allow</var>)</code><dd><p>Sets whether the sanitizer preserves custom data attributes (e.g., <code id=the-sanitizer-interface:attr-data-*><a href=dom.html#attr-data-*>data-*</a></code>).<dt><code><var>sanitizer</var>.<a id=the-sanitizer-interface:dom-sanitizer-removeunsafe-2 href=#dom-sanitizer-removeunsafe>removeUnsafe</a>()</code><dd><p>Modifies the configuration to automatically remove elements and attributes that are
+   considered unsafe.</dl>
+
+  <p>A <code id=the-sanitizer-interface:sanitizer-2><a href=#sanitizer>Sanitizer</a></code> object has an associated <dfn data-dfn-for=Sanitizer id=configuration>configuration</dfn>,
+  which is a <a id=the-sanitizer-interface:sanitizerconfig-4 href=#sanitizerconfig>SanitizerConfig</a>.</p>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=Sanitizer data-dfn-type=constructor id=dom-sanitizer-constructor><code>new
+  Sanitizer(<var>configuration</var>)</code></dfn> constructor steps are:</p>
+
+  <ol><li>
+    <p>If <var>configuration</var> is a <a id=the-sanitizer-interface:sanitizerpresets-2 href=#sanitizerpresets>SanitizerPresets</a> <a id=the-sanitizer-interface:string href=https://infra.spec.whatwg.org/#string data-x-internal=string>string</a>:</p>
+
+    <ol><li><p><a id=the-sanitizer-interface:assert href=https://infra.spec.whatwg.org/#assert data-x-internal=assert>Assert</a>: <var>configuration</var> is "<a id=the-sanitizer-interface:dom-sanitizerpresets-default-2 href=#dom-sanitizerpresets-default>default</a>".<li><p>Set <var>configuration</var> to the <span>built-in safe default
+     configuration</span>.</ol>
+   <li><p><a id=the-sanitizer-interface:configure-a-sanitizer href=#configure-a-sanitizer>Configure</a> <a id=the-sanitizer-interface:this href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a> given
+   <var>configuration</var> and true.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>To <dfn id=configure-a-sanitizer>configure</dfn> a <code id=the-sanitizer-interface:sanitizer-3><a href=#sanitizer>Sanitizer</a></code>
+  <var>sanitizer</var>, given a dictionary <var>configuration</var> and a boolean
+  <var>allowCommentsPIsAndDataAttributes</var>:</p>
+
+  <ol><li><p><a id=the-sanitizer-interface:canonicalize-the-configuration href=#canonicalize-the-configuration>Canonicalize the configuration</a> <var>configuration</var> with
+   <var>allowCommentsPIsAndDataAttributes</var>.<li><p>If <var>configuration</var> is not <span>valid</span>,
+   then throw a <code id=the-sanitizer-interface:typeerror><a href=https://tc39.es/ecma262/#sec-native-error-types-used-in-this-standard-typeerror data-x-internal=typeerror>TypeError</a></code>.<li><p>Set <var>sanitizer</var>'s <a id=the-sanitizer-interface:configuration href=#configuration>configuration</a> to
+   <var>configuration</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>To <dfn id=canonicalize-the-configuration>canonicalize the configuration</dfn> <a id=the-sanitizer-interface:sanitizerconfig-5 href=#sanitizerconfig>SanitizerConfig</a>
+  <var>configuration</var> with a boolean <var>allowCommentsPIsAndDataAttributes</var>:</p>
+
+  <ol><li><p>If neither <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements><a href=#dom-sanitizerconfig-elements>elements</a></code>"] nor <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeelements><a href=#dom-sanitizerconfig-removeelements>removeElements</a></code>"] <a id=the-sanitizer-interface:map-exists href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then set <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeelements-2><a href=#dom-sanitizerconfig-removeelements>removeElements</a></code>"] to an empty list.<li><p>If neither <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"] nor <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeattributes><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code>"] <a id=the-sanitizer-interface:map-exists-2 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then set <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeattributes-2><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code>"] to an empty
+   list.<li>
+    <p>If neither <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"] nor
+    <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeprocessinginstructions><a href=#dom-sanitizerconfig-removeprocessinginstructions>removeProcessingInstructions</a></code>"]
+    <a id=the-sanitizer-interface:map-exists-3 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+    <ol><li><p>If <var>allowCommentsPIsAndDataAttributes</var> is true, then set
+     <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeprocessinginstructions-2><a href=#dom-sanitizerconfig-removeprocessinginstructions>removeProcessingInstructions</a></code>"]
+     to an empty list.<li><p>Otherwise, set <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions-2><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"] to an empty
+     list.</ol>
+   <li>
+    <p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-2><a href=#dom-sanitizerconfig-elements>elements</a></code>"]
+    <a id=the-sanitizer-interface:map-exists-4 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+    <ol><li><p>Let <var>newElements</var> be « ».<li><p><a id=the-sanitizer-interface:list-iterate href=https://infra.spec.whatwg.org/#list-iterate data-x-internal=list-iterate>For each</a> <var>element</var> of
+     <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-3><a href=#dom-sanitizerconfig-elements>elements</a></code>"], <a id=the-sanitizer-interface:list-append href=https://infra.spec.whatwg.org/#list-append data-x-internal=list-append>append</a> the result of <span>canonicalizing</span> <var>element</var> to <var>newElements</var>.<li><p>Set <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-4><a href=#dom-sanitizerconfig-elements>elements</a></code>"] to <var>newElements</var>.</ol>
+   <li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeelements-3><a href=#dom-sanitizerconfig-removeelements>removeElements</a></code>"] <a id=the-sanitizer-interface:map-exists-5 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then set <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeelements-4><a href=#dom-sanitizerconfig-removeelements>removeElements</a></code>"] to the result of <a id=the-sanitizer-interface:canonicalize-a-sanitizer-element-list href=#canonicalize-a-sanitizer-element-list>canonicalizing</a>
+   <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeelements-5><a href=#dom-sanitizerconfig-removeelements>removeElements</a></code>"].<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-2><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"] <a id=the-sanitizer-interface:map-exists-6 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then set <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-3><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"] to the result of <a id=the-sanitizer-interface:canonicalize-a-sanitizer-list href=#canonicalize-a-sanitizer-list>canonicalizing</a> <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-4><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"].<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeattributes-3><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code>"] <a id=the-sanitizer-interface:map-exists-7 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then set <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeattributes-4><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code>"] to the result of <a id=the-sanitizer-interface:canonicalize-a-sanitizer-list-2 href=#canonicalize-a-sanitizer-list>canonicalizing</a> <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeattributes-5><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code>"].<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-replacewithchildrenelements><a href=#dom-sanitizerconfig-replacewithchildrenelements>replaceWithChildrenElements</a></code>"]
+   <a id=the-sanitizer-interface:map-exists-8 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then set <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-replacewithchildrenelements-2><a href=#dom-sanitizerconfig-replacewithchildrenelements>replaceWithChildrenElements</a></code>"] to
+   the result of <a id=the-sanitizer-interface:canonicalize-a-sanitizer-element-list-2 href=#canonicalize-a-sanitizer-element-list>canonicalizing</a>
+   <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-replacewithchildrenelements-3><a href=#dom-sanitizerconfig-replacewithchildrenelements>replaceWithChildrenElements</a></code>"].<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions-3><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"] <a id=the-sanitizer-interface:map-exists-9 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then set <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions-4><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"] to the result
+   of <a id=the-sanitizer-interface:canonicalize-a-processing-instruction-list href=#canonicalize-a-processing-instruction-list>canonicalizing</a>
+   <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions-5><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"].<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeprocessinginstructions-3><a href=#dom-sanitizerconfig-removeprocessinginstructions>removeProcessingInstructions</a></code>"]
+   <a id=the-sanitizer-interface:map-exists-10 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then set <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeprocessinginstructions-4><a href=#dom-sanitizerconfig-removeprocessinginstructions>removeProcessingInstructions</a></code>"]
+   to the result of <a id=the-sanitizer-interface:canonicalize-a-processing-instruction-list-2 href=#canonicalize-a-processing-instruction-list>canonicalizing</a>
+   <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeprocessinginstructions-5><a href=#dom-sanitizerconfig-removeprocessinginstructions>removeProcessingInstructions</a></code>"].<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-comments><a href=#dom-sanitizerconfig-comments>comments</a></code>"]
+   does not <a id=the-sanitizer-interface:map-exists-11 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exist</a>, then set it to
+   <var>allowCommentsPIsAndDataAttributes</var>.<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-5><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"] <a id=the-sanitizer-interface:map-exists-12 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a> and <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-dataattributes><a href=#dom-sanitizerconfig-dataattributes>dataAttributes</a></code>"] does not <a id=the-sanitizer-interface:map-exists-13 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exist</a>, then set it to <var>allowCommentsPIsAndDataAttributes</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>To <dfn id=canonicalize-a-sanitizer-list>canonicalize a sanitizer list</dfn> <var>list</var>:</p>
+
+  <ol><li><p>Let <var>newList</var> be « ».<li><p><a id=the-sanitizer-interface:list-iterate-2 href=https://infra.spec.whatwg.org/#list-iterate data-x-internal=list-iterate>For each</a> <var>item</var> in <var>list</var>, <a id=the-sanitizer-interface:list-append-2 href=https://infra.spec.whatwg.org/#list-append data-x-internal=list-append>append</a> the result of <a id=the-sanitizer-interface:canonicalize-a-sanitizer-name href=#canonicalize-a-sanitizer-name>canonicalizing</a> <var>item</var> to <var>newList</var>.<li><p>Return <var>newList</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>To <dfn id=canonicalize-a-processing-instruction-list>canonicalize a processing instruction list</dfn> <var>list</var>:</p>
+
+  <ol><li><p>Let <var>newList</var> be « ».<li><p><a id=the-sanitizer-interface:list-iterate-3 href=https://infra.spec.whatwg.org/#list-iterate data-x-internal=list-iterate>For each</a> <var>item</var> in <var>list</var>, <a id=the-sanitizer-interface:list-append-3 href=https://infra.spec.whatwg.org/#list-append data-x-internal=list-append>append</a> the result of <a id=the-sanitizer-interface:canonicalize-a-processing-instruction href=#canonicalize-a-processing-instruction>canonicalizing</a> <var>item</var> to <var>newList</var>.<li><p>Return <var>newList</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>To <dfn id=canonicalize-a-processing-instruction>canonicalize a processing instruction</dfn> given a <code id=the-sanitizer-interface:sanitizerpi-3><a href=#sanitizerpi>SanitizerPI</a></code>
+  <var>pi</var>:</p>
+
+  <ol><li><p>If <var>pi</var> is a <code id=the-sanitizer-interface:idl-domstring><a href=https://webidl.spec.whatwg.org/#idl-DOMString data-x-internal=idl-domstring>DOMString</a></code>, then return «[ "<code id=the-sanitizer-interface:dom-sanitizerprocessinginstruction-target><a href=#dom-sanitizerprocessinginstruction-target>target</a></code>" → <var>pi</var> ]».<li><p><a id=the-sanitizer-interface:assert-2 href=https://infra.spec.whatwg.org/#assert data-x-internal=assert>Assert</a>: <var>pi</var> is a dictionary and <var>pi</var>["<code id=the-sanitizer-interface:dom-sanitizerprocessinginstruction-target-2><a href=#dom-sanitizerprocessinginstruction-target>target</a></code>"] <a id=the-sanitizer-interface:map-exists-14 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>.<li><p>Return «[ "<code id=the-sanitizer-interface:dom-sanitizerprocessinginstruction-target-3><a href=#dom-sanitizerprocessinginstruction-target>target</a></code>" →
+   <var>pi</var>["<code id=the-sanitizer-interface:dom-sanitizerprocessinginstruction-target-4><a href=#dom-sanitizerprocessinginstruction-target>target</a></code>"]
+   ]».</ol>
+  </div>
+
+  <div algorithm="">
+  <p>To <dfn id=canonicalize-a-sanitizer-name>canonicalize a sanitizer name</dfn> given a <code id=the-sanitizer-interface:idl-domstring-2><a href=https://webidl.spec.whatwg.org/#idl-DOMString data-x-internal=idl-domstring>DOMString</a></code> or dictionary <var>name</var>, and a default namespace
+  <var>defaultNamespace</var> (default null):</p>
+
+  <ol><li><p>If <var>name</var> is a <code id=the-sanitizer-interface:idl-domstring-3><a href=https://webidl.spec.whatwg.org/#idl-DOMString data-x-internal=idl-domstring>DOMString</a></code>, then return «[
+   "name" → <var>name</var>, "namespace" → <var>defaultNamespace</var> ]».<li><p><a id=the-sanitizer-interface:assert-3 href=https://infra.spec.whatwg.org/#assert data-x-internal=assert>Assert</a>: <var>name</var> is a dictionary and both <var>name</var>["name"] and
+   <var>name</var>["namespace"] <a id=the-sanitizer-interface:map-exists-15 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exist</a>.<li><p>If <var>name</var>["namespace"] is the empty string, then set it to null.<li><p>Return «[ "name" → <var>name</var>["name"], "namespace" → <var>name</var>["namespace"]
+   ]».</ol>
+  </div>
+
+  <div algorithm="">
+  <p>To <dfn id=canonicalize-a-sanitizer-element>canonicalize a sanitizer element</dfn> given a <code id=the-sanitizer-interface:sanitizerelement-3><a href=#sanitizerelement>SanitizerElement</a></code>
+  <var>element</var>:</p>
+
+  <ol><li><p>Return the result of <a id=the-sanitizer-interface:canonicalize-a-sanitizer-name-2 href=#canonicalize-a-sanitizer-name>canonicalizing</a>
+   <var>element</var> with the <a id=the-sanitizer-interface:html-namespace-2 href=https://infra.spec.whatwg.org/#html-namespace data-x-internal=html-namespace-2>HTML namespace</a> as the default namespace.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>To <dfn id=canonicalize-a-sanitizer-element-list>canonicalize a sanitizer element list</dfn> <var>list</var>:</p>
+
+  <ol><li><p>Let <var>newList</var> be « ».<li><p><a id=the-sanitizer-interface:list-iterate-4 href=https://infra.spec.whatwg.org/#list-iterate data-x-internal=list-iterate>For each</a> <var>item</var> in <var>list</var>, <a id=the-sanitizer-interface:list-append-4 href=https://infra.spec.whatwg.org/#list-append data-x-internal=list-append>append</a> the result of <a id=the-sanitizer-interface:canonicalize-a-sanitizer-element href=#canonicalize-a-sanitizer-element>canonicalizing</a> <var>item</var> to <var>newList</var>.<li><p>Return <var>newList</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>To find the <dfn id=sanitizer-canonicalized-intersection>canonicalized intersection</dfn>
+  of <a id=the-sanitizer-interface:list href=https://infra.spec.whatwg.org/#list data-x-internal=list>lists</a> <var>A</var> and <var>B</var>:</p>
+
+  <ol><li><p>Let <var>setA</var> be « ».</p>
+
+   <li><p>Let <var>setB</var> be « ».</p>
+
+   <li><p><a id=the-sanitizer-interface:list-iterate-5 href=https://infra.spec.whatwg.org/#list-iterate data-x-internal=list-iterate>For each</a> <var>entry</var> of <var>A</var>, <a id=the-sanitizer-interface:set-append href=https://infra.spec.whatwg.org/#set-append data-x-internal=set-append>append</a> the result of <a id=the-sanitizer-interface:canonicalize-a-sanitizer-name-3 href=#canonicalize-a-sanitizer-name>canonicalizing</a> <var>entry</var> to <var>setA</var>.<li><p><a id=the-sanitizer-interface:list-iterate-6 href=https://infra.spec.whatwg.org/#list-iterate data-x-internal=list-iterate>For each</a> <var>entry</var> of <var>B</var>, <a id=the-sanitizer-interface:set-append-2 href=https://infra.spec.whatwg.org/#set-append data-x-internal=set-append>append</a> the result of <a id=the-sanitizer-interface:canonicalize-a-sanitizer-name-4 href=#canonicalize-a-sanitizer-name>canonicalizing</a> <var>entry</var> to <var>setB</var>.<li><p>Return the <a id=the-sanitizer-interface:set-intersection href=https://infra.spec.whatwg.org/#set-intersection data-x-internal=set-intersection>intersection</a> of <var>setA</var> and
+   <var>setB</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=Sanitizer data-dfn-type=method id=dom-sanitizer-get><code>get()</code></dfn> method
+  steps are:</p>
+
+  <p class=note>Outside of the <code id=the-sanitizer-interface:dom-sanitizer-get-3><a href=#dom-sanitizer-get>get()</a></code> method, the order of
+  the <code id=the-sanitizer-interface:sanitizer-4><a href=#sanitizer>Sanitizer</a></code>'s elements and attributes is unobservable. By explicitly sorting the
+  result of this method, we give implementations the opportunity to optimize by, for example, using
+  unordered sets internally.</p>
+
+  <ol><li><p>Let <var>config</var> be <a id=the-sanitizer-interface:this-2 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-sanitizer-interface:configuration-2 href=#configuration>configuration</a>.<li><p><a id=the-sanitizer-interface:assert-4 href=https://infra.spec.whatwg.org/#assert data-x-internal=assert>Assert</a>: <var>config</var> is <span>valid</span>.<li><p>If <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-5><a href=#dom-sanitizerconfig-elements>elements</a></code>"] <a id=the-sanitizer-interface:map-exists-16 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+    <ol><li>
+      <p><a id=the-sanitizer-interface:list-iterate-7 href=https://infra.spec.whatwg.org/#list-iterate data-x-internal=list-iterate>For each</a> <var>element</var> of <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-6><a href=#dom-sanitizerconfig-elements>elements</a></code>"]:</p>
+
+      <ol><li><p>If <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] <a id=the-sanitizer-interface:map-exists-17 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then set <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-2><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] to the
+       result of <a id=the-sanitizer-interface:list-sort href=https://infra.spec.whatwg.org/#list-sort-in-ascending-order data-x-internal=list-sort>sorting</a> <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-3><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"], with
+       <span>compare sanitizer items</span>.<li><p>If <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"]
+       <a id=the-sanitizer-interface:map-exists-18 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then set <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-2><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"]
+       to the result of <a id=the-sanitizer-interface:list-sort-2 href=https://infra.spec.whatwg.org/#list-sort-in-ascending-order data-x-internal=list-sort>sorting</a> <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-3><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"],
+       with <span>compare sanitizer items</span>.</ol>
+     <li><p>Set <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-7><a href=#dom-sanitizerconfig-elements>elements</a></code>"] to
+     the result of <a id=the-sanitizer-interface:list-sort-3 href=https://infra.spec.whatwg.org/#list-sort-in-ascending-order data-x-internal=list-sort>sorting</a> <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-8><a href=#dom-sanitizerconfig-elements>elements</a></code>"], with <span>compare sanitizer
+     items</span>.</ol>
+   <li>
+    <p>Otherwise:</p>
+
+    <ol><li><p>Set <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeelements-6><a href=#dom-sanitizerconfig-removeelements>removeElements</a></code>"] to the result of <a id=the-sanitizer-interface:list-sort-4 href=https://infra.spec.whatwg.org/#list-sort-in-ascending-order data-x-internal=list-sort>sorting</a> <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeelements-7><a href=#dom-sanitizerconfig-removeelements>removeElements</a></code>"], with <span>compare
+     sanitizer items</span>.</ol>
+   <li><p>If <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-replacewithchildrenelements-4><a href=#dom-sanitizerconfig-replacewithchildrenelements>replaceWithChildrenElements</a></code>"]
+   <a id=the-sanitizer-interface:map-exists-19 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then set <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-replacewithchildrenelements-5><a href=#dom-sanitizerconfig-replacewithchildrenelements>replaceWithChildrenElements</a></code>"] to
+   the result of <a id=the-sanitizer-interface:list-sort-5 href=https://infra.spec.whatwg.org/#list-sort-in-ascending-order data-x-internal=list-sort>sorting</a> <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-replacewithchildrenelements-6><a href=#dom-sanitizerconfig-replacewithchildrenelements>replaceWithChildrenElements</a></code>"],
+   with <span>compare sanitizer items</span>.<li><p>If <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions-6><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"] <a id=the-sanitizer-interface:map-exists-20 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then set <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions-7><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"] to the result
+   of <a id=the-sanitizer-interface:list-sort-6 href=https://infra.spec.whatwg.org/#list-sort-in-ascending-order data-x-internal=list-sort>sorting</a> <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions-8><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"], with
+   <var>piA</var>["<code id=the-sanitizer-interface:dom-sanitizerprocessinginstruction-target-5><a href=#dom-sanitizerprocessinginstruction-target>target</a></code>"] being
+   <a id=the-sanitizer-interface:code-unit-less-than href=https://infra.spec.whatwg.org/#code-unit-less-than data-x-internal=code-unit-less-than>code unit less than</a> <var>piB</var>["<code id=the-sanitizer-interface:dom-sanitizerprocessinginstruction-target-6><a href=#dom-sanitizerprocessinginstruction-target>target</a></code>"].<li>
+    <p>Otherwise:</p>
+
+    <ol><li><p>Set <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeprocessinginstructions-6><a href=#dom-sanitizerconfig-removeprocessinginstructions>removeProcessingInstructions</a></code>"]
+     to the result of <a id=the-sanitizer-interface:list-sort-7 href=https://infra.spec.whatwg.org/#list-sort-in-ascending-order data-x-internal=list-sort>sorting</a> <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeprocessinginstructions-7><a href=#dom-sanitizerconfig-removeprocessinginstructions>removeProcessingInstructions</a></code>"],
+     with <var>piA</var>["<code id=the-sanitizer-interface:dom-sanitizerprocessinginstruction-target-7><a href=#dom-sanitizerprocessinginstruction-target>target</a></code>"]
+     being <a id=the-sanitizer-interface:code-unit-less-than-2 href=https://infra.spec.whatwg.org/#code-unit-less-than data-x-internal=code-unit-less-than>code unit less than</a> <var>piB</var>["<code id=the-sanitizer-interface:dom-sanitizerprocessinginstruction-target-8><a href=#dom-sanitizerprocessinginstruction-target>target</a></code>"].</ol>
+   <li><p>If <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-6><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"]
+   <a id=the-sanitizer-interface:map-exists-21 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then set <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-7><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"] to the result of <a id=the-sanitizer-interface:list-sort-8 href=https://infra.spec.whatwg.org/#list-sort-in-ascending-order data-x-internal=list-sort>sorting</a> <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-8><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"] given <span>compare sanitizer
+   items</span>.<li>
+    <p>Otherwise:</p>
+
+    <ol><li><p>Set <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeattributes-6><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code>"] to the result of <a id=the-sanitizer-interface:list-sort-9 href=https://infra.spec.whatwg.org/#list-sort-in-ascending-order data-x-internal=list-sort>sorting</a> <var>config</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeattributes-7><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code>"] given <span>compare
+     sanitizer items</span>.</ol>
+   <li><p>Return <var>config</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=Sanitizer data-dfn-type=method id=dom-sanitizer-allowelement><code>allowElement(<var>element</var>)</code></dfn> method steps
+  are:</p>
+
+  <ol><li><p>Let <var>configuration</var> be <a id=the-sanitizer-interface:this-3 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-sanitizer-interface:configuration-3 href=#configuration>configuration</a>.<li><p><a id=the-sanitizer-interface:assert-5 href=https://infra.spec.whatwg.org/#assert data-x-internal=assert>Assert</a>: <var>configuration</var> is <span>valid</span>.<li><p>Set <var>element</var> to the result of <span>canonicalizing</span> <var>element</var>.<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-9><a href=#dom-sanitizerconfig-elements>elements</a></code>"]
+   <a id=the-sanitizer-interface:map-exists-22 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+    <ol><li><p>Let <var>modified</var> be the result of <a id=the-sanitizer-interface:list-remove href=https://infra.spec.whatwg.org/#list-remove data-x-internal=list-remove>removing</a>
+     <var>element</var> from <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-replacewithchildrenelements-7><a href=#dom-sanitizerconfig-replacewithchildrenelements>replaceWithChildrenElements</a></code>"].<li>
+      <p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-9><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"] <a id=the-sanitizer-interface:map-exists-23 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+      <ol><li>
+        <p>If <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-4><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] <a id=the-sanitizer-interface:map-exists-24 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+        <ol><li><p>Set <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-5><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] to the
+         result of <a id=the-sanitizer-interface:set-create href=https://infra.spec.whatwg.org/#set-create data-x-internal=set-create>creating a set</a> from <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-6><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"].<li><p>Set <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-7><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] to the
+         <a id=the-sanitizer-interface:set-difference href=https://infra.spec.whatwg.org/#set-difference data-x-internal=set-difference>difference</a> of <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-8><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] and
+         <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-10><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"].<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-dataattributes-2><a href=#dom-sanitizerconfig-dataattributes>dataAttributes</a></code>"] is true, then <a id=the-sanitizer-interface:list-remove-2 href=https://infra.spec.whatwg.org/#list-remove data-x-internal=list-remove>remove</a> all items <var>item</var> from <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-9><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] where
+         <var>item</var> is a <a id=the-sanitizer-interface:custom-data-attribute href=dom.html#custom-data-attribute>custom data attribute</a>.</ol>
+       <li>
+        <p>If <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-4><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"]
+        <a id=the-sanitizer-interface:map-exists-25 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+        <ol><li><p>Set <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-5><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"]
+         to the result of <a id=the-sanitizer-interface:set-create-2 href=https://infra.spec.whatwg.org/#set-create data-x-internal=set-create>creating a set</a> from
+         <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-6><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"].<li><p>Set <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-7><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"]
+         to the <a id=the-sanitizer-interface:sanitizer-canonicalized-intersection href=#sanitizer-canonicalized-intersection>intersection</a> of
+         <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-8><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"]
+         and <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-11><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"].</ol>
+       </ol>
+     <li>
+      <p>Otherwise:</p>
+
+      <ol><li><p>If <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-10><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] <a id=the-sanitizer-interface:map-exists-26 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+        <ol><li><p>Set <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-11><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] to the
+         result of <a id=the-sanitizer-interface:set-create-3 href=https://infra.spec.whatwg.org/#set-create data-x-internal=set-create>creating a set</a> from <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-12><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"].<li><p>Set <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-13><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] to the
+         <a id=the-sanitizer-interface:set-difference-2 href=https://infra.spec.whatwg.org/#set-difference data-x-internal=set-difference>difference</a> of <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-14><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] and
+         <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-9><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"]
+         <a id=the-sanitizer-interface:map-with-default href=https://infra.spec.whatwg.org/#map-with-default data-x-internal=map-with-default>with default</a> « ».<li><p><a id=the-sanitizer-interface:map-remove href=https://infra.spec.whatwg.org/#map-remove data-x-internal=map-remove>Remove</a> <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-10><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"].<li><p>Set <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-15><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] to the
+         <a id=the-sanitizer-interface:set-difference-3 href=https://infra.spec.whatwg.org/#set-difference data-x-internal=set-difference>difference</a> of <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-16><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] and
+         <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeattributes-8><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code>"].</ol>
+       <li>
+        <p>If <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-11><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"]
+        <a id=the-sanitizer-interface:map-exists-27 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+        <ol><li><p>Set <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-12><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"]
+         to the result of <a id=the-sanitizer-interface:set-create-4 href=https://infra.spec.whatwg.org/#set-create data-x-internal=set-create>creating a set</a> from
+         <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-13><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"].<li><p>Set <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-14><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"]
+         to the <a id=the-sanitizer-interface:set-difference-4 href=https://infra.spec.whatwg.org/#set-difference data-x-internal=set-difference>difference</a> of <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-15><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"]
+         and <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeattributes-9><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code>"].</ol>
+       </ol>
+     <li>
+      <p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-10><a href=#dom-sanitizerconfig-elements>elements</a></code>"]
+      does not <a id=the-sanitizer-interface:list-contains href=https://infra.spec.whatwg.org/#list-contain data-x-internal=list-contains>contain</a> <var>element</var>:</p>
+
+      <ol><li><p><a id=the-sanitizer-interface:list-append-5 href=https://infra.spec.whatwg.org/#list-append data-x-internal=list-append>Append</a> <var>element</var> to
+       <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-11><a href=#dom-sanitizerconfig-elements>elements</a></code>"].<li><p>Return true.</ol>
+     <li><p>Let <var>currentElement</var> be the item in <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-12><a href=#dom-sanitizerconfig-elements>elements</a></code>"] whose <code id=the-sanitizer-interface:dom-sanitizerelementnamespace-name><a href=#dom-sanitizerelementnamespace-name>name</a></code> member is <var>element</var>'s <code id=the-sanitizer-interface:dom-sanitizerelementnamespace-name-2><a href=#dom-sanitizerelementnamespace-name>name</a></code> member and whose <code id=the-sanitizer-interface:dom-sanitizerelementnamespace-namespace><a href=#dom-sanitizerelementnamespace-namespace>namespace</a></code> member is
+     <var>element</var>'s <code id=the-sanitizer-interface:dom-sanitizerelementnamespace-namespace-2><a href=#dom-sanitizerelementnamespace-namespace>namespace</a></code>
+     member.<li><p>If <var>element</var> is equal to <var>currentElement</var>, then return
+     <var>modified</var>.<li><p><a id=the-sanitizer-interface:list-remove-3 href=https://infra.spec.whatwg.org/#list-remove data-x-internal=list-remove>Remove</a> <var>element</var> from
+     <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-13><a href=#dom-sanitizerconfig-elements>elements</a></code>"].<li><p><a id=the-sanitizer-interface:list-append-6 href=https://infra.spec.whatwg.org/#list-append data-x-internal=list-append>Append</a> <var>element</var> to
+     <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-14><a href=#dom-sanitizerconfig-elements>elements</a></code>"].<li><p>Return true.</ol>
+   <li>
+    <p>Otherwise:</p>
+
+    <ol><li><p>If <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-17><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] <a id=the-sanitizer-interface:map-exists-28 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a> or <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-removeattributes-16><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>"]
+     <a id=the-sanitizer-interface:map-with-default-2 href=https://infra.spec.whatwg.org/#map-with-default data-x-internal=map-with-default>with default</a> « » is not empty, then return
+     false.<li><p>Let <var>modified</var> be the result of <a id=the-sanitizer-interface:list-remove-4 href=https://infra.spec.whatwg.org/#list-remove data-x-internal=list-remove>removing</a>
+     <var>element</var> from <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-replacewithchildrenelements-8><a href=#dom-sanitizerconfig-replacewithchildrenelements>replaceWithChildrenElements</a></code>"].<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeelements-8><a href=#dom-sanitizerconfig-removeelements>removeElements</a></code>"] does not <a id=the-sanitizer-interface:list-contains-2 href=https://infra.spec.whatwg.org/#list-contain data-x-internal=list-contains>contain</a> <var>element</var>, then return <var>modified</var>.<li><p><a id=the-sanitizer-interface:list-remove-5 href=https://infra.spec.whatwg.org/#list-remove data-x-internal=list-remove>Remove</a> <var>element</var> from
+     <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeelements-9><a href=#dom-sanitizerconfig-removeelements>removeElements</a></code>"].<li><p>Return true.</ol>
+   </ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=Sanitizer data-dfn-type=method id=dom-sanitizer-removeelement><code>removeElement(<var>element</var>)</code></dfn> method steps
+  are to return the result of <span>removing</span>
+  <var>element</var> from <a id=the-sanitizer-interface:this-4 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-sanitizer-interface:configuration-4 href=#configuration>configuration</a>.</p>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=Sanitizer data-dfn-type=method id=dom-sanitizer-replaceelementwithchildren><code>replaceElementWithChildren(<var>element</var>)</code></dfn>
+  method steps are:</p>
+
+  <ol><li><p>Let <var>configuration</var> be <a id=the-sanitizer-interface:this-5 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-sanitizer-interface:configuration-5 href=#configuration>configuration</a>.<li><p><a id=the-sanitizer-interface:assert-6 href=https://infra.spec.whatwg.org/#assert data-x-internal=assert>Assert</a>: <var>configuration</var> is <span>valid</span>.<li><p>Set <var>element</var> to the result of <a id=the-sanitizer-interface:canonicalize-a-sanitizer-element-2 href=#canonicalize-a-sanitizer-element>canonicalizing</a> <var>element</var>.<li><p>If the <span>built-in non-replaceable elements list</span> <a id=the-sanitizer-interface:list-contains-3 href=https://infra.spec.whatwg.org/#list-contain data-x-internal=list-contains>contains</a> <var>element</var>, then return false.<li><p>Let <var>modified</var> be the result of <a id=the-sanitizer-interface:list-remove-6 href=https://infra.spec.whatwg.org/#list-remove data-x-internal=list-remove>removing</a>
+   <var>element</var> from <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-15><a href=#dom-sanitizerconfig-elements>elements</a></code>"].<li><p>If <a id=the-sanitizer-interface:list-remove-7 href=https://infra.spec.whatwg.org/#list-remove data-x-internal=list-remove>removing</a> <var>element</var> from
+   <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeelements-10><a href=#dom-sanitizerconfig-removeelements>removeElements</a></code>"] is true, then set
+   <var>modified</var> to true.<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-replacewithchildrenelements-9><a href=#dom-sanitizerconfig-replacewithchildrenelements>replaceWithChildrenElements</a></code>"]
+   does not <a id=the-sanitizer-interface:list-contains-4 href=https://infra.spec.whatwg.org/#list-contain data-x-internal=list-contains>contain</a> <var>element</var>:</p>
+
+    <ol><li><p><a id=the-sanitizer-interface:list-append-7 href=https://infra.spec.whatwg.org/#list-append data-x-internal=list-append>Append</a> <var>element</var> to
+     <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-replacewithchildrenelements-10><a href=#dom-sanitizerconfig-replacewithchildrenelements>replaceWithChildrenElements</a></code>"].<li><p>Return true.</ol>
+   <li><p>Return <var>modified</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=Sanitizer data-dfn-type=method id=dom-sanitizer-allowattribute><code>allowAttribute(<var>attribute</var>)</code></dfn> method
+  steps are:</p>
+
+  <ol><li><p>Let <var>configuration</var> be <a id=the-sanitizer-interface:this-6 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-sanitizer-interface:configuration-6 href=#configuration>configuration</a>.<li><p><a id=the-sanitizer-interface:assert-7 href=https://infra.spec.whatwg.org/#assert data-x-internal=assert>Assert</a>: <var>configuration</var> is <span>valid</span>.<li><p>Set <var>attribute</var> to the result of <a id=the-sanitizer-interface:canonicalize-a-sanitizer-name-5 href=#canonicalize-a-sanitizer-name>canonicalizing</a> <var>attribute</var>.<li>
+    <p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-12><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"] <a id=the-sanitizer-interface:map-exists-29 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+    <ol><li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-dataattributes-3><a href=#dom-sanitizerconfig-dataattributes>dataAttributes</a></code>"] is true and
+     <var>attribute</var> is a <a id=the-sanitizer-interface:custom-data-attribute-2 href=dom.html#custom-data-attribute>custom data attribute</a>, then return false.<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-13><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"] <a id=the-sanitizer-interface:list-contains-5 href=https://infra.spec.whatwg.org/#list-contain data-x-internal=list-contains>contains</a> <var>attribute</var>, then return false.<li>
+      <p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-16><a href=#dom-sanitizerconfig-elements>elements</a></code>"]
+      <a id=the-sanitizer-interface:map-exists-30 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+      <ol><li>
+        <p><a id=the-sanitizer-interface:list-iterate-8 href=https://infra.spec.whatwg.org/#list-iterate data-x-internal=list-iterate>For each</a> <var>element</var> in
+        <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-17><a href=#dom-sanitizerconfig-elements>elements</a></code>"]:</p>
+
+        <ol><li><p>If <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-18><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] <a id=the-sanitizer-interface:map-with-default-3 href=https://infra.spec.whatwg.org/#map-with-default data-x-internal=map-with-default>with default</a> « » <a id=the-sanitizer-interface:list-contains-6 href=https://infra.spec.whatwg.org/#list-contain data-x-internal=list-contains>contains</a> <var>attribute</var>, then <a id=the-sanitizer-interface:list-remove-8 href=https://infra.spec.whatwg.org/#list-remove data-x-internal=list-remove>remove</a> <var>attribute</var> from <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-19><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"].</ol>
+       </ol>
+     <li><p><a id=the-sanitizer-interface:list-append-8 href=https://infra.spec.whatwg.org/#list-append data-x-internal=list-append>Append</a> <var>attribute</var> to
+     <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-14><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"].<li><p>Return true.</ol>
+   <li>
+    <p>Otherwise:</p>
+
+    <ol><li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeattributes-10><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code>"] does not <a id=the-sanitizer-interface:list-contains-7 href=https://infra.spec.whatwg.org/#list-contain data-x-internal=list-contains>contain</a> <var>attribute</var>, then return false.<li><p><a id=the-sanitizer-interface:list-remove-9 href=https://infra.spec.whatwg.org/#list-remove data-x-internal=list-remove>Remove</a> <var>attribute</var> from
+     <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeattributes-11><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code>"].<li><p>Return true.</ol>
+   </ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=Sanitizer data-dfn-type=method id=dom-sanitizer-removeattribute><code>removeAttribute(<var>attribute</var>)</code></dfn> method
+  steps are to return the result of <span>removing</span> <var>attribute</var> from <a id=the-sanitizer-interface:this-7 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s
+  <a id=the-sanitizer-interface:configuration-7 href=#configuration>configuration</a>.</p>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=Sanitizer data-dfn-type=method id=dom-sanitizer-setcomments><code>setComments(<var>allow</var>)</code></dfn> method steps
+  are:</p>
+
+  <ol><li><p>Let <var>configuration</var> be <a id=the-sanitizer-interface:this-8 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-sanitizer-interface:configuration-8 href=#configuration>configuration</a>.<li><p><a id=the-sanitizer-interface:assert-8 href=https://infra.spec.whatwg.org/#assert data-x-internal=assert>Assert</a>: <var>configuration</var> is <span>valid</span>.<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-comments-2><a href=#dom-sanitizerconfig-comments>comments</a></code>"]
+   <a id=the-sanitizer-interface:map-exists-31 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a> and is equal to <var>allow</var>, then return
+   false.<li><p>Set <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-comments-3><a href=#dom-sanitizerconfig-comments>comments</a></code>"] to <var>allow</var>.<li><p>Return true.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=Sanitizer data-dfn-type=method id=dom-sanitizer-setdataattributes><code>setDataAttributes(<var>allow</var>)</code></dfn> method
+  steps are:</p>
+
+  <ol><li><p>Let <var>configuration</var> be <a id=the-sanitizer-interface:this-9 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-sanitizer-interface:configuration-9 href=#configuration>configuration</a>.<li><p><a id=the-sanitizer-interface:assert-9 href=https://infra.spec.whatwg.org/#assert data-x-internal=assert>Assert</a>: <var>configuration</var> is <span>valid</span>.<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-15><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"] does not <a id=the-sanitizer-interface:map-exists-32 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exist</a>, then return false.<li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-dataattributes-4><a href=#dom-sanitizerconfig-dataattributes>dataAttributes</a></code>"] <a id=the-sanitizer-interface:map-exists-33 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a> and is equal to <var>allow</var>, then return false.<li>
+    <p>If <var>allow</var> is true:</p>
+
+    <ol><li>
+      <p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-18><a href=#dom-sanitizerconfig-elements>elements</a></code>"]
+      <a id=the-sanitizer-interface:map-exists-34 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+      <ol><li>
+        <p><a id=the-sanitizer-interface:list-iterate-9 href=https://infra.spec.whatwg.org/#list-iterate data-x-internal=list-iterate>For each</a> <var>element</var> of
+        <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-elements-19><a href=#dom-sanitizerconfig-elements>elements</a></code>"]:</p>
+
+        <ol><li><p>If <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-20><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] <a id=the-sanitizer-interface:map-exists-35 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>, then <a id=the-sanitizer-interface:list-remove-10 href=https://infra.spec.whatwg.org/#list-remove data-x-internal=list-remove>remove</a> all items
+         <var>item</var> from <var>element</var>["<code id=the-sanitizer-interface:dom-sanitizerelementnamespacewithattributes-attributes-21><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code>"] where
+         <var>item</var> is a <a id=the-sanitizer-interface:custom-data-attribute-3 href=dom.html#custom-data-attribute>custom data attribute</a>.</ol>
+       </ol>
+     <li><p><a id=the-sanitizer-interface:list-remove-11 href=https://infra.spec.whatwg.org/#list-remove data-x-internal=list-remove>Remove</a> all items <var>item</var> from
+     <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-attributes-16><a href=#dom-sanitizerconfig-attributes>attributes</a></code>"]
+     where <var>item</var> is a <a id=the-sanitizer-interface:custom-data-attribute-4 href=dom.html#custom-data-attribute>custom data attribute</a>.</ol>
+   <li><p>Set <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-dataattributes-5><a href=#dom-sanitizerconfig-dataattributes>dataAttributes</a></code>"] to <var>allow</var>.<li><p>Return true.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=Sanitizer data-dfn-type=method id=dom-sanitizer-allowprocessinginstruction><code>allowProcessingInstruction(<var>pi</var>)</code></dfn>
+  method steps are:</p>
+
+  <ol><li><p>Let <var>configuration</var> be <a id=the-sanitizer-interface:this-10 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-sanitizer-interface:configuration-10 href=#configuration>configuration</a>.<li><p><a id=the-sanitizer-interface:assert-10 href=https://infra.spec.whatwg.org/#assert data-x-internal=assert>Assert</a>: <var>configuration</var> is <span>valid</span>.<li><p>Set <var>pi</var> to the result of <a id=the-sanitizer-interface:canonicalize-a-processing-instruction-2 href=#canonicalize-a-processing-instruction>canonicalizing</a> <var>pi</var>.<li>
+    <p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions-9><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"] <a id=the-sanitizer-interface:map-exists-36 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+    <ol><li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions-10><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"] <a id=the-sanitizer-interface:list-contains-8 href=https://infra.spec.whatwg.org/#list-contain data-x-internal=list-contains>contains</a> <var>pi</var>, then return false.<li><p><a id=the-sanitizer-interface:list-append-9 href=https://infra.spec.whatwg.org/#list-append data-x-internal=list-append>Append</a> <var>pi</var> to
+     <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions-11><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"].<li><p>Return true.</ol>
+   <li>
+    <p>Otherwise:</p>
+
+    <ol><li>
+      <p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeprocessinginstructions-8><a href=#dom-sanitizerconfig-removeprocessinginstructions>removeProcessingInstructions</a></code>"]
+      <a id=the-sanitizer-interface:list-contains-9 href=https://infra.spec.whatwg.org/#list-contain data-x-internal=list-contains>contains</a> <var>pi</var>:</p>
+
+      <ol><li><p><a id=the-sanitizer-interface:list-remove-12 href=https://infra.spec.whatwg.org/#list-remove data-x-internal=list-remove>Remove</a> <var>pi</var> from
+       <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeprocessinginstructions-9><a href=#dom-sanitizerconfig-removeprocessinginstructions>removeProcessingInstructions</a></code>"].<li><p>Return true.</ol>
+     <li><p>Return false.</ol>
+   </ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=Sanitizer data-dfn-type=method id=dom-sanitizer-removeprocessinginstruction><code>removeProcessingInstruction(<var>pi</var>)</code></dfn>
+  method steps are:</p>
+
+  <ol><li><p>Let <var>configuration</var> be <a id=the-sanitizer-interface:this-11 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-sanitizer-interface:configuration-11 href=#configuration>configuration</a>.<li><p><a id=the-sanitizer-interface:assert-11 href=https://infra.spec.whatwg.org/#assert data-x-internal=assert>Assert</a>: <var>configuration</var> is <span>valid</span>.<li><p>Set <var>pi</var> to the result of <a id=the-sanitizer-interface:canonicalize-a-processing-instruction-3 href=#canonicalize-a-processing-instruction>canonicalizing</a> <var>pi</var>.<li>
+    <p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions-12><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"] <a id=the-sanitizer-interface:map-exists-37 href=https://infra.spec.whatwg.org/#map-exists data-x-internal=map-exists>exists</a>:</p>
+
+    <ol><li>
+      <p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions-13><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"] <a id=the-sanitizer-interface:list-contains-10 href=https://infra.spec.whatwg.org/#list-contain data-x-internal=list-contains>contains</a> <var>pi</var>:</p>
+
+      <ol><li><p><a id=the-sanitizer-interface:list-remove-13 href=https://infra.spec.whatwg.org/#list-remove data-x-internal=list-remove>Remove</a> <var>pi</var> from
+       <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-processinginstructions-14><a href=#dom-sanitizerconfig-processinginstructions>processingInstructions</a></code>"].<li><p>Return true.</ol>
+     <li><p>Return false.</ol>
+   <li>
+    <p>Otherwise:</p>
+
+    <ol><li><p>If <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeprocessinginstructions-10><a href=#dom-sanitizerconfig-removeprocessinginstructions>removeProcessingInstructions</a></code>"]
+     <a id=the-sanitizer-interface:list-contains-11 href=https://infra.spec.whatwg.org/#list-contain data-x-internal=list-contains>contains</a> <var>pi</var>, then return false.<li><p><a id=the-sanitizer-interface:list-append-10 href=https://infra.spec.whatwg.org/#list-append data-x-internal=list-append>Append</a> <var>pi</var> to
+     <var>configuration</var>["<code id=the-sanitizer-interface:dom-sanitizerconfig-removeprocessinginstructions-11><a href=#dom-sanitizerconfig-removeprocessinginstructions>removeProcessingInstructions</a></code>"].<li><p>Return true.</ol>
+   </ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=Sanitizer data-dfn-type=method id=dom-sanitizer-removeunsafe><code>removeUnsafe()</code></dfn> method steps are to return the
+  result of <span>removing unsafe</span> from <a id=the-sanitizer-interface:this-12 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s
+  <a id=the-sanitizer-interface:configuration-12 href=#configuration>configuration</a>.</p>
+  </div>
+
+  <h4 id=sanitizer-configuration><span class=secno>2026</span> Sanitizer configuration<a class=self-link href=#sanitizer-configuration></a></h4>
+
+  <pre><code class=idl>dictionary <dfn data-dfn-type=dictionary id=sanitizerelementnamespace>SanitizerElementNamespace</dfn> {
+  required DOMString <dfn data-dfn-for=SanitizerElementNamespace data-dfn-type=dict-member id=dom-sanitizerelementnamespace-name>name</dfn>;
+  DOMString? <dfn data-dfn-for=SanitizerElementNamespace data-dfn-type=dict-member id=dom-sanitizerelementnamespace-namespace>_namespace</dfn> = "http://www.w3.org/1999/xhtml";
+};
+
+// Used by "elements"
+dictionary <dfn data-dfn-type=dictionary id=sanitizerelementnamespacewithattributes>SanitizerElementNamespaceWithAttributes</dfn> : <a id=sanitizer-configuration:sanitizerelementnamespace href=#sanitizerelementnamespace>SanitizerElementNamespace</a> {
+  sequence&lt;<a id=sanitizer-configuration:sanitizerattribute href=#sanitizerattribute>SanitizerAttribute</a>> <dfn data-dfn-for=SanitizerElementNamespaceWithAttributes data-dfn-type=dict-member id=dom-sanitizerelementnamespacewithattributes-attributes>attributes</dfn>;
+  sequence&lt;<a id=sanitizer-configuration:sanitizerattribute-2 href=#sanitizerattribute>SanitizerAttribute</a>> <dfn data-dfn-for=SanitizerElementNamespaceWithAttributes data-dfn-type=dict-member id=dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</dfn>;
+};
+
+dictionary <dfn data-dfn-type=dictionary id=sanitizerattributenamespace>SanitizerAttributeNamespace</dfn> {
+  required DOMString <dfn data-dfn-for=SanitizerAttributeNamespace data-dfn-type=dict-member id=dom-sanitizerattributenamespace-name>name</dfn>;
+  DOMString? <dfn data-dfn-for=SanitizerAttributeNamespace data-dfn-type=dict-member id=dom-sanitizerattributenamespace-namespace>_namespace</dfn> = null;
+};
+
+dictionary <dfn data-dfn-type=dictionary id=sanitizerprocessinginstruction>SanitizerProcessingInstruction</dfn> {
+  required DOMString <dfn data-dfn-for=SanitizerProcessingInstruction data-dfn-type=dict-member id=dom-sanitizerprocessinginstruction-target>target</dfn>;
+};
+
+typedef (DOMString or <a id=sanitizer-configuration:sanitizerelementnamespace-2 href=#sanitizerelementnamespace>SanitizerElementNamespace</a>) <dfn data-dfn-type=typedef id=sanitizerelement>SanitizerElement</dfn>;
+typedef (DOMString or <a id=sanitizer-configuration:sanitizerelementnamespacewithattributes href=#sanitizerelementnamespacewithattributes>SanitizerElementNamespaceWithAttributes</a>) <dfn data-dfn-type=typedef id=sanitizerelementwithattributes>SanitizerElementWithAttributes</dfn>;
+typedef (DOMString or <a id=sanitizer-configuration:sanitizerprocessinginstruction href=#sanitizerprocessinginstruction>SanitizerProcessingInstruction</a>) <dfn data-dfn-type=typedef id=sanitizerpi>SanitizerPI</dfn>;
+typedef (DOMString or <a id=sanitizer-configuration:sanitizerattributenamespace href=#sanitizerattributenamespace>SanitizerAttributeNamespace</a>) <dfn data-dfn-type=typedef id=sanitizerattribute>SanitizerAttribute</dfn>;
+
+dictionary <dfn data-dfn-type=dictionary id=sanitizerconfig>SanitizerConfig</dfn> {
+  sequence&lt;<a id=sanitizer-configuration:sanitizerelementwithattributes href=#sanitizerelementwithattributes>SanitizerElementWithAttributes</a>> <dfn data-dfn-for=SanitizerConfig data-dfn-type=dict-member id=dom-sanitizerconfig-elements>elements</dfn>;
+  sequence&lt;<a id=sanitizer-configuration:sanitizerelement href=#sanitizerelement>SanitizerElement</a>> <dfn data-dfn-for=SanitizerConfig data-dfn-type=dict-member id=dom-sanitizerconfig-removeelements>removeElements</dfn>;
+  sequence&lt;<a id=sanitizer-configuration:sanitizerelement-2 href=#sanitizerelement>SanitizerElement</a>> <dfn data-dfn-for=SanitizerConfig data-dfn-type=dict-member id=dom-sanitizerconfig-replacewithchildrenelements>replaceWithChildrenElements</dfn>;
+
+  sequence&lt;<a id=sanitizer-configuration:sanitizerpi href=#sanitizerpi>SanitizerPI</a>> <dfn data-dfn-for=SanitizerConfig data-dfn-type=dict-member id=dom-sanitizerconfig-processinginstructions>processingInstructions</dfn>;
+  sequence&lt;<a id=sanitizer-configuration:sanitizerpi-2 href=#sanitizerpi>SanitizerPI</a>> <dfn data-dfn-for=SanitizerConfig data-dfn-type=dict-member id=dom-sanitizerconfig-removeprocessinginstructions>removeProcessingInstructions</dfn>;
+
+  sequence&lt;<a id=sanitizer-configuration:sanitizerattribute-3 href=#sanitizerattribute>SanitizerAttribute</a>> <dfn data-dfn-for=SanitizerConfig data-dfn-type=dict-member id=dom-sanitizerconfig-attributes>attributes</dfn>;
+  sequence&lt;<a id=sanitizer-configuration:sanitizerattribute-4 href=#sanitizerattribute>SanitizerAttribute</a>> <dfn data-dfn-for=SanitizerConfig data-dfn-type=dict-member id=dom-sanitizerconfig-removeattributes>removeAttributes</dfn>;
+
+  boolean <dfn data-dfn-for=SanitizerConfig data-dfn-type=dict-member id=dom-sanitizerconfig-comments>comments</dfn>;
+  boolean <dfn data-dfn-for=SanitizerConfig data-dfn-type=dict-member id=dom-sanitizerconfig-dataattributes>dataAttributes</dfn>;
+};</code></pre>
+
+  <p><code id=sanitizer-configuration:sanitizerelementnamespace-3><a href=#sanitizerelementnamespace>SanitizerElementNamespace</a></code>, <code id=sanitizer-configuration:sanitizerattributenamespace-2><a href=#sanitizerattributenamespace>SanitizerAttributeNamespace</a></code>,
+  <code id=sanitizer-configuration:sanitizerelementnamespacewithattributes-2><a href=#sanitizerelementnamespacewithattributes>SanitizerElementNamespaceWithAttributes</a></code>, and
+  <code id=sanitizer-configuration:sanitizerprocessinginstruction-2><a href=#sanitizerprocessinginstruction>SanitizerProcessingInstruction</a></code> dictionaries are considered equal when all of their
+  members are equal.</p>
+
+  <p class=XXX>Equality should be defined in the infra spec instead. See <a href=https://github.com/whatwg/infra/issues/664>issue #664</a>.</p>
+
+  <h5 id=configuration-invariants><span class=secno>2026</span> Configuration invariants<a class=self-link href=#configuration-invariants></a></h5>
+
+  
+
+  <p>Configurations can and ought to be modified by developers to suit their purposes. Options are
+  to write a new <code id=configuration-invariants:sanitizerconfig><a href=#sanitizerconfig>SanitizerConfig</a></code> dictionary from scratch, to modify an existing
+  <code id=configuration-invariants:sanitizer><a href=#sanitizer>Sanitizer</a></code>'s configuration by using the modifier methods, or to <code id=configuration-invariants:dom-sanitizer-get><a href=#dom-sanitizer-get>get()</a></code> an existing <code id=configuration-invariants:sanitizer-2><a href=#sanitizer>Sanitizer</a></code>'s
+  <a id=configuration-invariants:configuration href=#configuration>configuration</a> as a dictionary and modify the dictionary and then create a new
+  <code id=configuration-invariants:sanitizer-3><a href=#sanitizer>Sanitizer</a></code> with it.</p>
+
+  <p>An empty configuration allows everything (when called with the "unsafe" methods like <code id=configuration-invariants:dom-element-sethtmlunsafe><a href=#dom-element-sethtmlunsafe>setHTMLUnsafe()</a></code>). A configuration "<dfn data-dfn-for=SanitizerPresets data-dfn-type=enum-value id=dom-sanitizerpresets-default>default</dfn>" contains a
+  <span>built-in safe default configuration</span>. Note that "safe" and "unsafe" sanitizer methods
+  have different defaults.</p>
+
+  <p>Not all configuration dictionaries are valid. A valid configuration avoids redundancy (like
+  specifying the same element to be allowed twice) and contradictions (like specifying an element to
+  be both removed and allowed.)</p>
+
+  <p>Several conditions need to hold for a configuration to be valid:</p>
+
+  <ul><li>
+    <p>Mixing global allow- and remove-lists:</p>
+
+    <ul><li><p><code id=configuration-invariants:dom-sanitizerconfig-elements><a href=#dom-sanitizerconfig-elements>elements</a></code> or <code id=configuration-invariants:dom-sanitizerconfig-removeelements><a href=#dom-sanitizerconfig-removeelements>removeElements</a></code> can exist, but not both. If
+     both are missing, this is equivalent to <code id=configuration-invariants:dom-sanitizerconfig-removeelements-2><a href=#dom-sanitizerconfig-removeelements>removeElements</a></code> being an empty list.<li><p><code id=configuration-invariants:dom-sanitizerconfig-attributes><a href=#dom-sanitizerconfig-attributes>attributes</a></code> or <code id=configuration-invariants:dom-sanitizerconfig-removeattributes><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code> can exist, but not both.
+     If both are missing, this is equivalent to <code id=configuration-invariants:dom-sanitizerconfig-removeattributes-2><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code> being an empty
+     list.<li><p><code id=configuration-invariants:dom-sanitizerconfig-dataattributes><a href=#dom-sanitizerconfig-dataattributes>dataAttributes</a></code> is conceptually
+     an extension of the <code id=configuration-invariants:dom-sanitizerconfig-attributes-2><a href=#dom-sanitizerconfig-attributes>attributes</a></code> allow-list.
+     The <code id=configuration-invariants:dom-sanitizerconfig-dataattributes-2><a href=#dom-sanitizerconfig-dataattributes>dataAttributes</a></code> member is only
+     allowed when an <code id=configuration-invariants:dom-sanitizerconfig-attributes-3><a href=#dom-sanitizerconfig-attributes>attributes</a></code> list is
+     used.</ul>
+   <li>
+    <p>Duplicate entries between different global lists:</p>
+
+    <ul><li><p>There are no duplicate entries (i.e., no same elements) between <code id=configuration-invariants:dom-sanitizerconfig-elements-2><a href=#dom-sanitizerconfig-elements>elements</a></code>, <code id=configuration-invariants:dom-sanitizerconfig-removeelements-3><a href=#dom-sanitizerconfig-removeelements>removeElements</a></code>, or <code id=configuration-invariants:dom-sanitizerconfig-replacewithchildrenelements><a href=#dom-sanitizerconfig-replacewithchildrenelements>replaceWithChildrenElements</a></code>.<li><p>There are no duplicate entries (i.e., no same attributes) between <code id=configuration-invariants:dom-sanitizerconfig-attributes-4><a href=#dom-sanitizerconfig-attributes>attributes</a></code> or <code id=configuration-invariants:dom-sanitizerconfig-removeattributes-3><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code>.</ul>
+   <li>
+    <p>Mixing local allow- and remove-lists on the same element:</p>
+
+    <ul><li><p>When an <code id=configuration-invariants:dom-sanitizerconfig-attributes-5><a href=#dom-sanitizerconfig-attributes>attributes</a></code> list exists,
+     both, either or none of the <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-attributes><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code> and <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-removeattributes><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>
+     lists are allowed on the same element.<li><p>When a <code id=configuration-invariants:dom-sanitizerconfig-removeattributes-4><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code> list
+     exists, either or none of the <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-attributes-2><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code> and <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-removeattributes-2><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>
+     lists are allowed on the same element, but not both.</ul>
+   <li>
+    <p>Duplicate entries on the same element:</p>
+
+    <ul><li><p>There are no duplicate entries between <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-attributes-3><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code> and <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-removeattributes-3><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>
+     on the same element.</ul>
+   <li><p>No element from the <span>built-in non-replaceable elements list</span> appears in <code id=configuration-invariants:dom-sanitizerconfig-replacewithchildrenelements-2><a href=#dom-sanitizerconfig-replacewithchildrenelements>replaceWithChildrenElements</a></code>,
+   since replacing these elements with their children could lead to re-parsing issues or invalid
+   node trees.</ul>
+
+  <p>The <code id=configuration-invariants:dom-sanitizerconfig-elements-3><a href=#dom-sanitizerconfig-elements>elements</a></code> element allow-list can also
+  specify allowing or removing attributes for a given element. This is meant to mirror this
+  standard's structure, which knows both <a id=configuration-invariants:global-attributes href=dom.html#global-attributes>global attributes</a> as well as local attributes
+  that apply to a specific element. Global and local attributes can be mixed, but note that
+  ambiguous configurations where a particular attribute would be allowed by one list and forbidden
+  by another, are generally invalid.</p>
+
+  <table class=data><thead><tr><td><th>global <code id=configuration-invariants:dom-sanitizerconfig-attributes-6><a href=#dom-sanitizerconfig-attributes>attributes</a></code><th>global <code id=configuration-invariants:dom-sanitizerconfig-removeattributes-5><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code><tbody><tr><th>local <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-attributes-4><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code><td>An attribute is allowed if it matches either list. No duplicates are allowed.<td>An attribute is only allowed if it's in the local allow list. No duplicate entries between
+     global remove and local allow lists are allowed. Note that the global remove list has no
+     function for this particular element, but can apply to other elements that do not have a
+     local allow list.<tr><th>local <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-removeattributes-4><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code><td>An attribute is allowed if it's in the global allow-list, but not in the local remove-list.
+     Local remove has to be a subset of the global allow lists.<td>An attribute is allowed if it is in neither list. No duplicate entries between global
+     remove and local remove lists are allowed.</table>
+
+  <p>Please note the asymmetry where mostly no duplicates between global and per-element lists are
+  permitted, but in the case of a global allow-list and a per-element remove-list the latter has to
+  be a subset of the former. An excerpt of the table above, only focusing on duplicates, is as
+  follows:</p>
+
+  <table class=data><thead><tr><td><th>global <code id=configuration-invariants:dom-sanitizerconfig-attributes-7><a href=#dom-sanitizerconfig-attributes>attributes</a></code><th>global <code id=configuration-invariants:dom-sanitizerconfig-removeattributes-6><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code><tbody><tr><th>local <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-attributes-5><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code><td>No duplicates are allowed.<td>No duplicates are allowed.<tr><th>local <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-removeattributes-5><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code><td>Local remove has to be a subset of the global allow lists.<td>No duplicates are allowed.</table>
+
+  <p>The <code id=configuration-invariants:dom-sanitizerconfig-dataattributes-3><a href=#dom-sanitizerconfig-dataattributes>dataAttributes</a></code> setting allows
+  <a id=configuration-invariants:custom-data-attribute href=dom.html#custom-data-attribute>custom data attributes</a>. The rules above easily extends
+  to <a id=configuration-invariants:custom-data-attribute-2 href=dom.html#custom-data-attribute>custom data attributes</a> if one considers <code id=configuration-invariants:dom-sanitizerconfig-dataattributes-4><a href=#dom-sanitizerconfig-dataattributes>dataAttributes</a></code> to be an allow-list:</p>
+
+  <table class=data><thead><tr><td><th>global <code id=configuration-invariants:dom-sanitizerconfig-attributes-8><a href=#dom-sanitizerconfig-attributes>attributes</a></code> and <code id=configuration-invariants:dom-sanitizerconfig-dataattributes-5><a href=#dom-sanitizerconfig-dataattributes>dataAttributes</a></code> set<tbody><tr><th>local <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-attributes-6><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code><td>All <a id=configuration-invariants:custom-data-attribute-3 href=dom.html#custom-data-attribute>custom data attributes</a> are allowed. No
+     <a id=configuration-invariants:custom-data-attribute-4 href=dom.html#custom-data-attribute>custom data attributes</a> can be listed in any
+     allow-list, as that would mean a duplicate entry.<tr><th>local <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-removeattributes-6><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code><td>A <a id=configuration-invariants:custom-data-attribute-5 href=dom.html#custom-data-attribute>custom data attribute</a> is allowed, unless it's
+     listed in the local remove-list. No <a id=configuration-invariants:custom-data-attribute-6 href=dom.html#custom-data-attribute>custom data
+     attribute</a> can be listed in the global allow-list, as that would mean a duplicate
+     entry.</table>
+
+  <p>Putting these rules in words:</p>
+
+  <ul><li>
+    <p>Duplicates and interactions between global and local lists:</p>
+
+    <ul><li>
+      <p>If a global <code id=configuration-invariants:dom-sanitizerconfig-attributes-9><a href=#dom-sanitizerconfig-attributes>attributes</a></code> allow list
+      exists, then all element's local lists:</p>
+
+      <ul><li><p>If a local <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-attributes-7><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code> allow list
+       exists, there can be no duplicate entries between these lists.<li><p>If a local <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-removeattributes-7><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>
+       remove list exists, then all its entries also need to be listed in the global <code id=configuration-invariants:dom-sanitizerconfig-attributes-10><a href=#dom-sanitizerconfig-attributes>attributes</a></code> allow list.<li><p>If <code id=configuration-invariants:dom-sanitizerconfig-dataattributes-6><a href=#dom-sanitizerconfig-dataattributes>dataAttributes</a></code> is true,
+       then no <a id=configuration-invariants:custom-data-attribute-7 href=dom.html#custom-data-attribute>custom data attributes</a> can be listed in
+       any of the allow-lists.</ul>
+     <li>
+      <p>If a global <code id=configuration-invariants:dom-sanitizerconfig-removeattributes-7><a href=#dom-sanitizerconfig-removeattributes>removeAttributes</a></code>
+      remove list exists:</p>
+
+      <ul><li><p>If a local <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-attributes-8><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code> allow list
+       exists, there can be no duplicate entries between these lists.<li><p>If a local <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-removeattributes-8><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>
+       remove list exists, there can be no duplicate entries between these lists.<li><p>Not both a local <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-attributes-9><a href=#dom-sanitizerelementnamespacewithattributes-attributes>attributes</a></code> allow list
+       and local <code id=configuration-invariants:dom-sanitizerelementnamespacewithattributes-removeattributes-9><a href=#dom-sanitizerelementnamespacewithattributes-removeattributes>removeAttributes</a></code>
+       remove list exists.<li><p><code id=configuration-invariants:dom-sanitizerconfig-dataattributes-7><a href=#dom-sanitizerconfig-dataattributes>dataAttributes</a></code> has to be
+       false.</ul>
+     </ul>
+   </ul>
+
+  
+
+  <h4 id=sanitizer-security-considerations><span class=secno>2026</span> Security considerations<a class=self-link href=#sanitizer-security-considerations></a></h4>
+
+  
+
+  <p>The Sanitizer API is intended to prevent DOM-based cross-site scripting by traversing supplied
+  HTML content and removing elements and attributes according to a configuration. By design, the
+  <code id=sanitizer-security-considerations:dom-element-sethtml><a href=#dom-element-sethtml>setHTML()</a></code> and <code id=sanitizer-security-considerations:dom-parsehtml><a href=#dom-parsehtml>parseHTML()</a></code> methods remove script-capable markup regardless of the
+  configuration supplied; if any configuration could preserve such markup through these methods,
+  that would be a bug.</p>
+
+  <p>However, there are security issues that the Sanitizer API cannot prevent. The following
+  sections describe them.</p>
+
+  <h5 id=sanitizer-security-server-reflected><span class=secno>2026</span> Server-side reflected and stored XSS<a class=self-link href=#sanitizer-security-server-reflected></a></h5>
+
+  
+
+  <p>The Sanitizer API operates solely in the DOM and adds a capability to traverse and filter an
+  existing <code id=sanitizer-security-server-reflected:documentfragment><a href=https://dom.spec.whatwg.org/#interface-documentfragment data-x-internal=documentfragment>DocumentFragment</a></code>. The Sanitizer API does not address server-side reflected
+  or stored XSS.</p>
+
+  <h5 id=sanitizer-security-dom-clobbering><span class=secno>2026</span> DOM clobbering<a class=self-link href=#sanitizer-security-dom-clobbering></a></h5>
+
+  
+
+  <p>DOM clobbering describes an attack in which malicious HTML confuses an application by using
+  <code id=sanitizer-security-dom-clobbering:the-id-attribute><a href=dom.html#the-id-attribute>id</a></code> or <code>name</code> attributes such that DOM
+  properties, such as the <code id=sanitizer-security-dom-clobbering:dom-parentnode-children><a href=https://dom.spec.whatwg.org/#dom-parentnode-children data-x-internal=dom-parentnode-children>children</a></code> property of an HTML
+  element, are shadowed by malicious content.</p>
+
+  <p>The Sanitizer API does not protect against DOM clobbering attacks by default, but can be
+  configured to remove <code id=sanitizer-security-dom-clobbering:the-id-attribute-2><a href=dom.html#the-id-attribute>id</a></code> and <code>name</code>
+  attributes.</p>
+
+  <h5 id=sanitizer-security-script-gadgets><span class=secno>2026</span> XSS with script gadgets<a class=self-link href=#sanitizer-security-script-gadgets></a></h5>
+
+  
+
+  <p>Script gadgets are a technique in which an attacker uses existing application code from popular
+  JavaScript libraries to cause their own code to execute. This is often done by injecting
+  innocent-looking code or seemingly inert DOM nodes that are only parsed and interpreted by a
+  framework which then performs the execution of JavaScript based on that input.</p>
+
+  <p>The Sanitizer API cannot prevent these attacks. Instead, it relies on authors to explicitly
+  allow unknown elements in general, and additionally to explicitly allow attributes, elements, and
+  markup commonly used for templating and framework-specific code, such as <code id=sanitizer-security-script-gadgets:attr-data-*><a href=dom.html#attr-data-*>data-*</a></code> and <code id=sanitizer-security-script-gadgets:attr-slot-name><a href=scripting.html#attr-slot-name>slot</a></code> attributes and
+  elements like <code id=sanitizer-security-script-gadgets:the-slot-element><a href=scripting.html#the-slot-element>slot</a></code> and <code id=sanitizer-security-script-gadgets:the-template-element><a href=scripting.html#the-template-element>template</a></code>. These restrictions are not exhaustive
+  and authors are encouraged to examine their third party libraries for this behavior.</p>
+
+  <h5 id=sanitizer-security-mxss><span class=secno>2026</span> Mutation XSS<a class=self-link href=#sanitizer-security-mxss></a></h5>
+
+  
+
+  <p>Mutation XSS or mXSS describes an attack that exploits cases where the parsed DOM structure is
+  not the same after serializing and parsing again, to bypass sanitization that happens before
+  serialization. An example for carrying out such an attack is by relying on the change of parsing
+  behavior for foreign content or mis-nested tags.</p>
+
+  <p>The Sanitizer API offers only functions that turn a string into a node tree. The context is
+  supplied implicitly by all sanitizer functions: <a id=sanitizer-security-mxss:dom-element-sethtml href=#dom-element-sethtml>setHTML()</a> uses the current element; <a id=sanitizer-security-mxss:dom-parsehtml href=#dom-parsehtml>Document.parseHTML()</a> creates a new document. Therefore Sanitizer API
+  is not directly affected by mutation XSS.</p>
+
+  <p>If a developer were to retrieve a sanitized node tree as a string, e.g. via <code id=sanitizer-security-mxss:dom-element-innerhtml><a href=#dom-element-innerhtml>innerHTML</a></code>, and to then parse it again then mutation XSS can
+  occur. This practice is strongly discouraged. If processing or passing of HTML as a string is
+  necessary after all, then any string is to be considered untrusted and re-sanitized when inserted
+  into the DOM. In other words, a sanitized and then serialized HTML tree can no longer be
+  considered sanitized. A more complete treatment of mXSS can be found in <a href=references.html#refsMXSS>[MXSS]</a>.</p>
+
+  <nav><a href=webappapis.html>← 2026 Web application APIs</a> — <a href=./>Table of Contents</a> — <a href=timers-and-user-prompts.html>2026 Timers →</a></nav>

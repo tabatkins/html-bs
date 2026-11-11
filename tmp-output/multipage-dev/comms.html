@@ -1,0 +1,99 @@
+<!DOCTYPE html><html lang=en-US-x-hixie class=split><script src=/link-fixup.js defer=""></script><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>HTML Standard, Edition for Web Developers</title><meta name=theme-color content=#3c790a><meta name=color-scheme content="light dark"><link rel=stylesheet crossorigin="" href=https://resources.whatwg.org/standard-shared-with-dev.css><link rel=icon crossorigin="" href=https://resources.whatwg.org/logo.svg><link rel=stylesheet crossorigin="" href=/dev/styles.css><script>
+   function toggleStatus(div) {
+     div.parentNode.classList.toggle('wrapped');
+   }
+   function setLinkFragment(link) {
+     link.hash = location.hash;
+   }
+  </script><body>
+  <script src=/dev/search.js async=""></script>
+  
+  
+  
+  <header class="head with-buttons" id=head>
+   <a href=https://whatwg.org/ class=logo><img crossorigin="" width=100 height=100 alt=WHATWG src=https://resources.whatwg.org/logo.svg class=darkmode-aware></a>
+   
+   <hgroup><h1><a href=/dev/ rel=home>HTML: The Living Standard</a></h1><p id=dev-edition-h2>Edition for Web Developers — Last Updated <span class=pubdate>10 November 2026</span></hgroup>
+   
+
+   <div id=search>
+    <input name=query type=search placeholder="Search. Press '/'" autocomplete=off id=query>
+    <ol id=results></ol>
+   </div>
+  </header>
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  <nav><a href=imagebitmap-and-animations.html>← 2026 Images</a> — <a href=./>Table of Contents</a> — <a href=server-sent-events.html>2026 Server-sent events →</a></nav><ol class=toc><li><a href=comms.html#comms><span class=secno>9</span> Communication</a><ol><li><a href=comms.html#the-messageevent-interface><span class=secno>9.1</span> The <code>MessageEvent</code> interface</a></ol></ol><h2 id=comms><span class=secno>2026</span> Communication<a class=self-link href=#comms></a></h2>
+
+  <p class=note id=network><span id=network-intro></span><span id=the-websocket-interface></span><span id=feedback-from-the-protocol></span><span id=ping-and-pong-frames></span><span id=the-closeevent-interface></span><span id=garbage-collection-2></span><span id=websocket></span><span id=binarytype></span><span id=closeevent></span><span id=closeeventinit></span>The <code id=comms:websocket-2><a href=https://websockets.spec.whatwg.org/#websocket data-x-internal=websocket-2>WebSocket</a></code> interface used
+  to be defined here. It is now defined in <cite>WebSockets</cite>. <a href=references.html#refsWEBSOCKETS>[WEBSOCKETS]</a></p>
+
+  <h3 id=the-messageevent-interface><span class=secno>2026</span> The <code id=the-messageevent-interface:messageevent><a href=#messageevent>MessageEvent</a></code> interface<a class=self-link href=#the-messageevent-interface></a></h3><div class="mdn-anno wrapped"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent title="The MessageEvent interface represents a message received by a target object.">MessageEvent</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>3+</span></span><span class="safari yes"><span>Safari</span><span>4+</span></span><span class="chrome yes"><span>Chrome</span><span>2+</span></span><hr><span class="opera yes"><span>Opera</span><span>10.6+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>9+</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android yes"><span>WebView Android</span><span>37+</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>11+</span></span></div></div></div>
+
+  <p>Messages in <a id=the-messageevent-interface:server-sent-events href=server-sent-events.html#server-sent-events>server-sent events</a>, <a id=the-messageevent-interface:web-messaging href=web-messaging.html#web-messaging>cross-document messaging</a>,
+  <a id=the-messageevent-interface:channel-messaging href=web-messaging.html#channel-messaging>channel messaging</a>, <a id=the-messageevent-interface:broadcasting-to-other-browsing-contexts href=web-messaging.html#broadcasting-to-other-browsing-contexts>broadcast channels</a>, and <cite>WebSockets</cite> use
+  the <code id=the-messageevent-interface:messageevent-2><a href=#messageevent>MessageEvent</a></code> interface for their <code id=the-messageevent-interface:event-message><a href=indices.html#event-message>message</a></code>
+  events: <a href=references.html#refsWEBSOCKETS>[WEBSOCKETS]</a></p>
+
+  <pre><code class=idl>[Exposed=(Window,Worker,AudioWorklet)]
+interface <dfn data-dfn-type=interface id=messageevent>MessageEvent</dfn> : <a id=the-messageevent-interface:event href=https://dom.spec.whatwg.org/#interface-event data-x-internal=event>Event</a> {
+  <a id=the-messageevent-interface:dom-event-constructor href=https://dom.spec.whatwg.org/#concept-event-constructor data-x-internal=dom-event-constructor>constructor</a>(DOMString type, optional <a id=the-messageevent-interface:messageeventinit href=#messageeventinit>MessageEventInit</a> eventInitDict = {});
+
+  readonly attribute any <a id=the-messageevent-interface:dom-messageevent-data href=#dom-messageevent-data>data</a>;
+  readonly attribute USVString <a id=the-messageevent-interface:dom-messageevent-origin href=#dom-messageevent-origin>origin</a>;
+  readonly attribute DOMString <a id=the-messageevent-interface:dom-messageevent-lasteventid href=#dom-messageevent-lasteventid>lastEventId</a>;
+  readonly attribute <a id=the-messageevent-interface:messageeventsource href=#messageeventsource>MessageEventSource</a>? <a id=the-messageevent-interface:dom-messageevent-source href=#dom-messageevent-source>source</a>;
+  readonly attribute FrozenArray&lt;<a id=the-messageevent-interface:messageport href=web-messaging.html#messageport>MessagePort</a>> <a id=the-messageevent-interface:dom-messageevent-ports href=#dom-messageevent-ports>ports</a>;
+
+  undefined <span>initMessageEvent</span>(DOMString type, optional boolean bubbles = false, optional boolean cancelable = false, optional any data = null, optional USVString origin = "", optional DOMString lastEventId = "", optional <a id=the-messageevent-interface:messageeventsource-2 href=#messageeventsource>MessageEventSource</a>? source = null, optional sequence&lt;<a id=the-messageevent-interface:messageport-2 href=web-messaging.html#messageport>MessagePort</a>> ports = []);
+};
+
+dictionary <dfn data-dfn-type=dictionary id=messageeventinit>MessageEventInit</dfn> : <a id=the-messageevent-interface:eventinit href=https://dom.spec.whatwg.org/#dictdef-eventinit data-x-internal=eventinit>EventInit</a> {
+  any <dfn data-dfn-for=MessageEventInit data-dfn-type=dict-member id=dom-messageeventinit-data>data</dfn> = null;
+  USVString <dfn data-dfn-for=MessageEventInit data-dfn-type=dict-member id=dom-messageeventinit-origin>origin</dfn> = "";
+  DOMString <dfn data-dfn-for=MessageEventInit data-dfn-type=dict-member id=dom-messageeventinit-lasteventid>lastEventId</dfn> = "";
+  <a id=the-messageevent-interface:messageeventsource-3 href=#messageeventsource>MessageEventSource</a>? <dfn data-dfn-for=MessageEventInit data-dfn-type=dict-member id=dom-messageeventinit-source>source</dfn> = null;
+  sequence&lt;<a id=the-messageevent-interface:messageport-3 href=web-messaging.html#messageport>MessagePort</a>> <dfn data-dfn-for=MessageEventInit data-dfn-type=dict-member id=dom-messageeventinit-ports>ports</dfn> = [];
+};
+
+typedef (<a id=the-messageevent-interface:windowproxy href=nav-history-apis.html#windowproxy>WindowProxy</a> or <a id=the-messageevent-interface:messageport-4 href=web-messaging.html#messageport>MessagePort</a> or <a id=the-messageevent-interface:serviceworker href=https://w3c.github.io/ServiceWorker/#serviceworker data-x-internal=serviceworker>ServiceWorker</a>) <dfn data-dfn-type=typedef id=messageeventsource>MessageEventSource</dfn>;</code></pre>
+
+  <p>Each <code id=the-messageevent-interface:messageevent-3><a href=#messageevent>MessageEvent</a></code> has an <dfn data-dfn-for=MessageEvent data-export="" id=concept-messageevent-origin>origin</dfn> (an <a id=the-messageevent-interface:concept-origin href=browsers.html#concept-origin>origin</a>, a string, or null), initially
+  null.</p>
+
+  <dl class=domintro><dt><code><var>event</var>.<span id=dom-messageevent-data>data</span></code><dd><p>Returns the data of the message.<dt><code><var>event</var>.<span id=dom-messageevent-origin>origin</span></code><dd>
+    <p>Returns the origin of the message, for <a id=the-messageevent-interface:server-sent-events-2 href=server-sent-events.html#server-sent-events>server-sent events</a> and
+    <a id=the-messageevent-interface:web-messaging-2 href=web-messaging.html#web-messaging>cross-document messaging</a>.</p>
+   <dt><code><var>event</var>.<span id=dom-messageevent-lasteventid>lastEventId</span></code><dd>
+    <p>Returns the <span>last event ID string</span>,
+    for <a id=the-messageevent-interface:server-sent-events-3 href=server-sent-events.html#server-sent-events>server-sent events</a>.</p>
+   <dt><code><var>event</var>.<span id=dom-messageevent-source>source</span></code><dd>
+    <p>Returns the <code id=the-messageevent-interface:windowproxy-2><a href=nav-history-apis.html#windowproxy>WindowProxy</a></code> of the source window, for <a id=the-messageevent-interface:web-messaging-3 href=web-messaging.html#web-messaging>cross-document
+    messaging</a>, and the <code id=the-messageevent-interface:messageport-5><a href=web-messaging.html#messageport>MessagePort</a></code> being attached, in the <code id=the-messageevent-interface:event-workerglobalscope-connect><a href=indices.html#event-workerglobalscope-connect>connect</a></code> event fired at
+    <code id=the-messageevent-interface:sharedworkerglobalscope-2><a href=workers.html#sharedworkerglobalscope-2>SharedWorkerGlobalScope</a></code> objects.</p>
+   <dt><code><var>event</var>.<span id=dom-messageevent-ports>ports</span></code><dd>
+    <p>Returns the <code id=the-messageevent-interface:messageport-6><a href=web-messaging.html#messageport>MessagePort</a></code> array sent with the message, for <a id=the-messageevent-interface:web-messaging-4 href=web-messaging.html#web-messaging>cross-document
+    messaging</a> and <a id=the-messageevent-interface:channel-messaging-2 href=web-messaging.html#channel-messaging>channel messaging</a>.</p>
+   </dl>
+
+  
+
+  <p class=note>Various APIs (e.g., <code id=the-messageevent-interface:websocket-2><a href=https://websockets.spec.whatwg.org/#websocket data-x-internal=websocket-2>WebSocket</a></code>, <code id=the-messageevent-interface:eventsource><a href=server-sent-events.html#eventsource>EventSource</a></code>) use the
+  <code id=the-messageevent-interface:messageevent-4><a href=#messageevent>MessageEvent</a></code> interface for their <code id=the-messageevent-interface:event-message-2><a href=indices.html#event-message>message</a></code> event
+  without using the <code id=the-messageevent-interface:messageport-7><a href=web-messaging.html#messageport>MessagePort</a></code> API.</p>
+
+
+  <nav><a href=imagebitmap-and-animations.html>← 2026 Images</a> — <a href=./>Table of Contents</a> — <a href=server-sent-events.html>2026 Server-sent events →</a></nav>

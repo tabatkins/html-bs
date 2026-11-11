@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang=en-US-x-hixie class=split><script src=/link-fixup.js defer=""></script><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>HTML Standard</title><meta name=theme-color content=#3c790a><meta name=color-scheme content="light dark"><link rel=stylesheet crossorigin="" href=https://resources.whatwg.org/standard-shared-with-dev.css><link crossorigin="" rel=stylesheet href=https://resources.whatwg.org/standard.css><link crossorigin="" rel=stylesheet href=https://resources.whatwg.org/spec.css><link rel=icon crossorigin="" href=https://resources.whatwg.org/logo.svg><link rel=stylesheet crossorigin="" href=/styles.css><script>
+   function toggleStatus(div) {
+     div.parentNode.classList.toggle('wrapped');
+   }
+   function setLinkFragment(link) {
+     link.hash = location.hash;
+   }
+  </script><body>
+  
+  <script crossorigin="" src=/html-dfn.js defer=""></script>
+  <script crossorigin="" src=/var-click-highlighting.js defer=""></script>
+  
+  <header class="head with-buttons" id=head>
+   <a href=https://whatwg.org/ class=logo><img crossorigin="" width=100 height=100 alt=WHATWG src=https://resources.whatwg.org/logo.svg class=darkmode-aware></a>
+   <hgroup><h1 class=allcaps>HTML</h1><p id=living-standard>Living Standard — Last Updated <span class=pubdate>10 November 2026</span></hgroup>
+   
+   
+
+   
+  </header>
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  <nav><a href=imagebitmap-and-animations.html>← 2026 Images</a> — <a href=./>Table of Contents</a> — <a href=server-sent-events.html>2026 Server-sent events →</a></nav><ol class=toc><li id=toc-comms><a href=comms.html#comms><span class=secno>9</span> Communication</a><ol><li><a href=comms.html#the-messageevent-interface><span class=secno>9.1</span> The <code>MessageEvent</code> interface</a></ol></ol><h2 id=comms><span class=secno>2026</span> Communication<a class=self-link href=#comms></a></h2>
+
+  <p class=note id=network><span id=network-intro></span><span id=the-websocket-interface></span><span id=feedback-from-the-protocol></span><span id=ping-and-pong-frames></span><span id=the-closeevent-interface></span><span id=garbage-collection-2></span><span id=websocket></span><span id=binarytype></span><span id=closeevent></span><span id=closeeventinit></span>The <code id=comms:websocket-2><a href=https://websockets.spec.whatwg.org/#websocket data-x-internal=websocket-2>WebSocket</a></code> interface used
+  to be defined here. It is now defined in <cite>WebSockets</cite>. <a href=references.html#refsWEBSOCKETS>[WEBSOCKETS]</a></p>
+
+  <h3 id=the-messageevent-interface><span class=secno>2026</span> The <code id=the-messageevent-interface:messageevent><a href=#messageevent>MessageEvent</a></code> interface<a class=self-link href=#the-messageevent-interface></a></h3><div class="mdn-anno wrapped"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent title="The MessageEvent interface represents a message received by a target object.">MessageEvent</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>3+</span></span><span class="safari yes"><span>Safari</span><span>4+</span></span><span class="chrome yes"><span>Chrome</span><span>2+</span></span><hr><span class="opera yes"><span>Opera</span><span>10.6+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>9+</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android yes"><span>WebView Android</span><span>37+</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>11+</span></span></div></div></div>
+
+  <p>Messages in <a id=the-messageevent-interface:server-sent-events href=server-sent-events.html#server-sent-events>server-sent events</a>, <a id=the-messageevent-interface:web-messaging href=web-messaging.html#web-messaging>cross-document messaging</a>,
+  <a id=the-messageevent-interface:channel-messaging href=web-messaging.html#channel-messaging>channel messaging</a>, <a id=the-messageevent-interface:broadcasting-to-other-browsing-contexts href=web-messaging.html#broadcasting-to-other-browsing-contexts>broadcast channels</a>, and <cite>WebSockets</cite> use
+  the <code id=the-messageevent-interface:messageevent-2><a href=#messageevent>MessageEvent</a></code> interface for their <code id=the-messageevent-interface:event-message><a href=indices.html#event-message>message</a></code>
+  events: <a href=references.html#refsWEBSOCKETS>[WEBSOCKETS]</a></p>
+
+  <pre><code class=idl>[Exposed=(Window,Worker,AudioWorklet)]
+interface <dfn data-dfn-type=interface id=messageevent>MessageEvent</dfn> : <a id=the-messageevent-interface:event href=https://dom.spec.whatwg.org/#interface-event data-x-internal=event>Event</a> {
+  <a id=the-messageevent-interface:dom-event-constructor href=https://dom.spec.whatwg.org/#concept-event-constructor data-x-internal=dom-event-constructor>constructor</a>(DOMString type, optional <a id=the-messageevent-interface:messageeventinit href=#messageeventinit>MessageEventInit</a> eventInitDict = {});
+
+  readonly attribute any <a id=the-messageevent-interface:dom-messageevent-data href=#dom-messageevent-data>data</a>;
+  readonly attribute USVString <a id=the-messageevent-interface:dom-messageevent-origin href=#dom-messageevent-origin>origin</a>;
+  readonly attribute DOMString <a id=the-messageevent-interface:dom-messageevent-lasteventid href=#dom-messageevent-lasteventid>lastEventId</a>;
+  readonly attribute <a id=the-messageevent-interface:messageeventsource href=#messageeventsource>MessageEventSource</a>? <a id=the-messageevent-interface:dom-messageevent-source href=#dom-messageevent-source>source</a>;
+  readonly attribute FrozenArray&lt;<a id=the-messageevent-interface:messageport href=web-messaging.html#messageport>MessagePort</a>> <a id=the-messageevent-interface:dom-messageevent-ports href=#dom-messageevent-ports>ports</a>;
+
+  undefined <a id=the-messageevent-interface:dom-messageevent-initmessageevent href=#dom-messageevent-initmessageevent>initMessageEvent</a>(DOMString type, optional boolean bubbles = false, optional boolean cancelable = false, optional any data = null, optional USVString origin = "", optional DOMString lastEventId = "", optional <a id=the-messageevent-interface:messageeventsource-2 href=#messageeventsource>MessageEventSource</a>? source = null, optional sequence&lt;<a id=the-messageevent-interface:messageport-2 href=web-messaging.html#messageport>MessagePort</a>> ports = []);
+};
+
+dictionary <dfn data-dfn-type=dictionary id=messageeventinit>MessageEventInit</dfn> : <a id=the-messageevent-interface:eventinit href=https://dom.spec.whatwg.org/#dictdef-eventinit data-x-internal=eventinit>EventInit</a> {
+  any <dfn data-dfn-for=MessageEventInit data-dfn-type=dict-member id=dom-messageeventinit-data>data</dfn> = null;
+  USVString <dfn data-dfn-for=MessageEventInit data-dfn-type=dict-member id=dom-messageeventinit-origin>origin</dfn> = "";
+  DOMString <dfn data-dfn-for=MessageEventInit data-dfn-type=dict-member id=dom-messageeventinit-lasteventid>lastEventId</dfn> = "";
+  <a id=the-messageevent-interface:messageeventsource-3 href=#messageeventsource>MessageEventSource</a>? <dfn data-dfn-for=MessageEventInit data-dfn-type=dict-member id=dom-messageeventinit-source>source</dfn> = null;
+  sequence&lt;<a id=the-messageevent-interface:messageport-3 href=web-messaging.html#messageport>MessagePort</a>> <dfn data-dfn-for=MessageEventInit data-dfn-type=dict-member id=dom-messageeventinit-ports>ports</dfn> = [];
+};
+
+typedef (<a id=the-messageevent-interface:windowproxy href=nav-history-apis.html#windowproxy>WindowProxy</a> or <a id=the-messageevent-interface:messageport-4 href=web-messaging.html#messageport>MessagePort</a> or <a id=the-messageevent-interface:serviceworker href=https://w3c.github.io/ServiceWorker/#serviceworker data-x-internal=serviceworker>ServiceWorker</a>) <dfn data-dfn-type=typedef id=messageeventsource>MessageEventSource</dfn>;</code></pre>
+
+  <p>Each <code id=the-messageevent-interface:messageevent-3><a href=#messageevent>MessageEvent</a></code> has an <dfn data-dfn-for=MessageEvent data-export="" id=concept-messageevent-origin>origin</dfn> (an <a id=the-messageevent-interface:concept-origin href=browsers.html#concept-origin>origin</a>, a string, or null), initially
+  null.</p>
+
+  <dl class=domintro><dt><code><var>event</var>.<a id=dom-messageevent-data-dev href=#dom-messageevent-data>data</a></code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent/data title="The data read-only property of the MessageEvent interface represents the data sent by the message emitter.">MessageEvent/data</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>3+</span></span><span class="safari yes"><span>Safari</span><span>4+</span></span><span class="chrome yes"><span>Chrome</span><span>2+</span></span><hr><span class="opera yes"><span>Opera</span><span>12.1+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>9+</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android yes"><span>WebView Android</span><span>37+</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>12.1+</span></span></div></div></div><dd><p>Returns the data of the message.<dt><code><var>event</var>.<a id=dom-messageevent-origin-dev href=#dom-messageevent-origin>origin</a></code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent/origin title="The origin read-only property of the MessageEvent interface is a string representing the origin of the message emitter.">MessageEvent/origin</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>3+</span></span><span class="safari yes"><span>Safari</span><span>4+</span></span><span class="chrome yes"><span>Chrome</span><span>2+</span></span><hr><span class="opera yes"><span>Opera</span><span>12.1+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>9+</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android yes"><span>WebView Android</span><span>37+</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>12.1+</span></span></div></div></div><dd>
+    <p>Returns the origin of the message, for <a id=the-messageevent-interface:server-sent-events-2 href=server-sent-events.html#server-sent-events>server-sent events</a> and
+    <a id=the-messageevent-interface:web-messaging-2 href=web-messaging.html#web-messaging>cross-document messaging</a>.</p>
+   <dt><code><var>event</var>.<a id=dom-messageevent-lasteventid-dev href=#dom-messageevent-lasteventid>lastEventId</a></code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent/lastEventId title="The lastEventId read-only property of the MessageEvent interface is a string representing a unique ID for the event.">MessageEvent/lastEventId</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>3+</span></span><span class="safari yes"><span>Safari</span><span>4+</span></span><span class="chrome yes"><span>Chrome</span><span>2+</span></span><hr><span class="opera yes"><span>Opera</span><span>12.1+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>17+</span></span><span class="ie yes"><span>Internet Explorer</span><span>9+</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android yes"><span>WebView Android</span><span>37+</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>12.1+</span></span></div></div></div><dd>
+    <p>Returns the <a id=the-messageevent-interface:concept-event-stream-last-event-id href=server-sent-events.html#concept-event-stream-last-event-id>last event ID string</a>,
+    for <a id=the-messageevent-interface:server-sent-events-3 href=server-sent-events.html#server-sent-events>server-sent events</a>.</p>
+   <dt><code><var>event</var>.<a id=dom-messageevent-source-dev href=#dom-messageevent-source>source</a></code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent/source title="The source read-only property of the MessageEvent interface is a MessageEventSource (which can be a WindowProxy, MessagePort, or ServiceWorker object) representing the message emitter.">MessageEvent/source</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>3+</span></span><span class="safari yes"><span>Safari</span><span>4+</span></span><span class="chrome yes"><span>Chrome</span><span>2+</span></span><hr><span class="opera yes"><span>Opera</span><span>12.1+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie no"><span>Internet Explorer</span><span>No</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android yes"><span>WebView Android</span><span>37+</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>12.1+</span></span></div></div></div><dd>
+    <p>Returns the <code id=the-messageevent-interface:windowproxy-2><a href=nav-history-apis.html#windowproxy>WindowProxy</a></code> of the source window, for <a id=the-messageevent-interface:web-messaging-3 href=web-messaging.html#web-messaging>cross-document
+    messaging</a>, and the <code id=the-messageevent-interface:messageport-5><a href=web-messaging.html#messageport>MessagePort</a></code> being attached, in the <code id=the-messageevent-interface:event-workerglobalscope-connect><a href=indices.html#event-workerglobalscope-connect>connect</a></code> event fired at
+    <code id=the-messageevent-interface:sharedworkerglobalscope><a href=workers.html#sharedworkerglobalscope>SharedWorkerGlobalScope</a></code> objects.</p>
+   <dt><code><var>event</var>.<a id=dom-messageevent-ports-dev href=#dom-messageevent-ports>ports</a></code><div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/MessageEvent/ports title="The ports read-only property of the MessageEvent interface is an array of MessagePort objects representing the ports associated with the channel the message is being sent through (where appropriate, e.g. in channel messaging or when sending a message to a shared worker).">MessageEvent/ports</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>3+</span></span><span class="safari yes"><span>Safari</span><span>4+</span></span><span class="chrome yes"><span>Chrome</span><span>4+</span></span><hr><span class="opera yes"><span>Opera</span><span>12.1+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>9+</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android yes"><span>WebView Android</span><span>37+</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android yes"><span>Opera Android</span><span>12.1+</span></span></div></div></div><dd>
+    <p>Returns the <code id=the-messageevent-interface:messageport-6><a href=web-messaging.html#messageport>MessagePort</a></code> array sent with the message, for <a id=the-messageevent-interface:web-messaging-4 href=web-messaging.html#web-messaging>cross-document
+    messaging</a> and <a id=the-messageevent-interface:channel-messaging-2 href=web-messaging.html#channel-messaging>channel messaging</a>.</p>
+   </dl>
+
+  
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=MessageEvent data-dfn-type=attribute id=dom-messageevent-data><code>data</code></dfn>
+  attribute must return the value it was initialized to. It represents the message being sent.</p>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=MessageEvent data-dfn-type=attribute id=dom-messageevent-origin><code>origin</code></dfn> attribute represents, in <a id=the-messageevent-interface:server-sent-events-4 href=server-sent-events.html#server-sent-events>server-sent
+  events</a> and <a id=the-messageevent-interface:web-messaging-5 href=web-messaging.html#web-messaging>cross-document messaging</a>, the <a id=the-messageevent-interface:concept-document-origin href=https://dom.spec.whatwg.org/#concept-document-origin data-x-internal=concept-document-origin>origin</a> of the document that sent the message (typically
+  the scheme, hostname, and port of the document, but not its path or <a id=the-messageevent-interface:concept-url-fragment href=https://url.spec.whatwg.org/#concept-url-fragment data-x-internal=concept-url-fragment>fragment</a>).</p>
+
+  <p>The <code id=the-messageevent-interface:dom-messageevent-origin-2><a href=#dom-messageevent-origin>origin</a></code> getter steps are:</p>
+
+  <ol><li><p>If <a id=the-messageevent-interface:this href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-messageevent-interface:concept-messageevent-origin href=#concept-messageevent-origin>origin</a> is
+   an <a id=the-messageevent-interface:concept-origin-2 href=browsers.html#concept-origin>origin</a>, then return the <a id=the-messageevent-interface:ascii-serialisation-of-an-origin href=browsers.html#ascii-serialisation-of-an-origin>serialization</a> of <a id=the-messageevent-interface:this-2 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-messageevent-interface:concept-messageevent-origin-2 href=#concept-messageevent-origin>origin</a>.<li><p>If <a id=the-messageevent-interface:this-3 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-messageevent-interface:concept-messageevent-origin-3 href=#concept-messageevent-origin>origin</a> is
+   null, then return the empty string.<li><p>Return <a id=the-messageevent-interface:this-4 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-messageevent-interface:concept-messageevent-origin-4 href=#concept-messageevent-origin>origin</a>.</ol>
+
+  <p>When the <code id=the-messageevent-interface:dom-messageevent-origin-3><a href=#dom-messageevent-origin>origin</a></code> attribute is "initialized"
+  (during <code id=the-messageevent-interface:messageevent-4><a href=#messageevent>MessageEvent</a></code>'s <a id=the-messageevent-interface:dom-event-constructor-2 href=https://dom.spec.whatwg.org/#concept-event-constructor data-x-internal=dom-event-constructor>constructor</a>, for
+  example), the initialization value is placed into the object's <a id=the-messageevent-interface:concept-messageevent-origin-5 href=#concept-messageevent-origin>origin</a>.</p>
+  </div>
+
+  <div algorithm="">
+  <p>Objects implementing the <code id=the-messageevent-interface:messageevent-5><a href=#messageevent>MessageEvent</a></code> interface's <a id=the-messageevent-interface:extract-an-origin href=browsers.html#extract-an-origin>extract an origin</a>
+  steps are to return <a id=the-messageevent-interface:this-5 href=https://webidl.spec.whatwg.org/#this data-x-internal=this>this</a>'s <a id=the-messageevent-interface:concept-messageevent-origin-6 href=#concept-messageevent-origin>origin</a>
+  if it is an <a id=the-messageevent-interface:concept-origin-3 href=browsers.html#concept-origin>origin</a>; otherwise null.</p>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=MessageEvent data-dfn-type=attribute id=dom-messageevent-lasteventid><code>lastEventId</code></dfn> attribute must return the value it
+  was initialized to. It represents, in <a id=the-messageevent-interface:server-sent-events-5 href=server-sent-events.html#server-sent-events>server-sent events</a>, the <a id=the-messageevent-interface:concept-event-stream-last-event-id-2 href=server-sent-events.html#concept-event-stream-last-event-id>last event ID string</a> of the event source.</p>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=MessageEvent data-dfn-type=attribute id=dom-messageevent-source><code>source</code></dfn> attribute must return the value it was
+  initialized to. It represents, in <a id=the-messageevent-interface:web-messaging-6 href=web-messaging.html#web-messaging>cross-document messaging</a>, the
+  <code id=the-messageevent-interface:windowproxy-3><a href=nav-history-apis.html#windowproxy>WindowProxy</a></code> of the <a id=the-messageevent-interface:browsing-context href=document-sequences.html#browsing-context>browsing context</a> of the <code id=the-messageevent-interface:window><a href=nav-history-apis.html#window>Window</a></code> object
+  from which the message came; and in the <code id=the-messageevent-interface:event-workerglobalscope-connect-2><a href=indices.html#event-workerglobalscope-connect>connect</a></code> events used by <a id=the-messageevent-interface:sharedworkerglobalscope-2 href=workers.html#sharedworkerglobalscope>shared workers</a>, the newly connecting
+  <code id=the-messageevent-interface:messageport-7><a href=web-messaging.html#messageport>MessagePort</a></code>.</p>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=MessageEvent data-dfn-type=attribute id=dom-messageevent-ports><code>ports</code></dfn>
+  attribute must return the value it was initialized to. It represents, in <a id=the-messageevent-interface:web-messaging-7 href=web-messaging.html#web-messaging>cross-document
+  messaging</a> and <a id=the-messageevent-interface:channel-messaging-3 href=web-messaging.html#channel-messaging>channel messaging</a>, the <code id=the-messageevent-interface:messageport-8><a href=web-messaging.html#messageport>MessagePort</a></code> array being
+  sent.</p>
+  </div>
+
+  
+  <div algorithm="">
+  <p>The <dfn data-dfn-for=MessageEvent data-dfn-type=method id=dom-messageevent-initmessageevent><code>initMessageEvent(<var>type</var>, <var>bubbles</var>,
+  <var>cancelable</var>, <var>data</var>, <var>origin</var>, <var>lastEventId</var>,
+  <var>source</var>, <var>ports</var>)</code></dfn> method must initialize the event in a manner
+  analogous to the similarly-named <code id=the-messageevent-interface:dom-event-initevent><a href=https://dom.spec.whatwg.org/#dom-event-initevent data-x-internal=dom-event-initevent>initEvent()</a></code> method.
+  <a href=references.html#refsDOM>[DOM]</a></p>
+  </div>
+
+  
+
+  <p class=note>Various APIs (e.g., <code id=the-messageevent-interface:websocket-2><a href=https://websockets.spec.whatwg.org/#websocket data-x-internal=websocket-2>WebSocket</a></code>, <code id=the-messageevent-interface:eventsource><a href=server-sent-events.html#eventsource>EventSource</a></code>) use the
+  <code id=the-messageevent-interface:messageevent-6><a href=#messageevent>MessageEvent</a></code> interface for their <code id=the-messageevent-interface:event-message-2><a href=indices.html#event-message>message</a></code> event
+  without using the <code id=the-messageevent-interface:messageport-9><a href=web-messaging.html#messageport>MessagePort</a></code> API.</p>
+
+
+  <nav><a href=imagebitmap-and-animations.html>← 2026 Images</a> — <a href=./>Table of Contents</a> — <a href=server-sent-events.html>2026 Server-sent events →</a></nav>

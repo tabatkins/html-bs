@@ -1,0 +1,662 @@
+<!DOCTYPE html><html lang=en-US-x-hixie class=split><script src=/link-fixup.js defer=""></script><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>HTML Standard</title><meta name=theme-color content=#3c790a><meta name=color-scheme content="light dark"><link rel=stylesheet crossorigin="" href=https://resources.whatwg.org/standard-shared-with-dev.css><link crossorigin="" rel=stylesheet href=https://resources.whatwg.org/standard.css><link crossorigin="" rel=stylesheet href=https://resources.whatwg.org/spec.css><link rel=icon crossorigin="" href=https://resources.whatwg.org/logo.svg><link rel=stylesheet crossorigin="" href=/styles.css><script>
+   function toggleStatus(div) {
+     div.parentNode.classList.toggle('wrapped');
+   }
+   function setLinkFragment(link) {
+     link.hash = location.hash;
+   }
+  </script><body>
+  
+  <script crossorigin="" src=/html-dfn.js defer=""></script>
+  <script crossorigin="" src=/var-click-highlighting.js defer=""></script>
+  
+  <header class="head with-buttons" id=head>
+   <a href=https://whatwg.org/ class=logo><img crossorigin="" width=100 height=100 alt=WHATWG src=https://resources.whatwg.org/logo.svg class=darkmode-aware></a>
+   <hgroup><h1 class=allcaps>HTML</h1><p id=living-standard>Living Standard — Last Updated <span class=pubdate>10 November 2026</span></hgroup>
+   
+   
+
+   
+  </header>
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  <nav><a href=common-microsyntaxes.html>← 2026 Common microsyntaxes</a> — <a href=./>Table of Contents</a> — <a href=common-dom-interfaces.html>2026 Common DOM interfaces →</a></nav><ol class=toc><li id=toc-infrastructure><ol><li><a href=urls-and-fetching.html#urls><span class=secno>2.4</span> URLs</a><ol><li><a href=urls-and-fetching.html#terminology-2><span class=secno>2.4.1</span> Terminology</a><li><a href=urls-and-fetching.html#resolving-urls><span class=secno>2.4.2</span> Parsing URLs</a><li><a href=urls-and-fetching.html#document-base-urls><span class=secno>2.4.3</span> Document base URLs</a></ol><li><a href=urls-and-fetching.html#fetching-resources><span class=secno>2.5</span> Fetching resources</a><ol><li><a href=urls-and-fetching.html#terminology-3><span class=secno>2.5.1</span> Terminology</a><li><a href=urls-and-fetching.html#content-type-sniffing><span class=secno>2.5.2</span> Determining the type of a resource</a><li><a href=urls-and-fetching.html#extracting-character-encodings-from-meta-elements><span class=secno>2.5.3</span> Extracting character encodings from <code>meta</code> elements</a><li><a href=urls-and-fetching.html#cors-settings-attributes><span class=secno>2.5.4</span> CORS settings attributes</a><li><a href=urls-and-fetching.html#referrer-policy-attributes><span class=secno>2.5.5</span> Referrer policy attributes</a><li><a href=urls-and-fetching.html#nonce-attributes><span class=secno>2.5.6</span> Nonce attributes</a><li><a href=urls-and-fetching.html#lazy-loading-attributes><span class=secno>2.5.7</span> Lazy loading attributes</a><li><a href=urls-and-fetching.html#blocking-attributes><span class=secno>2.5.8</span> Blocking attributes</a><li><a href=urls-and-fetching.html#fetch-priority-attributes><span class=secno>2.5.9</span> Fetch priority attributes</a></ol></ol></ol><h3 id=urls><span class=secno>2026</span> URLs<a class=self-link href=#urls></a></h3>
+
+  <h4 id=terminology-2><span class=secno>2026</span> Terminology<a class=self-link href=#terminology-2></a></h4>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-non-empty-url>valid non-empty URL</dfn> if it is a <a id=terminology-2:valid-url-string href=https://url.spec.whatwg.org/#valid-url-string data-x-internal=valid-url-string>valid URL string</a> but it is
+  not the empty string.</p>
+  </div>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-url-potentially-surrounded-by-spaces>valid URL potentially surrounded by spaces</dfn> if, after <a id=terminology-2:strip-leading-and-trailing-ascii-whitespace href=https://infra.spec.whatwg.org/#strip-leading-and-trailing-ascii-whitespace data-x-internal=strip-leading-and-trailing-ascii-whitespace>stripping leading and trailing ASCII
+  whitespace</a> from it, it is a <a id=terminology-2:valid-url-string-2 href=https://url.spec.whatwg.org/#valid-url-string data-x-internal=valid-url-string>valid URL string</a>.</p>
+  </div>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-non-empty-url-potentially-surrounded-by-spaces>valid non-empty URL potentially surrounded by spaces</dfn> if, after <a id=terminology-2:strip-leading-and-trailing-ascii-whitespace-2 href=https://infra.spec.whatwg.org/#strip-leading-and-trailing-ascii-whitespace data-x-internal=strip-leading-and-trailing-ascii-whitespace>stripping leading and trailing ASCII
+  whitespace</a> from it, it is a <a id=terminology-2:valid-non-empty-url href=#valid-non-empty-url>valid non-empty URL</a>.</p>
+  </div>
+
+  <hr>
+
+  <p>This specification defines the URL <dfn id=about:legacy-compat><code>about:legacy-compat</code></dfn> as a reserved,
+  though unresolvable, <code id=terminology-2:about-protocol><a href=https://www.rfc-editor.org/rfc/rfc6694#section-2 data-x-internal=about-protocol>about:</a></code> URL, for use in <a id=terminology-2:syntax-doctype href=syntax.html#syntax-doctype>DOCTYPE</a>s in <a id=terminology-2:html-documents href=https://dom.spec.whatwg.org/#html-document data-x-internal=html-documents>HTML documents</a> when needed for
+  compatibility with XML tools. <a href=references.html#refsABOUT>[ABOUT]</a></p>
+
+  <p>This specification defines the URL <dfn id=about:html-kind><code>about:html-kind</code></dfn> as a reserved,
+  though unresolvable, <code id=terminology-2:about-protocol-2><a href=https://www.rfc-editor.org/rfc/rfc6694#section-2 data-x-internal=about-protocol>about:</a></code> URL, that is used as an
+  identifier for kinds of media tracks. <a href=references.html#refsABOUT>[ABOUT]</a></p>
+
+  <p>This specification defines the URL <dfn id=about:srcdoc><code>about:srcdoc</code></dfn> as a reserved, though
+  unresolvable, <code id=terminology-2:about-protocol-3><a href=https://www.rfc-editor.org/rfc/rfc6694#section-2 data-x-internal=about-protocol>about:</a></code> URL, that is used as the <a id="terminology-2:the-document's-address" href=https://dom.spec.whatwg.org/#concept-document-url data-x-internal="the-document's-address">URL</a> of <a id=terminology-2:an-iframe-srcdoc-document href=iframe-embed-object.html#an-iframe-srcdoc-document><code>iframe</code> <code>srcdoc</code> documents</a>.
+  <a href=references.html#refsABOUT>[ABOUT]</a></p>
+
+  <hr>
+
+  <div algorithm="">
+  <p>A <a id=terminology-2:url href=https://url.spec.whatwg.org/#concept-url data-x-internal=url>URL</a> <dfn id=matches-about:blank>matches <code>about:blank</code></dfn> if its <a id=terminology-2:concept-url-scheme href=https://url.spec.whatwg.org/#concept-url-scheme data-x-internal=concept-url-scheme>scheme</a> is "<code>about</code>", its <a id=terminology-2:concept-url-path href=https://url.spec.whatwg.org/#concept-url-path data-x-internal=concept-url-path>path</a> contains a single string "<code>blank</code>", its
+  <a id=terminology-2:concept-url-username href=https://url.spec.whatwg.org/#concept-url-username data-x-internal=concept-url-username>username</a> and <a id=terminology-2:concept-url-password href=https://url.spec.whatwg.org/#concept-url-password data-x-internal=concept-url-password>password</a> are the empty string, and its <a id=terminology-2:concept-url-host href=https://url.spec.whatwg.org/#concept-url-host data-x-internal=concept-url-host>host</a> is null.</p>
+  </div>
+
+  <p class=note>Such a URL's <a id=terminology-2:concept-url-query href=https://url.spec.whatwg.org/#concept-url-query data-x-internal=concept-url-query>query</a> and <a id=terminology-2:concept-url-fragment href=https://url.spec.whatwg.org/#concept-url-fragment data-x-internal=concept-url-fragment>fragment</a> can be non-null. For example, the <a id=terminology-2:url-record href=https://url.spec.whatwg.org/#concept-url data-x-internal=url-record>URL
+  record</a> created by <a id=terminology-2:url-parser href=https://url.spec.whatwg.org/#concept-url-parser data-x-internal=url-parser>parsing</a> "<code>about:blank?foo#bar</code>" <a id=terminology-2:matches-about:blank href=#matches-about:blank>matches <code>about:blank</code></a>.</p>
+
+  <div algorithm="">
+  <p>A <a id=terminology-2:url-2 href=https://url.spec.whatwg.org/#concept-url data-x-internal=url>URL</a> <dfn id=matches-about:srcdoc>matches <code>about:srcdoc</code></dfn> if its <a id=terminology-2:concept-url-scheme-2 href=https://url.spec.whatwg.org/#concept-url-scheme data-x-internal=concept-url-scheme>scheme</a> is "<code>about</code>", its <a id=terminology-2:concept-url-path-2 href=https://url.spec.whatwg.org/#concept-url-path data-x-internal=concept-url-path>path</a> contains a single string "<code>srcdoc</code>",
+  its <a id=terminology-2:concept-url-query-2 href=https://url.spec.whatwg.org/#concept-url-query data-x-internal=concept-url-query>query</a> is null, its <a id=terminology-2:concept-url-username-2 href=https://url.spec.whatwg.org/#concept-url-username data-x-internal=concept-url-username>username</a> and <a id=terminology-2:concept-url-password-2 href=https://url.spec.whatwg.org/#concept-url-password data-x-internal=concept-url-password>password</a> are the empty string, and its <a id=terminology-2:concept-url-host-2 href=https://url.spec.whatwg.org/#concept-url-host data-x-internal=concept-url-host>host</a> is null.</p>
+  </div>
+
+  <p class=note>The reason that <a id=terminology-2:matches-about:srcdoc href=#matches-about:srcdoc>matches <code>about:srcdoc</code></a> ensures that the
+  <a id=terminology-2:url-3 href=https://url.spec.whatwg.org/#concept-url data-x-internal=url>URL</a>'s <a id=terminology-2:concept-url-query-3 href=https://url.spec.whatwg.org/#concept-url-query data-x-internal=concept-url-query>query</a> is null is because it is not
+  possible to create <a id=terminology-2:an-iframe-srcdoc-document-2 href=iframe-embed-object.html#an-iframe-srcdoc-document>an <code>iframe</code> <code>srcdoc</code> document</a> whose <a id="terminology-2:the-document's-address-2" href=https://dom.spec.whatwg.org/#concept-document-url data-x-internal="the-document's-address">URL</a> has a non-null <a id=terminology-2:concept-url-query-4 href=https://url.spec.whatwg.org/#concept-url-query data-x-internal=concept-url-query>query</a>, unlike <code id=terminology-2:document><a href=dom.html#document>Document</a></code>s whose <a id="terminology-2:the-document's-address-3" href=https://dom.spec.whatwg.org/#concept-document-url data-x-internal="the-document's-address">URL</a> <a id=terminology-2:matches-about:blank-2 href=#matches-about:blank>matches <code>about:blank</code></a>. In other
+  words, the set of all <a id=terminology-2:url-4 href=https://url.spec.whatwg.org/#concept-url data-x-internal=url>URL</a>s that <a id=terminology-2:matches-about:srcdoc-2 href=#matches-about:srcdoc>match
+  <code>about:srcdoc</code></a> only vary in their <a id=terminology-2:concept-url-fragment-2 href=https://url.spec.whatwg.org/#concept-url-fragment data-x-internal=concept-url-fragment>fragment</a>.</p>
+
+
+  
+
+  <h4 id=resolving-urls><span class=secno>2026</span> Parsing URLs<a class=self-link href=#resolving-urls></a></h4>
+
+  <p>Parsing a URL is the process of taking a string and obtaining the <a id=resolving-urls:url-record href=https://url.spec.whatwg.org/#concept-url data-x-internal=url-record>URL record</a> that
+  it represents. While this process is defined in <cite>URL</cite>, the HTML standard defines
+  several wrappers to abstract base URLs and encodings. <a href=references.html#refsURL>[URL]</a></p>
+
+  <p class=note>Most new APIs are to use <a id=resolving-urls:parse-a-url href=#parse-a-url>parse a URL</a>. Older APIs and HTML elements
+  might have reason to use <a id=resolving-urls:encoding-parsing-a-url href=#encoding-parsing-a-url>encoding-parse a URL</a>. When a
+  custom base URL is needed or no base URL is desired, the <a id=resolving-urls:url-parser href=https://url.spec.whatwg.org/#concept-url-parser data-x-internal=url-parser>URL parser</a> can of course be
+  used directly as well.</p>
+
+  <div algorithm="">
+  <p>To <dfn data-export="" id=parse-a-url>parse a URL</dfn>, given a string <var>url</var>, relative to a
+  <code id=resolving-urls:document><a href=dom.html#document>Document</a></code> object or <a id=resolving-urls:environment-settings-object href=webappapis.html#environment-settings-object>environment settings object</a> <var>environment</var>,
+  run these steps. They return failure or a <a id=resolving-urls:url href=https://url.spec.whatwg.org/#concept-url data-x-internal=url>URL</a>.</p>
+
+  <ol><li><p>Let <var>baseURL</var> be <var>environment</var>'s <a id=resolving-urls:document-base-url href=#document-base-url>base
+   URL</a>, if <var>environment</var> is a <code id=resolving-urls:document-2><a href=dom.html#document>Document</a></code> object; otherwise
+   <var>environment</var>'s <a id=resolving-urls:api-base-url href=webappapis.html#api-base-url>API base URL</a>.<li><p>Return the result of applying the <a id=resolving-urls:url-parser-2 href=https://url.spec.whatwg.org/#concept-url-parser data-x-internal=url-parser>URL parser</a> to <var>url</var>, with
+   <var>baseURL</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p id=resolve-a-url>To <dfn data-export="" id=encoding-parsing-a-url>encoding-parse a URL</dfn>,
+  given a string <var>url</var>, relative to a <code id=resolving-urls:document-3><a href=dom.html#document>Document</a></code> object or <a id=resolving-urls:environment-settings-object-2 href=webappapis.html#environment-settings-object>environment
+  settings object</a> <var>environment</var>, run these steps. They return failure or a
+  <a id=resolving-urls:url-2 href=https://url.spec.whatwg.org/#concept-url data-x-internal=url>URL</a>.</p>
+
+  <ol><li><p>Let <var>encoding</var> be <a id=resolving-urls:utf-8 href=https://encoding.spec.whatwg.org/#utf-8 data-x-internal=utf-8>UTF-8</a>.<li><p>If <var>environment</var> is a <code id=resolving-urls:document-4><a href=dom.html#document>Document</a></code> object, then set <var>encoding</var>
+   to <var>environment</var>'s <a id="resolving-urls:document's-character-encoding" href=https://dom.spec.whatwg.org/#concept-document-encoding data-x-internal="document's-character-encoding">character
+   encoding</a>.<li><p>Otherwise, if <var>environment</var>'s <a id=resolving-urls:concept-relevant-global href=webappapis.html#concept-relevant-global>relevant global object</a> is a
+   <code id=resolving-urls:window><a href=nav-history-apis.html#window>Window</a></code> object, set <var>encoding</var> to <var>environment</var>'s <a id=resolving-urls:concept-relevant-global-2 href=webappapis.html#concept-relevant-global>relevant
+   global object</a>'s <a id=resolving-urls:concept-document-window href=nav-history-apis.html#concept-document-window>associated
+   <code>Document</code></a>'s <a id="resolving-urls:document's-character-encoding-2" href=https://dom.spec.whatwg.org/#concept-document-encoding data-x-internal="document's-character-encoding">character
+   encoding</a>.<li><p>Let <var>baseURL</var> be <var>environment</var>'s <a id=resolving-urls:document-base-url-2 href=#document-base-url>base
+   URL</a>, if <var>environment</var> is a <code id=resolving-urls:document-5><a href=dom.html#document>Document</a></code> object; otherwise
+   <var>environment</var>'s <a id=resolving-urls:api-base-url-2 href=webappapis.html#api-base-url>API base URL</a>.<li><p>Return the result of applying the <a id=resolving-urls:url-parser-3 href=https://url.spec.whatwg.org/#concept-url-parser data-x-internal=url-parser>URL parser</a> to <var>url</var>, with
+   <var>baseURL</var> and <var>encoding</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>To <dfn id=encoding-parsing-and-serializing-a-url>encoding-parse-and-serialize a
+  URL</dfn>, given a string <var>url</var>, relative to a <code id=resolving-urls:document-6><a href=dom.html#document>Document</a></code> object or
+  <a id=resolving-urls:environment-settings-object-3 href=webappapis.html#environment-settings-object>environment settings object</a> <var>environment</var>, run these steps. They return
+  failure or a string.</p>
+
+  <ol><li><p>Let <var>url</var> be the result of <a id=resolving-urls:encoding-parsing-a-url-2 href=#encoding-parsing-a-url>encoding-parsing a URL</a> given
+   <var>url</var>, relative to <var>environment</var>.<li><p>If <var>url</var> is failure, then return failure.<li><p>Return the result of applying the <a id=resolving-urls:concept-url-serializer href=https://url.spec.whatwg.org/#concept-url-serializer data-x-internal=concept-url-serializer>URL
+   serializer</a> to <var>url</var>.</ol>
+  </div>
+
+  
+
+
+
+  
+
+  <h4 id=document-base-urls><span class=secno>2026</span> Document base URLs<a class=self-link href=#document-base-urls></a></h4>
+
+  <div algorithm="">
+  <p>The <dfn data-export="" id=document-base-url>document base URL</dfn> of a <code id=document-base-urls:document><a href=dom.html#document>Document</a></code> <var>document</var> is the
+  <a id=document-base-urls:url-record href=https://url.spec.whatwg.org/#concept-url data-x-internal=url-record>URL record</a> obtained by running these steps:</p>
+
+  <ol><li><p>If <var>document</var> has no <a id=document-base-urls:descendant href=https://dom.spec.whatwg.org/#concept-tree-descendant data-x-internal=descendant>descendant</a> <code id=document-base-urls:the-base-element><a href=semantics.html#the-base-element>base</a></code> element that has
+   an <code id=document-base-urls:attr-base-href><a href=semantics.html#attr-base-href>href</a></code> attribute, then return <var>document</var>'s
+   <a id=document-base-urls:fallback-base-url href=#fallback-base-url>fallback base URL</a>.<li><p>Otherwise, return the <a id=document-base-urls:frozen-base-url href=semantics.html#frozen-base-url>frozen base URL</a> of the first <code id=document-base-urls:the-base-element-2><a href=semantics.html#the-base-element>base</a></code> element
+   in <var>document</var> that has an <code id=document-base-urls:attr-base-href-2><a href=semantics.html#attr-base-href>href</a></code> attribute, in
+   <a id=document-base-urls:tree-order href=https://dom.spec.whatwg.org/#concept-tree-order data-x-internal=tree-order>tree order</a>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn id=fallback-base-url>fallback base URL</dfn> of a <code id=document-base-urls:document-2><a href=dom.html#document>Document</a></code> object <var>document</var> is the
+  <a id=document-base-urls:url-record-2 href=https://url.spec.whatwg.org/#concept-url data-x-internal=url-record>URL record</a> obtained by running these steps:</p>
+
+  <ol><li>
+    <p>If <var>document</var> is <a id=document-base-urls:an-iframe-srcdoc-document href=iframe-embed-object.html#an-iframe-srcdoc-document>an <code>iframe</code>
+    <code>srcdoc</code> document</a>:</p>
+
+    <ol><li><p><a id=document-base-urls:assert href=https://infra.spec.whatwg.org/#assert data-x-internal=assert>Assert</a>: <var>document</var>'s <a id=document-base-urls:concept-document-about-base-url href=dom.html#concept-document-about-base-url>about base URL</a> is non-null.<li><p>Return <var>document</var>'s <a id=document-base-urls:concept-document-about-base-url-2 href=dom.html#concept-document-about-base-url>about base
+     URL</a>.</ol>
+   <li><p>If <var>document</var>'s <a id="document-base-urls:the-document's-address" href=https://dom.spec.whatwg.org/#concept-document-url data-x-internal="the-document's-address">URL</a> <a id=document-base-urls:matches-about:blank href=#matches-about:blank>matches
+   <code>about:blank</code></a> and <var>document</var>'s <a id=document-base-urls:concept-document-about-base-url-3 href=dom.html#concept-document-about-base-url>about base URL</a> is non-null, then return
+   <var>document</var>'s <a id=document-base-urls:concept-document-about-base-url-4 href=dom.html#concept-document-about-base-url>about base
+   URL</a>.<li><p>Return <var>document</var>'s <a id="document-base-urls:the-document's-address-2" href=https://dom.spec.whatwg.org/#concept-document-url data-x-internal="the-document's-address">URL</a>.</ol>
+  </div>
+
+  <hr>
+
+  <div algorithm="">
+  <p>To <dfn id=set-the-url>set the URL</dfn> for a <code id=document-base-urls:document-3><a href=dom.html#document>Document</a></code> <var>document</var> to a <a id=document-base-urls:url-record-3 href=https://url.spec.whatwg.org/#concept-url data-x-internal=url-record>URL
+  record</a> <var>url</var>:</p>
+
+  <ol><li><p>Set <var>document</var>'s <a id="document-base-urls:the-document's-address-3" href=https://dom.spec.whatwg.org/#concept-document-url data-x-internal="the-document's-address">URL</a> to
+   <var>url</var>.<li><p><a id=document-base-urls:respond-to-base-url-changes href=#respond-to-base-url-changes>Respond to base URL changes</a> given <var>document</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p id=dynamic-changes-to-base-urls>To <dfn id=respond-to-base-url-changes>respond to base URL changes</dfn> for a
+  <code id=document-base-urls:document-4><a href=dom.html#document>Document</a></code> <var>document</var>:</p>
+
+  <ol><li><p>The user agent should update any user interface elements which are displaying affected
+   URLs, or data derived from such URLs, to the user. Examples of such user interface elements would
+   be a status bar that displays a <a id=document-base-urls:hyperlink href=links.html#hyperlink>hyperlink</a>'s <a id=document-base-urls:concept-hyperlink-url href=links.html#concept-hyperlink-url>url</a>, or some user interface which displays the URL
+   specified by a <code id=document-base-urls:the-q-element><a href=text-level-semantics.html#the-q-element>q</a></code>, <code id=document-base-urls:the-blockquote-element><a href=grouping-content.html#the-blockquote-element>blockquote</a></code>, <code id=document-base-urls:the-ins-element><a href=edits.html#the-ins-element>ins</a></code>, or <code id=document-base-urls:the-del-element><a href=edits.html#the-del-element>del</a></code>
+   element's <code>cite</code> attribute.<li><p>Ensure that the CSS <code id=document-base-urls:selector-link><a href=semantics-other.html#selector-link>:link</a></code>/<code id=document-base-urls:selector-visited><a href=semantics-other.html#selector-visited>:visited</a></code>/etc. <a id=document-base-urls:pseudo-class href=https://drafts.csswg.org/selectors/#pseudo-class data-x-internal=pseudo-class>pseudo-classes</a>
+   are updated appropriately.<li>
+    <p><a id=document-base-urls:list-iterate href=https://infra.spec.whatwg.org/#list-iterate data-x-internal=list-iterate>For each</a> <var>descendant</var> of <var>document</var>'s
+    <a id=document-base-urls:shadow-including-descendant href=https://dom.spec.whatwg.org/#concept-shadow-including-descendant data-x-internal=shadow-including-descendant>shadow-including descendants</a>:</p>
+
+    <ol><li>
+      <p>If <var>descendant</var> is a <code id=document-base-urls:the-script-element><a href=scripting.html#the-script-element>script</a></code> element whose <a id=document-base-urls:concept-script-result href=scripting.html#concept-script-result>result</a> is a <a id=document-base-urls:speculation-rules-parse-result href=webappapis.html#speculation-rules-parse-result>speculation rules parse
+      result</a>:</p>
+
+      <ol><li><p>Let <var>oldResult</var> be <var>element</var>'s <a id=document-base-urls:concept-script-result-2 href=scripting.html#concept-script-result>result</a>.<li><p>Let <var>newResult</var> be the result of <a id=document-base-urls:create-a-speculation-rules-parse-result href=webappapis.html#create-a-speculation-rules-parse-result>creating a speculation rules parse result</a> given <var>element</var>'s
+       <a id=document-base-urls:child-text-content href=https://dom.spec.whatwg.org/#concept-child-text-content data-x-internal=child-text-content>child text content</a> and <var>element</var>'s <a id=document-base-urls:node-document href=https://dom.spec.whatwg.org/#concept-node-document data-x-internal=node-document>node document</a>.<li><p><a id=document-base-urls:update-speculation-rules href=webappapis.html#update-speculation-rules>Update speculation rules</a> given <var>element</var>'s <a id=document-base-urls:concept-relevant-global href=webappapis.html#concept-relevant-global>relevant global
+       object</a>, <var>oldResult</var>, and <var>newResult</var>.</ol>
+    </ol>
+   <li><p><a id=document-base-urls:consider-speculative-loads href=speculative-loading.html#consider-speculative-loads>Consider speculative loads</a> given <var>document</var>.</ol>
+  </div>
+
+  <p class=example id=example-base-url-change-img-unaffected>This means that changing the base
+  URL doesn't affect, for example, the image displayed by <code id=document-base-urls:the-img-element><a href=embedded-content.html#the-img-element>img</a></code> elements. Thus,
+  subsequent accesses of the <code id=document-base-urls:dom-img-src><a href=embedded-content.html#dom-img-src>src</a></code> IDL attribute from script will
+  return a new <a id=document-base-urls:absolute-url href=https://url.spec.whatwg.org/#syntax-url-absolute data-x-internal=absolute-url>absolute URL</a> that might no longer correspond to the image being
+  shown.</p>
+
+  
+
+
+  
+
+  <h3 id=fetching-resources><span class=secno>2026</span> Fetching resources<a class=self-link href=#fetching-resources></a></h3>
+
+  <h4 id=terminology-3><span class=secno>2026</span> Terminology<a class=self-link href=#terminology-3></a></h4>
+
+  <div algorithm="">
+  <p>A <a id=terminology-3:concept-response href=https://fetch.spec.whatwg.org/#concept-response data-x-internal=concept-response>response</a> whose <a id=terminology-3:concept-response-type href=https://fetch.spec.whatwg.org/#concept-response-type data-x-internal=concept-response-type>type</a> is "<code>basic</code>", "<code>cors</code>", or "<code>default</code>" is <dfn data-export="" id=cors-same-origin>CORS-same-origin</dfn>.
+  <a href=references.html#refsFETCH>[FETCH]</a></p>
+  </div>
+
+  <div algorithm="">
+  <p>A <a id=terminology-3:concept-response-2 href=https://fetch.spec.whatwg.org/#concept-response data-x-internal=concept-response>response</a> whose <a id=terminology-3:concept-response-type-2 href=https://fetch.spec.whatwg.org/#concept-response-type data-x-internal=concept-response-type>type</a> is "<code>opaque</code>" or "<code>opaqueredirect</code>" is <dfn id=cors-cross-origin>CORS-cross-origin</dfn>.</p>
+  </div>
+
+  <div algorithm="">
+  <p>A <a id=terminology-3:concept-response-3 href=https://fetch.spec.whatwg.org/#concept-response data-x-internal=concept-response>response</a>'s <dfn data-export="" id=unsafe-response>unsafe response</dfn> is its
+  <a id=terminology-3:concept-internal-response href=https://fetch.spec.whatwg.org/#concept-internal-response data-x-internal=concept-internal-response>internal response</a> if it has one, and the <a id=terminology-3:concept-response-4 href=https://fetch.spec.whatwg.org/#concept-response data-x-internal=concept-response>response</a> itself otherwise.</p>
+  </div>
+
+  <div algorithm="">
+  <p>To <dfn id=create-a-potential-cors-request>create a potential-CORS request</dfn>, given a <var>url</var>, <var>destination</var>,
+  <var>corsAttributeState</var>, and an optional <i>same-origin fallback flag</i>, run these
+  steps:</p>
+
+  <ol><li><p>Let <var>mode</var> be "<code>no-cors</code>" if <var>corsAttributeState</var>
+   is <a id=terminology-3:attr-crossorigin-none href=#attr-crossorigin-none>No CORS</a>, and "<code>cors</code>"
+   otherwise.<li><p>If <i>same-origin fallback flag</i> is set and <var>mode</var> is "<code>no-cors</code>", set <var>mode</var> to "<code>same-origin</code>".<li><p>Let <var>credentialsMode</var> be "<code>include</code>".<li><p>If <var>corsAttributeState</var> is <a id=terminology-3:attr-crossorigin-anonymous href=#attr-crossorigin-anonymous>Anonymous</a>, set <var>credentialsMode</var> to "<code>same-origin</code>".<li><p>Return a new <a id=terminology-3:concept-request href=https://fetch.spec.whatwg.org/#concept-request data-x-internal=concept-request>request</a> whose
+   <a id=terminology-3:concept-request-url href=https://fetch.spec.whatwg.org/#concept-request-url data-x-internal=concept-request-url>URL</a> is <var>url</var>, <a id=terminology-3:concept-request-destination href=https://fetch.spec.whatwg.org/#concept-request-destination data-x-internal=concept-request-destination>destination</a> is <var>destination</var>,
+   <a id=terminology-3:concept-request-mode href=https://fetch.spec.whatwg.org/#concept-request-mode data-x-internal=concept-request-mode>mode</a> is <var>mode</var>, <a id=terminology-3:concept-request-credentials-mode href=https://fetch.spec.whatwg.org/#concept-request-credentials-mode data-x-internal=concept-request-credentials-mode>credentials mode</a> is
+   <var>credentialsMode</var>, and whose <a id=terminology-3:use-url-credentials-flag href=https://fetch.spec.whatwg.org/#concept-request-use-url-credentials-flag data-x-internal=use-url-credentials-flag>use-URL-credentials flag</a> is set.</ol>
+  </div>
+
+
+  <h4 id=content-type-sniffing><span class=secno>2026</span> Determining the type of a resource<a class=self-link href=#content-type-sniffing></a></h4>
+
+  <p>The <dfn id=content-type>Content-Type metadata</dfn> of a resource must be obtained and
+  interpreted in a manner consistent with the requirements of <cite>MIME Sniffing</cite>.
+  <a href=references.html#refsMIMESNIFF>[MIMESNIFF]</a></p>
+
+  <p>The <dfn id=content-type-sniffing-2><a href=https://mimesniff.spec.whatwg.org/#computed-mime-type>computed MIME type</a></dfn> of a
+  resource must be found in a manner consistent with the requirements given in <cite>MIME
+  Sniffing</cite>. <a href=references.html#refsMIMESNIFF>[MIMESNIFF]</a></p>
+
+  <p>The <dfn id=content-type-sniffing:-image><a href=https://mimesniff.spec.whatwg.org/#rules-for-sniffing-images-specifically>rules for
+  sniffing images specifically</a></dfn>, the <dfn id=content-type-sniffing:-text-or-binary><a href=https://mimesniff.spec.whatwg.org/#rules-for-text-or-binary>rules for distinguishing
+  if a resource is text or binary</a></dfn>, and the <dfn id=content-type-sniffing:-video><a href=https://mimesniff.spec.whatwg.org/#rules-for-sniffing-audio-and-video-specifically>rules
+  for sniffing audio and video specifically</a></dfn> are also defined in <cite>MIME Sniffing</cite>.
+  These rules return a <a id=content-type-sniffing:mime-type href=https://mimesniff.spec.whatwg.org/#mime-type data-x-internal=mime-type>MIME type</a> as their result. <a href=references.html#refsMIMESNIFF>[MIMESNIFF]</a></p>
+
+  <p class=warning>It is imperative that the rules in <cite>MIME Sniffing</cite> be
+  followed exactly. When a user agent uses different heuristics for content type detection than the
+  server expects, security problems can occur. For more details, see <cite>MIME Sniffing</cite>.
+  <a href=references.html#refsMIMESNIFF>[MIMESNIFF]</a></p>
+
+
+  <h4 id=extracting-character-encodings-from-meta-elements><span class=secno>2026</span> Extracting character encodings from <code id=extracting-character-encodings-from-meta-elements:the-meta-element><a href=semantics.html#the-meta-element>meta</a></code> elements<a class=self-link href=#extracting-character-encodings-from-meta-elements></a></h4>
+
+  <div algorithm="">
+  <p>The <dfn id=algorithm-for-extracting-a-character-encoding-from-a-meta-element>algorithm for extracting a character encoding from a <code>meta</code> element</dfn>,
+  given a string <var>s</var>, is as follows. It returns either a character encoding or
+  nothing.</p>
+
+  <ol><li><p>Let <var>position</var> be a pointer into <var>s</var>, initially
+   pointing at the start of the string.<li><p><i>Loop</i>: Find the first seven characters in <var>s</var> after <var>position</var> that are an <a id=extracting-character-encodings-from-meta-elements:ascii-case-insensitive href=https://infra.spec.whatwg.org/#ascii-case-insensitive data-x-internal=ascii-case-insensitive>ASCII case-insensitive</a> match for the word "<code>charset</code>". If no such match is found, return nothing.<li><p>Skip any <a id=extracting-character-encodings-from-meta-elements:space-characters href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a> that immediately follow the word "<code>charset</code>" (there might not be any).<li><p>If the next character is not a U+003D EQUALS SIGN (=), then move <var>position</var> to point just before that next character, and jump back to the step
+   labeled <i>loop</i>.<li><p>Skip any <a id=extracting-character-encodings-from-meta-elements:space-characters-2 href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a> that immediately follow the equals sign (there
+   might not be any).<li>
+    <p>Process the next character as follows:</p>
+
+    <dl class=switch><dt>If it is a U+0022 QUOTATION MARK character (") and there is a later U+0022 QUOTATION MARK character (") in <var>s</var><dt>If it is a U+0027 APOSTROPHE character (') and there is a later U+0027 APOSTROPHE character (') in <var>s</var><dd>Return the result of <a id=extracting-character-encodings-from-meta-elements:getting-an-encoding href=https://encoding.spec.whatwg.org/#concept-encoding-get data-x-internal=getting-an-encoding>getting an encoding</a> from the substring that is between
+     this character and the next earliest occurrence of this character.<dt>If it is an unmatched U+0022 QUOTATION MARK character (")<dt>If it is an unmatched U+0027 APOSTROPHE character (')<dt>If there is no next character<dd>Return nothing.<dt>Otherwise<dd>Return the result of <a id=extracting-character-encodings-from-meta-elements:getting-an-encoding-2 href=https://encoding.spec.whatwg.org/#concept-encoding-get data-x-internal=getting-an-encoding>getting an encoding</a> from the substring that consists of
+     this character up to but not including the first <a id=extracting-character-encodings-from-meta-elements:space-characters-3 href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a> or U+003B
+     SEMICOLON character (;), or the end of <var>s</var>, whichever comes first.</dl>
+   </ol>
+  </div>
+
+  <p class=note>This algorithm is distinct from those in the HTTP specifications (for example,
+  HTTP doesn't allow the use of single quotes and requires supporting a backslash-escape mechanism
+  that is not supported by this algorithm). While the
+  algorithm is used in contexts that, historically, were related to HTTP, the syntax as supported by
+  implementations diverged some time ago. <a href=references.html#refsHTTP>[HTTP]</a></p>
+
+  
+
+
+  <h4 id=cors-settings-attributes><span class=secno>2026</span> CORS settings attributes<a class=self-link href=#cors-settings-attributes></a></h4><div class="mdn-anno wrapped"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin title="The crossorigin attribute, valid on the <audio>, <img>, <link>, <script>, and <video> elements, provides support for CORS, defining how the element handles cross-origin requests, thereby enabling the configuration of the CORS requests for the element's fetched data. Depending on the element, the attribute can be a CORS settings attribute.">Attributes/crossorigin</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>8+</span></span><span class="safari yes"><span>Safari</span><span>6+</span></span><span class="chrome yes"><span>Chrome</span><span>13+</span></span><hr><span class="opera unknown"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge yes"><span>Edge (Legacy)</span><span>12+</span></span><span class="ie yes"><span>Internet Explorer</span><span>Yes</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div>
+
+  <p>A <dfn id=cors-settings-attribute>CORS settings attribute</dfn> is an <a id=cors-settings-attributes:enumerated-attribute href=common-microsyntaxes.html#enumerated-attribute>enumerated attribute</a> with the following
+  keywords and states:</p>
+
+  <table><thead><tr><th> Keyword
+     <th> State
+     <th> Brief description
+   <tbody><tr><td><dfn data-dfn-for=audio/crossorigin,video/crossorigin,img/crossorigin,link/crossorigin,script/crossorigin data-dfn-type=attr-value id=attr-crossorigin-anonymous-keyword><code>anonymous</code></dfn>
+     <td><dfn id=attr-crossorigin-anonymous>Anonymous</dfn>
+     <td><a id=cors-settings-attributes:concept-request href=https://fetch.spec.whatwg.org/#concept-request data-x-internal=concept-request>Requests</a> for the element will have their
+     <a id=cors-settings-attributes:concept-request-mode href=https://fetch.spec.whatwg.org/#concept-request-mode data-x-internal=concept-request-mode>mode</a> set to "<code>cors</code>" and their
+     <a id=cors-settings-attributes:concept-request-credentials-mode href=https://fetch.spec.whatwg.org/#concept-request-credentials-mode data-x-internal=concept-request-credentials-mode>credentials mode</a> set to "<code>same-origin</code>".
+    <tr><td><dfn data-dfn-for=audio/crossorigin,video/crossorigin,img/crossorigin,link/crossorigin,script/crossorigin data-dfn-type=attr-value id=attr-crossorigin-use-credentials-keyword><code>use-credentials</code></dfn>
+     <td><dfn id=attr-crossorigin-use-credentials>Use Credentials</dfn>
+     <td><a id=cors-settings-attributes:concept-request-2 href=https://fetch.spec.whatwg.org/#concept-request data-x-internal=concept-request>Requests</a> for the element will have their <a id=cors-settings-attributes:concept-request-mode-2 href=https://fetch.spec.whatwg.org/#concept-request-mode data-x-internal=concept-request-mode>mode</a> set to "<code>cors</code>" and their <a id=cors-settings-attributes:concept-request-credentials-mode-2 href=https://fetch.spec.whatwg.org/#concept-request-credentials-mode data-x-internal=concept-request-credentials-mode>credentials mode</a> set to "<code>include</code>".
+  </table>
+
+  <div algorithm="">
+  <p>The attribute's <i id=cors-settings-attributes:missing-value-default><a href=common-microsyntaxes.html#missing-value-default>missing value default</a></i> is the <dfn id=attr-crossorigin-none>No CORS</dfn> state, and its <i id=cors-settings-attributes:invalid-value-default><a href=common-microsyntaxes.html#invalid-value-default>invalid value default</a></i> and <i id=cors-settings-attributes:empty-value-default><a href=common-microsyntaxes.html#empty-value-default>empty value default</a></i> are
+  both the <a id=cors-settings-attributes:attr-crossorigin-anonymous href=#attr-crossorigin-anonymous>Anonymous</a> state.</p>
+  </div>
+
+  <p>The majority of fetches governed by <a id=cors-settings-attributes:cors-settings-attribute href=#cors-settings-attribute>CORS settings
+  attributes</a> will be done via the <a id=cors-settings-attributes:create-a-potential-cors-request href=#create-a-potential-cors-request>create a potential-CORS request</a> algorithm.</p>
+
+  <div algorithm="">
+  <p id=module-script-credentials-mode>For more modern features, where the request's <a id=cors-settings-attributes:concept-request-mode-3 href=https://fetch.spec.whatwg.org/#concept-request-mode data-x-internal=concept-request-mode>mode</a> is always "<code>cors</code>", certain <a id=cors-settings-attributes:cors-settings-attribute-2 href=#cors-settings-attribute>CORS settings attributes</a> have been repurposed to have a
+  slightly different meaning, wherein they only impact the <a id=cors-settings-attributes:concept-request-3 href=https://fetch.spec.whatwg.org/#concept-request data-x-internal=concept-request>request</a>'s <a id=cors-settings-attributes:concept-request-credentials-mode-3 href=https://fetch.spec.whatwg.org/#concept-request-credentials-mode data-x-internal=concept-request-credentials-mode>credentials mode</a>. To perform this translation, we
+  define the <dfn data-export="" id=cors-settings-attribute-credentials-mode>CORS settings attribute credentials mode</dfn> for a given <a id=cors-settings-attributes:cors-settings-attribute-3 href=#cors-settings-attribute>CORS
+  settings attribute</a> to be determined by switching on the attribute's state:</p>
+
+  <dl class=switch><dt><a id=cors-settings-attributes:attr-crossorigin-none href=#attr-crossorigin-none>No CORS</a><dt><a id=cors-settings-attributes:attr-crossorigin-anonymous-2 href=#attr-crossorigin-anonymous>Anonymous</a><dd>"<code>same-origin</code>"<dt><a id=cors-settings-attributes:attr-crossorigin-none-2 href=#attr-crossorigin-none>Use Credentials</a><dd>"<code>include</code>"</dl>
+  </div>
+
+
+  <h4 id=referrer-policy-attributes><span class=secno>2026</span> Referrer policy attributes<a class=self-link href=#referrer-policy-attributes></a></h4>
+
+  <p>A <dfn data-export="" id=referrer-policy-attribute>referrer policy attribute</dfn> is an <a id=referrer-policy-attributes:enumerated-attribute href=common-microsyntaxes.html#enumerated-attribute>enumerated attribute</a>.  Each
+  <a id=referrer-policy-attributes:referrer-policy href=https://w3c.github.io/webappsec-referrer-policy/#referrer-policy data-x-internal=referrer-policy>referrer policy</a>, including the empty string, is a keyword for this attribute, mapping
+  to a state of the same name.</p>
+
+  <div algorithm="">
+  <p>The attribute's <i id=referrer-policy-attributes:missing-value-default><a href=common-microsyntaxes.html#missing-value-default>missing value default</a></i> and <i id=referrer-policy-attributes:invalid-value-default><a href=common-microsyntaxes.html#invalid-value-default>invalid value default</a></i> are both the empty string state.</p>
+  </div>
+
+  <p>The impact of these states on the processing model of various <a id=referrer-policy-attributes:concept-fetch href=https://fetch.spec.whatwg.org/#concept-fetch data-x-internal=concept-fetch>fetches</a> is defined in more detail throughout this specification, in
+  <cite>Fetch</cite>, and in <cite>Referrer Policy</cite>. <a href=references.html#refsFETCH>[FETCH]</a>
+  <a href=references.html#refsREFERRERPOLICY>[REFERRERPOLICY]</a></p>
+
+  <div class=note>
+   <p>Several signals can contribute to which processing model is used for a given <a id=referrer-policy-attributes:concept-fetch-2 href=https://fetch.spec.whatwg.org/#concept-fetch data-x-internal=concept-fetch>fetch</a>; a <a id=referrer-policy-attributes:referrer-policy-attribute href=#referrer-policy-attribute>referrer policy attribute</a> is only one of
+   them. In general, the order in which these signals are processed are:</p>
+
+   <ol><li><p>First, the presence of a <code id=referrer-policy-attributes:link-type-noreferrer><a href=links.html#link-type-noreferrer>noreferrer</a></code> link
+    type;<li><p>Then, the value of a <a id=referrer-policy-attributes:referrer-policy-attribute-2 href=#referrer-policy-attribute>referrer policy attribute</a>;<li><p>Then, the presence of any <code id=referrer-policy-attributes:the-meta-element><a href=semantics.html#the-meta-element>meta</a></code> element with <code id=referrer-policy-attributes:attr-meta-name><a href=semantics.html#attr-meta-name>name</a></code> attribute set to <code id=referrer-policy-attributes:meta-referrer><a href=semantics.html#meta-referrer>referrer</a></code>.<li><p>Finally, the `<code id=referrer-policy-attributes:http-referrer-policy><a href=https://w3c.github.io/webappsec-referrer-policy/#referrer-policy-header-dfn data-x-internal=http-referrer-policy>Referrer-Policy</a></code>` HTTP
+    header.</ol>
+  </div>
+
+  <h4 id=nonce-attributes><span class=secno>2026</span> Nonce attributes<a class=self-link href=#nonce-attributes></a></h4>
+
+  <div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce title="The nonce global attribute is a content attribute defining a cryptographic nonce (&quot;number used once&quot;) which can be used by Content Security Policy to determine whether or not a given fetch will be allowed to proceed for a given element.">Global_attributes/nonce</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>31+</span></span><span class="safari yes"><span>Safari</span><span>Yes</span></span><span class="chrome yes"><span>Chrome</span><span>Yes</span></span><hr><span class="opera unknown"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>Yes</span></span><hr><span class="edge unknown"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>Internet Explorer</span><span>No</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div><p>A <dfn data-dfn-for=htmlsvg-global data-dfn-type=element-attr id=attr-nonce><code>nonce</code></dfn> content
+  attribute represents a cryptographic nonce ("number used once") which can be used by <cite>Content
+  Security Policy</cite> to determine whether or not a given fetch will be allowed to proceed. The
+  value is text. <a href=references.html#refsCSP>[CSP]</a></p>
+
+  <p>Elements that have a <code id=nonce-attributes:attr-nonce><a href=#attr-nonce>nonce</a></code> content attribute ensure that the
+  cryptographic nonce is only exposed to script (and not to side-channels like CSS attribute
+  selectors) by taking the value from the content attribute, moving it into an internal slot named
+  <dfn data-dfn-for=HTMLOrSVGOrMathMLElement data-dfn-type=attribute id=cryptographicnonce>[[CryptographicNonce]]</dfn>, exposing it to script
+  via the <code id=nonce-attributes:htmlorsvgelement><a href=dom.html#htmlorsvgelement>HTMLOrSVGOrMathMLElement</a></code> interface mixin, and setting the content attribute
+  to the empty string. Unless otherwise specified, the slot's value is the empty string.</p>
+
+  <dl class=domintro><dt><code><var>element</var>.<a id=dom-htmlorsvgormathmlelement-nonce-dev href=#dom-noncedelement-nonce>nonce</a></code><dd><p>Returns the value set for <var>element</var>'s cryptographic nonce. If the setter was not
+   used, this will be the value originally found in the <code id=nonce-attributes:attr-nonce-2><a href=#attr-nonce>nonce</a></code>
+   content attribute.<dt><code><var>element</var>.<a id=nonce-attributes:dom-noncedelement-nonce href=#dom-noncedelement-nonce>nonce</a> = <var>value</var></code><dd><p>Updates <var>element</var>'s cryptographic nonce value.</dl>
+
+  <div class="mdn-anno wrapped before"><button class=mdn-anno-btn onclick=toggleStatus(this)><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/nonce title="The nonce property of the HTMLElement interface returns the cryptographic number used once that is used by Content Security Policy to determine whether a given fetch will be allowed to proceed.">HTMLElement/nonce</a><div class=support><span class="firefox yes"><span>Firefox</span><span>75+</span></span><span class="safari yes"><span>Safari</span><span title="Partial implementation.">🔰 10+</span></span><span class="chrome yes"><span>Chrome</span><span>61+</span></span><hr><span class="opera unknown"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge unknown"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>Internet Explorer</span><span>No</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div><div algorithm="">
+  <p>The <dfn id=dom-noncedelement-nonce data-dfn-for=HTMLOrSVGOrMathMLElement data-dfn-type=attribute><code>nonce</code></dfn> IDL attribute must, on getting,
+  return the value of this element's <a id=nonce-attributes:cryptographicnonce href=#cryptographicnonce>[[CryptographicNonce]]</a>; and on setting, set this
+  element's <a id=nonce-attributes:cryptographicnonce-2 href=#cryptographicnonce>[[CryptographicNonce]]</a> to the given value.</p>
+  </div>
+
+  <p class=note id=nonce-does-not-update-dom>Note how the setter for the <code id=nonce-attributes:dom-noncedelement-nonce-2><a href=#dom-noncedelement-nonce>nonce</a></code> IDL attribute does not update the
+  corresponding content attribute. This, as well as the below setting of the <code id=nonce-attributes:attr-nonce-3><a href=#attr-nonce>nonce</a></code> content attribute to the empty string when an element
+  <a id=nonce-attributes:becomes-browsing-context-connected href=infrastructure.html#becomes-browsing-context-connected>becomes browsing-context connected</a>, is meant to prevent exfiltration of the nonce
+  value through mechanisms that can easily read content attributes, such as selectors. Learn more in
+  <a href=https://github.com/whatwg/html/issues/2369>issue #2369</a>, where this behavior was
+  introduced.</p>
+
+  <div algorithm="">
+  <p>The following <a id=nonce-attributes:concept-element-attributes-change-ext href=https://dom.spec.whatwg.org/#concept-element-attributes-change-ext data-x-internal=concept-element-attributes-change-ext>attribute change
+  steps</a> are used for the <code id=nonce-attributes:attr-nonce-4><a href=#attr-nonce>nonce</a></code> content attribute:
+
+  <ol><li><p>If <var>element</var> does not <a id=nonce-attributes:include href=https://webidl.spec.whatwg.org/#include data-x-internal=include>include</a> <code id=nonce-attributes:htmlorsvgelement-2><a href=dom.html#htmlorsvgelement>HTMLOrSVGOrMathMLElement</a></code>,
+   then return.<li><p>If <var>localName</var> is not <code id=nonce-attributes:attr-nonce-5><a href=#attr-nonce>nonce</a></code> or
+   <var>namespace</var> is not null, then return.<li><p>If <var>value</var> is null, then set <var>element</var>'s
+   <a id=nonce-attributes:cryptographicnonce-3 href=#cryptographicnonce>[[CryptographicNonce]]</a> to the empty string.<li><p>Otherwise, set <var>element</var>'s <a id=nonce-attributes:cryptographicnonce-4 href=#cryptographicnonce>[[CryptographicNonce]]</a> to
+   <var>value</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>Whenever an element <a id=nonce-attributes:include-2 href=https://webidl.spec.whatwg.org/#include data-x-internal=include>including</a>
+  <code id=nonce-attributes:htmlorsvgelement-3><a href=dom.html#htmlorsvgelement>HTMLOrSVGOrMathMLElement</a></code> <a id=nonce-attributes:becomes-browsing-context-connected-2 href=infrastructure.html#becomes-browsing-context-connected>becomes browsing-context connected</a>, the user
+  agent must execute the following steps on the <var>element</var>:</p>
+
+  <ol><li><p>Let <var>CSP list</var> be <var>element</var>'s <a id=nonce-attributes:shadow-including-root href=https://dom.spec.whatwg.org/#concept-shadow-including-root data-x-internal=shadow-including-root>shadow-including root</a>'s <a id=nonce-attributes:concept-document-policy-container href=dom.html#concept-document-policy-container>policy
+   container</a>'s <a id=nonce-attributes:policy-container-csp-list href=browsers.html#policy-container-csp-list>CSP list</a>.<li>
+    <p>If <var>CSP list</var> <a id=nonce-attributes:contains-a-header-delivered-content-security-policy href=https://w3c.github.io/webappsec-csp/#contains-a-header-delivered-content-security-policy data-x-internal=contains-a-header-delivered-content-security-policy>contains a header-delivered Content Security Policy</a>, and
+    <var>element</var> has a <code id=nonce-attributes:attr-nonce-6><a href=#attr-nonce>nonce</a></code> content attribute
+    whose value is not the empty string:</p>
+
+    <ol><li><p>Let <var>nonce</var> be <var>element</var>'s
+     <a id=nonce-attributes:cryptographicnonce-5 href=#cryptographicnonce>[[CryptographicNonce]]</a>.<li><p><a id=nonce-attributes:concept-element-attributes-set-value href=https://dom.spec.whatwg.org/#concept-element-attributes-set-value data-x-internal=concept-element-attributes-set-value>Set an attribute value</a> for
+     <var>element</var> using "<code id=nonce-attributes:attr-nonce-7><a href=#attr-nonce>nonce</a></code>" and the empty
+     string.<li><p>Set <var>element</var>'s <a id=nonce-attributes:cryptographicnonce-6 href=#cryptographicnonce>[[CryptographicNonce]]</a> to
+     <var>nonce</var>.</ol>
+
+    <p class=note>If <var>element</var>'s <a id=nonce-attributes:cryptographicnonce-7 href=#cryptographicnonce>[[CryptographicNonce]]</a> were not restored it
+    would be the empty string at this point.</p>
+   </ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <a id=nonce-attributes:concept-node-clone-ext href=https://dom.spec.whatwg.org/#concept-node-clone-ext data-x-internal=concept-node-clone-ext>cloning steps</a> for elements that
+  <a id=nonce-attributes:include-3 href=https://webidl.spec.whatwg.org/#include data-x-internal=include>include</a> <code id=nonce-attributes:htmlorsvgelement-4><a href=dom.html#htmlorsvgelement>HTMLOrSVGOrMathMLElement</a></code> given <var>node</var>, <var>copy</var>,
+  and <var>subtree</var> are to set <var>copy</var>'s <a id=nonce-attributes:cryptographicnonce-8 href=#cryptographicnonce>[[CryptographicNonce]]</a> to
+  <var>node</var>'s <a id=nonce-attributes:cryptographicnonce-9 href=#cryptographicnonce>[[CryptographicNonce]]</a>.</p>
+  </div>
+
+  <h4 id=lazy-loading-attributes><span class=secno>2026</span> Lazy loading attributes<a class=self-link href=#lazy-loading-attributes></a></h4><div class="mdn-anno wrapped"><button class=mdn-anno-btn onclick=toggleStatus(this)><b class=all-engines-flag title="Support in all current engines.">✔</b><span>MDN</span></button><div class=feature><p><a href=https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading title="Lazy loading is a strategy to identify resources as non-blocking (non-critical) and load these only when needed. It's a way to shorten the length of the critical rendering path, which translates into reduced page load times.">Lazy_loading</a><p class=all-engines-text>Support in all current engines.<div class=support><span class="firefox yes"><span>Firefox</span><span>75+</span></span><span class="safari yes"><span>Safari</span><span>15.4+</span></span><span class="chrome yes"><span>Chrome</span><span>77+</span></span><hr><span class="opera unknown"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span><hr><span class="edge unknown"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>Internet Explorer</span><span>No</span></span><hr><span class="firefox_android unknown"><span>Firefox Android</span><span>?</span></span><span class="safari_ios unknown"><span>Safari iOS</span><span>?</span></span><span class="chrome_android unknown"><span>Chrome Android</span><span>?</span></span><span class="webview_android unknown"><span>WebView Android</span><span>?</span></span><span class="samsunginternet_android unknown"><span>Samsung Internet</span><span>?</span></span><span class="opera_android unknown"><span>Opera Android</span><span>?</span></span></div></div></div>
+
+  <p>A <dfn id=lazy-loading-attribute>lazy loading attribute</dfn> is an <a id=lazy-loading-attributes:enumerated-attribute href=common-microsyntaxes.html#enumerated-attribute>enumerated attribute</a> with the following
+  keywords and states:</p>
+
+  <table><thead><tr><th>Keyword
+     <th>State
+     <th>Brief description
+   <tbody><tr><td><dfn data-dfn-for=img/loading,audio/loading,video/loading,iframe/loading data-dfn-type=attr-value id=attr-loading-lazy><code>lazy</code></dfn>
+     <td><dfn id=attr-loading-lazy-state>Lazy</dfn>
+     <td>Used to defer fetching a resource until some conditions are met.
+    <tr><td><dfn data-dfn-for=img/loading,audio/loading,video/loading,iframe/loading data-dfn-type=attr-value id=attr-loading-eager><code>eager</code></dfn>
+     <td><dfn id=attr-loading-eager-state>Eager</dfn>
+     <td>Used to fetch a resource immediately; the default state.
+  </table>
+
+  <p>The attribute directs the user agent to fetch a resource immediately or to defer fetching until
+  some conditions associated with the element are met, according to the attribute's current
+  state.</p>
+
+  <div algorithm="">
+  <p>The attribute's <i id=lazy-loading-attributes:missing-value-default><a href=common-microsyntaxes.html#missing-value-default>missing value default</a></i> and <i id=lazy-loading-attributes:invalid-value-default><a href=common-microsyntaxes.html#invalid-value-default>invalid value default</a></i> are both the <a id=lazy-loading-attributes:attr-loading-eager-state href=#attr-loading-eager-state>Eager</a> state.</p>
+  </div>
+
+  <hr>
+
+  <div algorithm="">
+  <p>The <dfn id=will-lazy-load-element-steps>will lazy load element steps</dfn>, given an element <var>element</var>,
+  are as follows:</p>
+
+  <ol><li>
+    <p>If <a id=lazy-loading-attributes:concept-n-noscript href=webappapis.html#concept-n-noscript>scripting is disabled</a> for <var>element</var>,
+    then return false.</p>
+
+    <p class=note>This is an anti-tracking measure, because if a user agent supported lazy loading
+    when scripting is disabled, it would still be possible for a site to track a user's approximate
+    scroll position throughout a session, by strategically placing images in a page's markup such
+    that a server can track how many images are requested and when.</p>
+   <li><p>If <var>element</var>'s <a id=lazy-loading-attributes:lazy-loading-attribute href=#lazy-loading-attribute>lazy loading attribute</a> is in the <a id=lazy-loading-attributes:attr-loading-lazy-state href=#attr-loading-lazy-state>Lazy</a> state, then return true.<li><p>Return false.</ol>
+  </div>
+
+  <p>Each <code id=lazy-loading-attributes:the-img-element><a href=embedded-content.html#the-img-element>img</a></code>, <code id=lazy-loading-attributes:the-audio-element><a href=media.html#the-audio-element>audio</a></code>, <code id=lazy-loading-attributes:the-video-element><a href=media.html#the-video-element>video</a></code>, and <code id=lazy-loading-attributes:the-iframe-element><a href=iframe-embed-object.html#the-iframe-element>iframe</a></code> element has associated
+  <dfn id=lazy-load-resumption-steps>lazy load resumption steps</dfn>, initially null.</p>
+
+  <p>Each <code id=lazy-loading-attributes:the-video-element-2><a href=media.html#the-video-element>video</a></code> element also has associated <dfn id=poster-lazy-load-resumption-steps>poster lazy load resumption steps</dfn>,
+  initially null.</p>
+
+  <p class=note>For <code id=lazy-loading-attributes:the-img-element-2><a href=embedded-content.html#the-img-element>img</a></code>, <code id=lazy-loading-attributes:the-audio-element-2><a href=media.html#the-audio-element>audio</a></code>, <code id=lazy-loading-attributes:the-video-element-3><a href=media.html#the-video-element>video</a></code>, and <code id=lazy-loading-attributes:the-iframe-element-2><a href=iframe-embed-object.html#the-iframe-element>iframe</a></code> elements that
+  <a id=lazy-loading-attributes:will-lazy-load-element-steps href=#will-lazy-load-element-steps>will lazy load</a>, these steps are run from the
+  <a id=lazy-loading-attributes:lazy-load-intersection-observer href=#lazy-load-intersection-observer>lazy load intersection observer</a>'s callback or when their <a id=lazy-loading-attributes:lazy-loading-attribute-2 href=#lazy-loading-attribute>lazy loading
+  attribute</a> is set to the <a id=lazy-loading-attributes:attr-loading-eager-state-2 href=#attr-loading-eager-state>Eager</a> state. This
+  causes the element to continue loading. For <code id=lazy-loading-attributes:the-video-element-4><a href=media.html#the-video-element>video</a></code> elements, <a id=lazy-loading-attributes:poster-lazy-load-resumption-steps href=#poster-lazy-load-resumption-steps>poster lazy load
+  resumption steps</a> are also run at the same time.</p>
+
+  <p>Each <code id=lazy-loading-attributes:document><a href=dom.html#document>Document</a></code> has a <dfn id=lazy-load-intersection-observer>lazy load intersection observer</dfn>, initially set to
+  null but can be set to an <code id=lazy-loading-attributes:intersectionobserver><a href=https://w3c.github.io/IntersectionObserver/#intersectionobserver data-x-internal=intersectionobserver>IntersectionObserver</a></code> instance.</p>
+
+  <div algorithm="">
+  <p>To <dfn id=start-intersection-observing-a-lazy-loading-element>start intersection-observing a lazy loading element</dfn> <var>element</var>, run these
+  steps:</p>
+
+  <ol><li><p>Let <var>doc</var> be <var>element</var>'s <a id=lazy-loading-attributes:node-document href=https://dom.spec.whatwg.org/#concept-node-document data-x-internal=node-document>node document</a>.<li>
+    <p>If <var>doc</var>'s <a id=lazy-loading-attributes:lazy-load-intersection-observer-2 href=#lazy-load-intersection-observer>lazy load intersection observer</a> is null, set it to a new
+    <code id=lazy-loading-attributes:intersectionobserver-2><a href=https://w3c.github.io/IntersectionObserver/#intersectionobserver data-x-internal=intersectionobserver>IntersectionObserver</a></code> instance, initialized as follows:</p>
+
+    <p class=XXX>The intention is to use the original value of the
+    <code id=lazy-loading-attributes:intersectionobserver-3><a href=https://w3c.github.io/IntersectionObserver/#intersectionobserver data-x-internal=intersectionobserver>IntersectionObserver</a></code> constructor. However, we're forced to use the
+    JavaScript-exposed constructor in this specification, until <cite>Intersection Observer</cite>
+    exposes low-level hooks for use in specifications. See bug <a href=https://github.com/w3c/IntersectionObserver/issues/464>w3c/IntersectionObserver#464</a>
+    which tracks this. <a href=references.html#refsINTERSECTIONOBSERVER>[INTERSECTIONOBSERVER]</a></p>
+
+    <ul><li>
+      <p>The <var>callback</var> is these steps, with arguments <var>entries</var> and
+      <var>observer</var>:</p>
+
+      <ol><li>
+        <p>For each <var>entry</var> in <var>entries</var> <span class=XXX>using a method of
+        iteration which does not trigger developer-modifiable array accessors or
+        iteration hooks</span>:</p>
+
+        <ol><li><p>Let <var>resumptionSteps</var> be null.<li><p>If <var>entry</var>.<code id=lazy-loading-attributes:dom-intersectionobserverentry-isintersecting><a href=https://w3c.github.io/IntersectionObserver/#dom-intersectionobserverentry-isintersecting data-x-internal=dom-intersectionobserverentry-isintersecting>isIntersecting</a></code> is true, then
+         set <var>resumptionSteps</var> to <var>entry</var>.<code id=lazy-loading-attributes:dom-intersectionobserverentry-target><a href=https://w3c.github.io/IntersectionObserver/#dom-intersectionobserverentry-target data-x-internal=dom-intersectionobserverentry-target>target</a></code>'s
+         <a id=lazy-loading-attributes:lazy-load-resumption-steps href=#lazy-load-resumption-steps>lazy load resumption steps</a>.<li><p>Let <var>posterResumptionSteps</var> be null.</p>
+
+         <p>If <var>entry</var>.<code id=lazy-loading-attributes:dom-intersectionobserverentry-isintersecting-2><a href=https://w3c.github.io/IntersectionObserver/#dom-intersectionobserverentry-isintersecting data-x-internal=dom-intersectionobserverentry-isintersecting>isIntersecting</a></code> is true and <var>entry</var>.<code id=lazy-loading-attributes:dom-intersectionobserverentry-target-2><a href=https://w3c.github.io/IntersectionObserver/#dom-intersectionobserverentry-target data-x-internal=dom-intersectionobserverentry-target>target</a></code> is a
+         <code id=lazy-loading-attributes:the-video-element-5><a href=media.html#the-video-element>video</a></code> element, then set <var>posterResumptionSteps</var> to the <code id=lazy-loading-attributes:the-video-element-6><a href=media.html#the-video-element>video</a></code>
+         element's <a id=lazy-loading-attributes:poster-lazy-load-resumption-steps-2 href=#poster-lazy-load-resumption-steps>poster lazy load resumption steps</a>.<li><p>If <var>resumptionSteps</var> is null and <var>posterResumptionSteps</var> is null,
+         then return.<li><p><a id=lazy-loading-attributes:stop-intersection-observing-a-lazy-loading-element href=#stop-intersection-observing-a-lazy-loading-element>Stop intersection-observing a lazy loading element</a> for
+         <var>entry</var>.<code id=lazy-loading-attributes:dom-intersectionobserverentry-target-3><a href=https://w3c.github.io/IntersectionObserver/#dom-intersectionobserverentry-target data-x-internal=dom-intersectionobserverentry-target>target</a></code>.<li><p>If <var>resumptionSteps</var> is not null:</p>
+
+         <ol><li><p>Set <var>entry</var>.<code id=lazy-loading-attributes:dom-intersectionobserverentry-target-4><a href=https://w3c.github.io/IntersectionObserver/#dom-intersectionobserverentry-target data-x-internal=dom-intersectionobserverentry-target>target</a></code>'s <a id=lazy-loading-attributes:lazy-load-resumption-steps-2 href=#lazy-load-resumption-steps>lazy load resumption
+          steps</a> to null.<li><p>Invoke <var>resumptionSteps</var>.</ol>
+         <li><p>If <var>posterResumptionSteps</var> is not null:</p>
+
+         <ol><li><p>Set the <code id=lazy-loading-attributes:the-video-element-7><a href=media.html#the-video-element>video</a></code> element's <a id=lazy-loading-attributes:poster-lazy-load-resumption-steps-3 href=#poster-lazy-load-resumption-steps>poster lazy load resumption steps</a>
+          to null.<li><p>Invoke <var>posterResumptionSteps</var>.</ol>
+         </ol>
+
+        <p class=XXX>The intention is to use the original value of the
+        <code id=lazy-loading-attributes:dom-intersectionobserverentry-isintersecting-3><a href=https://w3c.github.io/IntersectionObserver/#dom-intersectionobserverentry-isintersecting data-x-internal=dom-intersectionobserverentry-isintersecting>isIntersecting</a></code> and
+        <code id=lazy-loading-attributes:dom-intersectionobserverentry-target-5><a href=https://w3c.github.io/IntersectionObserver/#dom-intersectionobserverentry-target data-x-internal=dom-intersectionobserverentry-target>target</a></code> getters. See <a href=https://github.com/w3c/IntersectionObserver/issues/464>w3c/IntersectionObserver#464</a>.
+        <a href=references.html#refsINTERSECTIONOBSERVER>[INTERSECTIONOBSERVER]</a></p>
+       </ol>
+     <li>
+      <p>The <var>options</var> is an <code id=lazy-loading-attributes:intersectionobserverinit><a href=https://w3c.github.io/IntersectionObserver/#dictdef-intersectionobserverinit data-x-internal=intersectionobserverinit>IntersectionObserverInit</a></code> dictionary with the
+      following dictionary members: «[ "<code>scrollMargin</code>" → <a id=lazy-loading-attributes:lazy-load-root-margin href=#lazy-load-root-margin>lazy load scroll
+      margin</a> ]»</p>
+
+      <p class=note>This allows for fetching the image during scrolling, when it does not yet —
+      but is about to — intersect the viewport.</p>
+
+      <p class=XXX>The <a id=lazy-loading-attributes:lazy-load-root-margin-2 href=#lazy-load-root-margin>lazy load scroll margin</a> suggestions imply dynamic changes to the
+      value, but the <code id=lazy-loading-attributes:intersectionobserver-4><a href=https://w3c.github.io/IntersectionObserver/#intersectionobserver data-x-internal=intersectionobserver>IntersectionObserver</a></code> API does not support changing the scroll
+      margin. See issue <a href=https://github.com/w3c/IntersectionObserver/issues/428>w3c/IntersectionObserver#428</a>.</p>
+     </ul>
+   <li>
+    <p>Call <var>doc</var>'s <a id=lazy-loading-attributes:lazy-load-intersection-observer-3 href=#lazy-load-intersection-observer>lazy load intersection observer</a>'s <code id=lazy-loading-attributes:dom-intersectionobserver-observe><a href=https://w3c.github.io/IntersectionObserver/#dom-intersectionobserver-observe data-x-internal=dom-intersectionobserver-observe>observe</a></code> method with <var>element</var> as the
+    argument.</p>
+
+    <p class=XXX>The intention is to use the original value of the <code id=lazy-loading-attributes:dom-intersectionobserver-observe-2><a href=https://w3c.github.io/IntersectionObserver/#dom-intersectionobserver-observe data-x-internal=dom-intersectionobserver-observe>observe</a></code> method. See <a href=https://github.com/w3c/IntersectionObserver/issues/464>w3c/IntersectionObserver#464</a>.
+    <a href=references.html#refsINTERSECTIONOBSERVER>[INTERSECTIONOBSERVER]</a></p>
+   </ol>
+  </div>
+
+  <div algorithm="">
+  <p>To <dfn id=stop-intersection-observing-a-lazy-loading-element>stop intersection-observing a lazy loading element</dfn> <var>element</var>, run these
+  steps:</p>
+
+  <ol><li><p>Let <var>doc</var> be <var>element</var>'s <a id=lazy-loading-attributes:node-document-2 href=https://dom.spec.whatwg.org/#concept-node-document data-x-internal=node-document>node document</a>.<li><p><a id=lazy-loading-attributes:assert href=https://infra.spec.whatwg.org/#assert data-x-internal=assert>Assert</a>: <var>doc</var>'s <a id=lazy-loading-attributes:lazy-load-intersection-observer-4 href=#lazy-load-intersection-observer>lazy load intersection observer</a> is not
+   null.<li>
+    <p>Call <var>doc</var>'s <a id=lazy-loading-attributes:lazy-load-intersection-observer-5 href=#lazy-load-intersection-observer>lazy load intersection observer</a>'s <code id=lazy-loading-attributes:dom-intersectionobserver-unobserve><a href=https://w3c.github.io/IntersectionObserver/#dom-intersectionobserver-unobserve data-x-internal=dom-intersectionobserver-unobserve>unobserve</a></code> method with <var>element</var> as
+    the argument.</p>
+
+    <p class=XXX>The intention is to use the original value of the <code id=lazy-loading-attributes:dom-intersectionobserver-unobserve-2><a href=https://w3c.github.io/IntersectionObserver/#dom-intersectionobserver-unobserve data-x-internal=dom-intersectionobserver-unobserve>unobserve</a></code> method. See <a href=https://github.com/w3c/IntersectionObserver/issues/464>w3c/IntersectionObserver#464</a>.
+    <a href=references.html#refsINTERSECTIONOBSERVER>[INTERSECTIONOBSERVER]</a></p>
+   </ol>
+  </div>
+
+  <p>
+  <a title="There is a tracking vector here." class=tracking-vector id=lazy-loading-attributes:tracking-vector href=https://infra.spec.whatwg.org/#tracking-vector data-x-internal=tracking-vector><img src=https://resources.whatwg.org/tracking-vector.svg alt="(This is a tracking vector.)" width=46 height=64 class=darkmode-aware crossorigin=""></a>
+  The <dfn id=lazy-load-root-margin>lazy load scroll margin</dfn> is an
+  <a id=lazy-loading-attributes:implementation-defined href=https://infra.spec.whatwg.org/#implementation-defined data-x-internal=implementation-defined>implementation-defined</a> value, but with the following suggestions to consider:</p>
+
+  <ul><li><p>Set a minimum value that most often results in the resources being loaded before they
+   intersect the viewport under normal usage patterns for the given device.<li><p>The typical scrolling speed: increase the value for devices with faster typical scrolling
+   speeds.<li><p>The current scrolling speed or momentum: the UA can attempt to predict where the scrolling
+   will likely stop, and adjust the value accordingly.<li><p>The network quality: increase the value for slow or high-latency connections.<li><p>User preferences can influence the value.</ul>
+
+  <p class=note>It is important <a id=lazy-loading-attributes:tracking-vector-2 href=https://infra.spec.whatwg.org/#tracking-vector data-x-internal=tracking-vector>for privacy</a> that the
+  <a id=lazy-loading-attributes:lazy-load-root-margin-3 href=#lazy-load-root-margin>lazy load scroll margin</a> not leak additional information. For example, the typical
+  scrolling speed on the current device could be imprecise so as to not introduce a new
+  fingerprinting vector.</p>
+
+  <h4 id=blocking-attributes><span class=secno>2026</span> Blocking attributes<a class=self-link href=#blocking-attributes></a></h4>
+
+  <p>A <dfn id=blocking-attribute>blocking attribute</dfn> explicitly indicates that certain operations should be blocked
+  on the fetching of an external resource. The operations that can be blocked are represented by
+  <dfn id=possible-blocking-token>possible blocking tokens</dfn>, which are strings listed by
+  the following table:</p>
+
+  <table><thead><tr><th>Possible blocking token
+     <th>Description
+   <tbody><tr><td>"<dfn id=blocking-token-render><code>render</code></dfn>"
+     <td>The element is <a id=blocking-attributes:potentially-render-blocking href=#potentially-render-blocking>potentially render-blocking</a>.
+  </table>
+
+
+  <p class=note id=future-blocking-tokens>In the future, there might be more <a id=blocking-attributes:possible-blocking-token href=#possible-blocking-token>possible blocking tokens</a>.</p>
+
+  <p>A <a id=blocking-attributes:blocking-attribute href=#blocking-attribute>blocking attribute</a> must have a value that is an <a id=blocking-attributes:unordered-set-of-unique-space-separated-tokens href=common-microsyntaxes.html#unordered-set-of-unique-space-separated-tokens>unordered set of unique
+  space-separated tokens</a>, each of which are <a id=blocking-attributes:possible-blocking-token-2 href=#possible-blocking-token>possible
+  blocking tokens</a>. The <a id=blocking-attributes:concept-supported-tokens href=https://dom.spec.whatwg.org/#concept-supported-tokens data-x-internal=concept-supported-tokens>supported tokens</a> of a
+  <a id=blocking-attributes:blocking-attribute-2 href=#blocking-attribute>blocking attribute</a> are the <a id=blocking-attributes:possible-blocking-token-3 href=#possible-blocking-token>possible blocking
+  tokens</a>. Any element can have at most one <a id=blocking-attributes:blocking-attribute-3 href=#blocking-attribute>blocking attribute</a>.</p>
+
+  <div algorithm="">
+  <p>The <dfn id=blocking-tokens-set>blocking tokens set</dfn> for an element <var>el</var> are the result of the
+  following steps:</p>
+
+  <ol><li><p>Let <var>value</var> be the value of <var>el</var>'s <a id=blocking-attributes:blocking-attribute-4 href=#blocking-attribute>blocking attribute</a>, or
+   the empty string if no such attribute exists.</p>
+
+   <li><p>Set <var>value</var> to <var>value</var>, <a id=blocking-attributes:converted-to-ascii-lowercase href=https://infra.spec.whatwg.org/#ascii-lowercase data-x-internal=converted-to-ascii-lowercase>converted to ASCII lowercase</a>.</p>
+
+   <li><p>Let <var>rawTokens</var> be the result of <a id=blocking-attributes:split-a-string-on-spaces href=https://infra.spec.whatwg.org/#split-on-ascii-whitespace data-x-internal=split-a-string-on-spaces>splitting <var>value</var> on ASCII whitespace</a>.</p>
+
+   <li><p>Return a set containing the elements of <var>rawTokens</var> that are <a id=blocking-attributes:possible-blocking-token-4 href=#possible-blocking-token>possible blocking tokens</a>.</p>
+  </ol>
+  </div>
+
+  <div algorithm="">
+  <p>An element is <dfn id=potentially-render-blocking>potentially render-blocking</dfn> if its <a id=blocking-attributes:blocking-tokens-set href=#blocking-tokens-set>blocking tokens set</a>
+  contains "<code id=blocking-attributes:blocking-token-render><a href=#blocking-token-render>render</a></code>", or if it is
+  <dfn id=implicitly-potentially-render-blocking>implicitly potentially render-blocking</dfn>, which will be defined at the individual
+  elements. By default, an element is not <a id=blocking-attributes:implicitly-potentially-render-blocking href=#implicitly-potentially-render-blocking>implicitly potentially render-blocking</a>.</p>
+  </div>
+
+  <h4 id=fetch-priority-attributes><span class=secno>2026</span> Fetch priority attributes<a class=self-link href=#fetch-priority-attributes></a></h4>
+
+  <p>A <dfn id=fetch-priority-attribute>fetch priority attribute</dfn> is an <a id=fetch-priority-attributes:enumerated-attribute href=common-microsyntaxes.html#enumerated-attribute>enumerated attribute</a> with the
+  following keywords and states:</p>
+
+  <table><thead><tr><th>Keyword
+     <th>State
+     <th>Brief description
+   <tbody><tr><td><dfn data-dfn-for=img/fetchpriority,script/fetchpriority,link/fetchpriority data-dfn-type=attr-value id=attr-fetchpriority-high><code>high</code></dfn>
+     <td><dfn id=attr-fetchpriority-high-state>High</dfn>
+     <td>Signals a high-priority <a id=fetch-priority-attributes:concept-fetch href=https://fetch.spec.whatwg.org/#concept-fetch data-x-internal=concept-fetch>fetch</a> relative to other
+     resources with the same <a id=fetch-priority-attributes:concept-request-destination href=https://fetch.spec.whatwg.org/#concept-request-destination data-x-internal=concept-request-destination>destination</a>.
+    <tr><td><dfn data-dfn-for=img/fetchpriority,script/fetchpriority,link/fetchpriority data-dfn-type=attr-value id=attr-fetchpriority-low><code>low</code></dfn>
+     <td><dfn id=attr-fetchpriority-low-state>Low</dfn>
+     <td>Signals a low-priority <a id=fetch-priority-attributes:concept-fetch-2 href=https://fetch.spec.whatwg.org/#concept-fetch data-x-internal=concept-fetch>fetch</a> relative to other
+     resources with the same <a id=fetch-priority-attributes:concept-request-destination-2 href=https://fetch.spec.whatwg.org/#concept-request-destination data-x-internal=concept-request-destination>destination</a>.
+    <tr><td><dfn data-dfn-for=img/fetchpriority,script/fetchpriority,link/fetchpriority data-dfn-type=attr-value id=attr-fetchpriority-auto><code>auto</code></dfn>
+     <td><dfn id=attr-fetchpriority-auto-state>Auto</dfn>
+     <td>Signals automatic determination of <a id=fetch-priority-attributes:concept-fetch-3 href=https://fetch.spec.whatwg.org/#concept-fetch data-x-internal=concept-fetch>fetch</a> priority
+     relative to other resources with the same <a id=fetch-priority-attributes:concept-request-destination-3 href=https://fetch.spec.whatwg.org/#concept-request-destination data-x-internal=concept-request-destination>destination</a>.
+  </table>
+
+  <div algorithm="">
+  <p>The attribute's <i id=fetch-priority-attributes:missing-value-default><a href=common-microsyntaxes.html#missing-value-default>missing value default</a></i> and
+  <i id=fetch-priority-attributes:invalid-value-default><a href=common-microsyntaxes.html#invalid-value-default>invalid value default</a></i> are both the
+  <a id=fetch-priority-attributes:attr-fetchpriority-auto-state href=#attr-fetchpriority-auto-state>Auto</a> state.</p>
+  </div>
+
+  <nav><a href=common-microsyntaxes.html>← 2026 Common microsyntaxes</a> — <a href=./>Table of Contents</a> — <a href=common-dom-interfaces.html>2026 Common DOM interfaces →</a></nav>

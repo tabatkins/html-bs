@@ -1,0 +1,1411 @@
+<!DOCTYPE html><html lang=en-US-x-hixie class=split><script src=/link-fixup.js defer=""></script><meta charset=utf-8><meta name=viewport content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>HTML Standard</title><meta name=theme-color content=#3c790a><meta name=color-scheme content="light dark"><link rel=stylesheet crossorigin="" href=https://resources.whatwg.org/standard-shared-with-dev.css><link crossorigin="" rel=stylesheet href=https://resources.whatwg.org/standard.css><link crossorigin="" rel=stylesheet href=https://resources.whatwg.org/spec.css><link rel=icon crossorigin="" href=https://resources.whatwg.org/logo.svg><link rel=stylesheet crossorigin="" href=/styles.css><script>
+   function toggleStatus(div) {
+     div.parentNode.classList.toggle('wrapped');
+   }
+   function setLinkFragment(link) {
+     link.hash = location.hash;
+   }
+  </script><body>
+  
+  <script crossorigin="" src=/html-dfn.js defer=""></script>
+  <script crossorigin="" src=/var-click-highlighting.js defer=""></script>
+  
+  <header class="head with-buttons" id=head>
+   <a href=https://whatwg.org/ class=logo><img crossorigin="" width=100 height=100 alt=WHATWG src=https://resources.whatwg.org/logo.svg class=darkmode-aware></a>
+   <hgroup><h1 class=allcaps>HTML</h1><p id=living-standard>Living Standard — Last Updated <span class=pubdate>10 November 2026</span></hgroup>
+   
+   
+
+   
+  </header>
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  <nav><a href=infrastructure.html>← 2026 Common infrastructure</a> — <a href=./>Table of Contents</a> — <a href=urls-and-fetching.html>2026 URLs →</a></nav><ol class=toc><li id=toc-infrastructure><ol><li><a href=common-microsyntaxes.html#common-microsyntaxes><span class=secno>2.3</span> Common microsyntaxes</a><ol><li><a href=common-microsyntaxes.html#common-parser-idioms><span class=secno>2.3.1</span> Common parser idioms</a><li><a href=common-microsyntaxes.html#boolean-attributes><span class=secno>2.3.2</span> Boolean attributes</a><li><a href=common-microsyntaxes.html#keywords-and-enumerated-attributes><span class=secno>2.3.3</span> Keywords and enumerated attributes</a><li><a href=common-microsyntaxes.html#numbers><span class=secno>2.3.4</span> Numbers</a><ol><li><a href=common-microsyntaxes.html#signed-integers><span class=secno>2.3.4.1</span> Signed integers</a><li><a href=common-microsyntaxes.html#non-negative-integers><span class=secno>2.3.4.2</span> Non-negative integers</a><li><a href=common-microsyntaxes.html#floating-point-numbers><span class=secno>2.3.4.3</span> Floating-point numbers</a><li><a href=common-microsyntaxes.html#percentages-and-dimensions><span class=secno>2.3.4.4</span> Percentages and lengths</a><li><a href=common-microsyntaxes.html#nonzero-percentages-and-lengths><span class=secno>2.3.4.5</span> Nonzero percentages and lengths</a><li><a href=common-microsyntaxes.html#lists-of-floating-point-numbers><span class=secno>2.3.4.6</span> Lists of floating-point numbers</a><li><a href=common-microsyntaxes.html#lists-of-dimensions><span class=secno>2.3.4.7</span> Lists of dimensions</a></ol><li><a href=common-microsyntaxes.html#dates-and-times><span class=secno>2.3.5</span> Dates and times</a><ol><li><a href=common-microsyntaxes.html#months><span class=secno>2.3.5.1</span> Months</a><li><a href=common-microsyntaxes.html#dates><span class=secno>2.3.5.2</span> Dates</a><li><a href=common-microsyntaxes.html#yearless-dates><span class=secno>2.3.5.3</span> Yearless dates</a><li><a href=common-microsyntaxes.html#times><span class=secno>2.3.5.4</span> Times</a><li><a href=common-microsyntaxes.html#local-dates-and-times><span class=secno>2.3.5.5</span> Local dates and times</a><li><a href=common-microsyntaxes.html#time-zones><span class=secno>2.3.5.6</span> Time zones</a><li><a href=common-microsyntaxes.html#global-dates-and-times><span class=secno>2.3.5.7</span> Global dates and times</a><li><a href=common-microsyntaxes.html#weeks><span class=secno>2.3.5.8</span> Weeks</a><li><a href=common-microsyntaxes.html#durations><span class=secno>2.3.5.9</span> Durations</a><li><a href=common-microsyntaxes.html#vaguer-moments-in-time><span class=secno>2.3.5.10</span> Vaguer moments in time</a></ol><li><a href=common-microsyntaxes.html#colours><span class=secno>2.3.6</span> Legacy colors</a><li><a href=common-microsyntaxes.html#space-separated-tokens><span class=secno>2.3.7</span> Space-separated tokens</a><li><a href=common-microsyntaxes.html#comma-separated-tokens><span class=secno>2.3.8</span> Comma-separated tokens</a><li><a href=common-microsyntaxes.html#syntax-references><span class=secno>2.3.9</span> References</a><li><a href=common-microsyntaxes.html#mq><span class=secno>2.3.10</span> Media queries</a><li><a href=common-microsyntaxes.html#unique-values><span class=secno>2.3.11</span> Unique internal values</a></ol></ol></ol><h3 id=common-microsyntaxes><span class=secno>2026</span> Common microsyntaxes<a class=self-link href=#common-microsyntaxes></a></h3>
+
+  <p>There are various places in HTML that accept particular data types, such as dates or numbers.
+  This section describes what the conformance criteria for content in those formats is, and how to
+  parse them.</p>
+
+  
+
+  <p class=note>Implementers are strongly urged to carefully examine any third-party libraries
+  they might consider using to implement the parsing of syntaxes described below. For example, date
+  libraries are likely to implement error handling behavior that differs from what is required in
+  this specification, since error-handling behavior is often not defined in specifications that
+  describe date syntaxes similar to those used in this specification, and thus implementations tend
+  to vary greatly in how they handle errors.</p>
+
+  
+
+
+  
+
+  <h4 id=common-parser-idioms><span class=secno>2026</span> Common parser idioms<a class=self-link href=#common-parser-idioms></a></h4>
+
+  <p var-scope="">Some of the micro-parsers described below follow the pattern of having an <var>input</var>
+  variable that holds the string being parsed, and having a <var>position</var> variable pointing at
+  the next character to parse in <var>input</var>.</p>
+
+  
+
+
+
+  <h4 id=boolean-attributes><span class=secno>2026</span> Boolean attributes<a class=self-link href=#boolean-attributes></a></h4>
+
+  <p>A number of attributes are <dfn id=boolean-attribute>boolean attributes</dfn>. The
+  presence of a boolean attribute on an element represents the true value, and the absence of the
+  attribute represents the false value.</p>
+
+  <p>If the attribute is present, its value must either be the empty string or a value that is an
+  <a id=boolean-attributes:ascii-case-insensitive href=https://infra.spec.whatwg.org/#ascii-case-insensitive data-x-internal=ascii-case-insensitive>ASCII case-insensitive</a> match for the attribute's canonical name, with no leading or
+  trailing whitespace.</p>
+
+  <p class=note>The values "true" and "false" are not allowed on boolean attributes. To represent
+  a false value, the attribute has to be omitted altogether.</p>
+
+  <div class=example>
+
+   <p>Here is an example of a checkbox that is checked and disabled. The <code id=boolean-attributes:attr-input-checked><a href=input.html#attr-input-checked>checked</a></code> and <code id=boolean-attributes:attr-fe-disabled><a href=form-control-infrastructure.html#attr-fe-disabled>disabled</a></code>
+   attributes are the boolean attributes.</p>
+
+   <pre><code class=html>&lt;label>&lt;input type=checkbox checked name=cheese disabled> Cheese&lt;/label></code></pre>
+
+   <p>This could be equivalently written as this:
+
+   <pre><code class=html>&lt;label>&lt;input type=checkbox checked=checked name=cheese disabled=disabled> Cheese&lt;/label></code></pre>
+
+   <p>You can also mix styles; the following is still equivalent:</p>
+
+   <pre><code class=html>&lt;label>&lt;input type='checkbox' checked name=cheese disabled=""> Cheese&lt;/label></code></pre>
+
+  </div>
+
+
+
+  <h4 id=keywords-and-enumerated-attributes><span class=secno>2026</span> Keywords and enumerated attributes<a class=self-link href=#keywords-and-enumerated-attributes></a></h4>
+
+  <p>Some attributes, called <dfn data-lt="enumerated attribute" data-export="" id=enumerated-attribute>enumerated attributes</dfn>, take on a finite set of states. The state for such an
+  attribute is derived by combining the attribute's value, a set of keyword/state mappings, and
+  three possible special states that can also be given in the specification of the attribute. These
+  special states are the <dfn id=invalid-value-default><i>invalid value default</i></dfn>, the <dfn id=missing-value-default><i>missing value
+  default</i></dfn>, and the <dfn id=empty-value-default><i>empty value default</i></dfn>.</p>
+
+  <p class=note>Multiple keywords can map to the same state.</p>
+
+  <div algorithm="">
+  <p>To determine the state of an attribute, use the following steps:</p>
+
+  <ol><li>
+    <p>If the attribute is not specified:</p>
+
+    <ol><li><p>If the attribute has a <i id=keywords-and-enumerated-attributes:missing-value-default><a href=#missing-value-default>missing value default</a></i>
+     state defined, then return that <i id=keywords-and-enumerated-attributes:missing-value-default-2><a href=#missing-value-default>missing value default</a></i>
+     state.<li><p>Otherwise, return no state.</ol>
+   <li><p>If the attribute's value is an <a id=keywords-and-enumerated-attributes:ascii-case-insensitive href=https://infra.spec.whatwg.org/#ascii-case-insensitive data-x-internal=ascii-case-insensitive>ASCII case-insensitive</a> match for one of the
+   keywords defined for the attribute, then return the state represented by that keyword.<li><p>If the attribute has an <i id=keywords-and-enumerated-attributes:empty-value-default><a href=#empty-value-default>empty value default</a></i> state
+   defined and the attribute's value is the empty string, then return that <i id=keywords-and-enumerated-attributes:empty-value-default-2><a href=#empty-value-default>empty value default</a></i> state.<li><p>If the attribute has an <i id=keywords-and-enumerated-attributes:invalid-value-default><a href=#invalid-value-default>invalid value default</a></i> state
+   defined, then return that <i id=keywords-and-enumerated-attributes:invalid-value-default-2><a href=#invalid-value-default>invalid value default</a></i>
+   state.<li><p>Return no state.</ol>
+  </div>
+
+  <p>For authoring conformance purposes, if an enumerated attribute is specified, the attribute's
+  value must be one of:</p>
+
+  <ul><li><p>An <a id=keywords-and-enumerated-attributes:ascii-case-insensitive-2 href=https://infra.spec.whatwg.org/#ascii-case-insensitive data-x-internal=ascii-case-insensitive>ASCII case-insensitive</a> match for one of the conforming keywords for that
+   attribute, with no leading or trailing whitespace.<li><p>The empty string and the attribute must have an <i id=keywords-and-enumerated-attributes:empty-value-default-3><a href=#empty-value-default>empty
+   value default</a></i> defined.</ul>
+
+  <div algorithm="">
+  <p>For <a id=keywords-and-enumerated-attributes:reflect href=common-dom-interfaces.html#reflect>reflection</a> purposes, states which have any keywords mapping
+  to them are said to have a <dfn id=canonical-keyword>canonical keyword</dfn>. This is determined as follows:</p>
+
+  <ol><li><p>If there is only one keyword mapping to the given state, then it is that keyword.<li><p>If there is only one <em>conforming</em> keyword mapping to the given state, then it is
+   that conforming keyword.<li><p>If there are two conforming keywords mapping to the given state, and one is the empty
+   string, then the canonical keyword will be the conforming keyword that is not the empty
+   string.<li><p>Otherwise, the canonical keyword for the state will be explicitly given in the
+   specification for the attribute.</ol>
+  </div>
+
+
+
+  <h4 id=numbers><span class=secno>2026</span> Numbers<a class=self-link href=#numbers></a></h4>
+
+  <h5 id=signed-integers><span class=secno>2026</span> Signed integers<a class=self-link href=#signed-integers></a></h5>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-integer>valid integer</dfn> if it consists of one or more <a id=signed-integers:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>,
+  optionally prefixed with a U+002D HYPHEN-MINUS character (-).</p>
+  </div>
+
+  <div algorithm="">
+  <p>A <a id=signed-integers:valid-integer href=#valid-integer>valid integer</a> without a U+002D HYPHEN-MINUS (-) prefix represents the number
+  that is represented in base ten by that string of digits. A <a id=signed-integers:valid-integer-2 href=#valid-integer>valid integer</a>
+  <em>with</em> a U+002D HYPHEN-MINUS (-) prefix represents the number represented in base ten by
+  the string of digits that follows the U+002D HYPHEN-MINUS, subtracted from zero.</p>
+  </div>
+
+  
+
+  <div algorithm="">
+  <p>The <dfn id=rules-for-parsing-integers>rules for parsing integers</dfn> are as given in the following algorithm. When
+  invoked, the steps must be followed in the order given, aborting at the first step that returns a
+  value. This algorithm will return either an integer or an error.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a pointer into <var>input</var>, initially pointing at the
+   start of the string.<li><p>Let <var>sign</var> have the value "positive".<li><p><a id=signed-integers:skip-ascii-whitespace href=https://infra.spec.whatwg.org/#skip-ascii-whitespace data-x-internal=skip-ascii-whitespace>Skip ASCII whitespace</a> within <var>input</var> given
+   <var>position</var>.<li><p>If <var>position</var> is past the end of <var>input</var>, return an error.<li>
+    <p>If the character indicated by <var>position</var> (the first character) is a U+002D
+    HYPHEN-MINUS character (-):</p>
+
+    <ol><li>Let <var>sign</var> be "negative".<li>Advance <var>position</var> to the next character.<li>If <var>position</var> is past the end of <var>input</var>, return an error.</ol>
+
+    <p>Otherwise, if the character indicated by <var>position</var> (the first character) is a
+    U+002B PLUS SIGN character (+):</p>
+
+    <ol><li>Advance <var>position</var> to the next character. (The "<code>+</code>" is
+     ignored, but it is not conforming.)<li>If <var>position</var> is past the end of <var>input</var>, return an error.</ol>
+   <li><p>If the character indicated by <var>position</var> is not an <a id=signed-integers:ascii-digits-2 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digit</a>, then return an error.<li><p><a id=signed-integers:collect-a-sequence-of-code-points href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=signed-integers:ascii-digits-3 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+   <var>input</var> given <var>position</var>, and interpret the resulting sequence as a base-ten
+   integer. Let <var>value</var> be that integer.<li><p>If <var>sign</var> is "positive", return <var>value</var>, otherwise return the result of
+   subtracting <var>value</var> from zero.</ol>
+  </div>
+
+  
+
+
+  <h5 id=non-negative-integers><span class=secno>2026</span> Non-negative integers<a class=self-link href=#non-negative-integers></a></h5>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-non-negative-integer>valid non-negative integer</dfn> if it consists of one or more <a id=non-negative-integers:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII
+  digits</a>.</p>
+  </div>
+
+  <div algorithm="">
+  <p>A <a id=non-negative-integers:valid-non-negative-integer href=#valid-non-negative-integer>valid non-negative integer</a> represents the number that is represented in base ten
+  by that string of digits.</p>
+  </div>
+
+  
+
+  <div algorithm="">
+  <p>The <dfn id=rules-for-parsing-non-negative-integers>rules for parsing non-negative integers</dfn> are as given in the following algorithm.
+  When invoked, the steps must be followed in the order given, aborting at the first step that
+  returns a value. This algorithm will return either zero, a positive integer, or an error.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>value</var> be the result of parsing <var>input</var> using the
+   <a id=non-negative-integers:rules-for-parsing-integers href=#rules-for-parsing-integers>rules for parsing integers</a>.<li><p>If <var>value</var> is an error, return an error.<li><p>If <var>value</var> is less than zero, return an error.<li><p>Return <var>value</var>.</ol>
+  </div>
+
+  
+
+  
+
+
+  <h5 id=floating-point-numbers><span class=secno>2026</span> Floating-point numbers<a class=self-link href=#floating-point-numbers></a></h5>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-floating-point-number>valid floating-point number</dfn> if it consists of:</p>
+
+  <ol><li><p>Optionally, a U+002D HYPHEN-MINUS character (-).<li>
+    <p>One or both of the following, in the given order:</p>
+
+    <ol><li><p>A series of one or more <a id=floating-point-numbers:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>.<li>
+      <p>Both of the following, in the given order:</p>
+
+      <ol><li><p>A single U+002E FULL STOP character (.).<li><p>A series of one or more <a id=floating-point-numbers:ascii-digits-2 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>.</ol>
+     </ol>
+   <li>
+    <p>Optionally:</p>
+
+    <ol><li><p>Either a U+0065 LATIN SMALL LETTER E character (e) or a U+0045 LATIN CAPITAL LETTER E
+     character (E).<li><p>Optionally, a U+002D HYPHEN-MINUS character (-) or U+002B PLUS SIGN character
+     (+).<li><p>A series of one or more <a id=floating-point-numbers:ascii-digits-3 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>.</ol>
+   </ol>
+  </div>
+
+  <div algorithm="">
+  <p>A <a id=floating-point-numbers:valid-floating-point-number href=#valid-floating-point-number>valid floating-point number</a> represents the number obtained by multiplying the
+  significand by ten raised to the power of the exponent, where the significand is the first number,
+  interpreted as base ten (including the decimal point and the number after the decimal point, if
+  any, and interpreting the significand as a negative number if the whole string starts with a
+  U+002D HYPHEN-MINUS character (-) and the number is not zero), and where the exponent is the
+  number after the E, if any (interpreted as a negative number if there is a U+002D HYPHEN-MINUS
+  character (-) between the E and the number and the number is not zero, or else ignoring a U+002B
+  PLUS SIGN character (+) between the E and the number if there is one). If there is no E, then the
+  exponent is treated as zero.</p>
+  </div>
+
+  <p class=note>The Infinity and Not-a-Number (NaN) values are not <a id=floating-point-numbers:valid-floating-point-number-2 href=#valid-floating-point-number>valid floating-point numbers</a>.</p>
+
+  
+
+  <p class=note>The <a id=floating-point-numbers:valid-floating-point-number-3 href=#valid-floating-point-number>valid floating-point number</a> concept is typically only used to
+  restrict what is allowed for authors, while the user agent requirements use the <a id=floating-point-numbers:rules-for-parsing-floating-point-number-values href=#rules-for-parsing-floating-point-number-values>rules for
+  parsing floating-point number values</a> below (e.g., the <code id=floating-point-numbers:attr-progress-max><a href=form-elements.html#attr-progress-max>max</a></code> attribute of the <code id=floating-point-numbers:the-progress-element><a href=form-elements.html#the-progress-element>progress</a></code> element). However, in
+  some cases the user agent requirements include checking if a string is a <a id=floating-point-numbers:valid-floating-point-number-4 href=#valid-floating-point-number>valid
+  floating-point number</a> (e.g., the <a id=floating-point-numbers:value-sanitization-algorithm href=input.html#value-sanitization-algorithm>value sanitization algorithm</a> for the <a id="floating-point-numbers:number-state-(type=number)" href="input.html#number-state-(type=number)">Number</a> state of the <code id=floating-point-numbers:the-input-element><a href=input.html#the-input-element>input</a></code> element, or the
+  <a id=floating-point-numbers:parse-a-srcset-attribute href=images.html#parse-a-srcset-attribute>parse a srcset attribute</a> algorithm).</p>
+
+  <div algorithm="">
+  <p>The <dfn id=best-representation-of-the-number-as-a-floating-point-number>best
+  representation of the number <var>n</var> as a floating-point number</dfn> is the string
+  obtained from running <a id=floating-point-numbers:tostring href=https://tc39.es/ecma262/#sec-tostring data-x-internal=tostring>ToString</a>(<var>n</var>). The abstract operation
+  <a id=floating-point-numbers:tostring-2 href=https://tc39.es/ecma262/#sec-tostring data-x-internal=tostring>ToString</a> is not uniquely determined. When there are multiple possible strings that
+  could be obtained from <a id=floating-point-numbers:tostring-3 href=https://tc39.es/ecma262/#sec-tostring data-x-internal=tostring>ToString</a> for a particular value, the user agent must always
+  return the same string for that value (though it may differ from the value used by other user
+  agents).</p>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn data-export="" id=rules-for-parsing-floating-point-number-values>rules for parsing floating-point number values</dfn> are as given in the
+  following algorithm. This algorithm must be aborted at the first step that returns something.
+  This algorithm will return either a number or an error.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a pointer into <var>input</var>, initially pointing at the
+   start of the string.<li><p>Let <var>value</var> have the value 1.<li><p>Let <var>divisor</var> have the value 1.<li><p>Let <var>exponent</var> have the value 1.<li><p><a id=floating-point-numbers:skip-ascii-whitespace href=https://infra.spec.whatwg.org/#skip-ascii-whitespace data-x-internal=skip-ascii-whitespace>Skip ASCII whitespace</a> within <var>input</var> given
+   <var>position</var>.<li><p>If <var>position</var> is past the end of <var>input</var>, return an error.<li>
+    <p>If the character indicated by <var>position</var> is a U+002D HYPHEN-MINUS character (-):</p>
+
+    <ol><li>Change <var>value</var> and <var>divisor</var> to −1.<li>Advance <var>position</var> to the next character.<li>If <var>position</var> is past the end of <var>input</var>, return an error.</ol>
+
+    <p>Otherwise, if the character indicated by <var>position</var> (the first character) is a
+    U+002B PLUS SIGN character (+):</p>
+
+    <ol><li>Advance <var>position</var> to the next character. (The "<code>+</code>"
+     is ignored, but it is not conforming.)<li>If <var>position</var> is past the end of <var>input</var>, return an error.</ol>
+   <li><p>If the character indicated by <var>position</var> is a U+002E FULL STOP (.), and that is
+   not the last character in <var>input</var>, and the character after the character indicated by
+   <var>position</var> is an <a id=floating-point-numbers:ascii-digits-4 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digit</a>, then set
+   <var>value</var> to zero and jump to the step labeled <i>fraction</i>.</p> 
+
+   <li><p>If the character indicated by <var>position</var> is not an <a id=floating-point-numbers:ascii-digits-5 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digit</a>, then return an error.<li><p><a id=floating-point-numbers:collect-a-sequence-of-code-points href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=floating-point-numbers:ascii-digits-6 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+   <var>input</var> given <var>position</var>, and interpret the resulting sequence as a base-ten
+   integer. Multiply <var>value</var> by that integer.<li>If <var>position</var> is past the end of <var>input</var>, jump to the step labeled
+   <i>conversion</i>.<li><p><i>Fraction</i>: If the character indicated by <var>position</var> is a U+002E
+   FULL STOP (.), run these substeps:</p>
+
+    <ol><li><p>Advance <var>position</var> to the next character.<li><p>If <var>position</var> is past the end of <var>input</var>, or if the character
+     indicated by <var>position</var> is not an <a id=floating-point-numbers:ascii-digits-7 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digit</a>,
+     U+0065 LATIN SMALL LETTER E (e), or U+0045 LATIN CAPITAL LETTER E (E), then jump to the step
+     labeled <i>conversion</i>.<li><p>If the character indicated by <var>position</var> is a U+0065 LATIN SMALL
+     LETTER E character (e) or a U+0045 LATIN CAPITAL LETTER E character (E), skip the remainder of
+     these substeps.</p>
+
+     <li><p><i>Fraction loop</i>: Multiply <var>divisor</var> by ten.<li>Add the value of the character indicated by <var>position</var>, interpreted as a
+     base-ten digit (0..9) and divided by <var>divisor</var>, to <var>value</var>.<li><p>Advance <var>position</var> to the next character.<li><p>If <var>position</var> is past the end of <var>input</var>, then jump to the step
+     labeled <i>conversion</i>.<li><p>If the character indicated by <var>position</var> is an <a id=floating-point-numbers:ascii-digits-8 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digit</a>, jump back to the step labeled <i>fraction loop</i> in these
+     substeps.</ol>
+   <li><p>If the character indicated by <var>position</var> is U+0065 (e) or a U+0045 (E):</p>
+
+    <ol><li><p>Advance <var>position</var> to the next character.<li><p>If <var>position</var> is past the end of <var>input</var>, then jump to the step
+     labeled <i>conversion</i>.<li>
+      <p>If the character indicated by <var>position</var> is a U+002D HYPHEN-MINUS character
+      (-):</p>
+
+      <ol><li>Change <var>exponent</var> to −1.<li>Advance <var>position</var> to the next character.<li><p>If <var>position</var> is past the end of <var>input</var>, then jump to the step
+       labeled <i>conversion</i>.</ol>
+
+      <p>Otherwise, if the character indicated by <var>position</var> is a U+002B PLUS SIGN
+      character (+):</p>
+
+      <ol><li>Advance <var>position</var> to the next character.<li><p>If <var>position</var> is past the end of <var>input</var>, then jump to the step
+       labeled <i>conversion</i>.</ol>
+     <li><p>If the character indicated by <var>position</var> is not an <a id=floating-point-numbers:ascii-digits-9 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digit</a>, then jump to the step labeled <i>conversion</i>.<li><p><a id=floating-point-numbers:collect-a-sequence-of-code-points-2 href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=floating-point-numbers:ascii-digits-10 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+     <var>input</var> given <var>position</var>, and interpret the resulting sequence as a base-ten
+     integer. Multiply <var>exponent</var> by that integer.<li><p>Multiply <var>value</var> by ten raised to the <var>exponent</var>th power.</ol>
+   <li><p><i>Conversion</i>: Let <var>S</var> be the set of finite IEEE 754 double-precision
+   floating-point values except −0, but with two special values added: 2<sup>1024</sup> and −2<sup>1024</sup>.<li><p>Let <var>rounded-value</var> be the number in <var>S</var> that is closest to
+   <var>value</var>, selecting the number with an even significand if there are two equally close
+   values. (The two special values 2<sup>1024</sup> and −2<sup>1024</sup>
+   are considered to have even significands for this purpose.)<li><p>If <var>rounded-value</var> is 2<sup>1024</sup> or −2<sup>1024</sup>, return an error.<li><p>Return <var>rounded-value</var>.</ol>
+  </div>
+
+  
+
+
+
+  <h5 id=percentages-and-dimensions><span class=secno>2026</span> Percentages and lengths<a class=self-link href=#percentages-and-dimensions></a></h5>
+
+  <div algorithm="">
+  <p>The <dfn id=rules-for-parsing-dimension-values>rules for parsing dimension values</dfn> are as given in the following algorithm. When
+  invoked, the steps must be followed in the order given, aborting at the first step that returns a
+  value. This algorithm will return either a number greater than or equal to 0.0, or failure; if a
+  number is returned, then it is further categorized as either a percentage or a length.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a <a id=percentages-and-dimensions:position-variable href=https://infra.spec.whatwg.org/#string-position-variable data-x-internal=position-variable>position variable</a> for <var>input</var>,
+   initially pointing at the start of <var>input</var>.<li><p><a id=percentages-and-dimensions:skip-ascii-whitespace href=https://infra.spec.whatwg.org/#skip-ascii-whitespace data-x-internal=skip-ascii-whitespace>Skip ASCII whitespace</a> within <var>input</var> given
+   <var>position</var>.<li><p>If <var>position</var> is past the end of <var>input</var> or the code point at
+   <var>position</var> within <var>input</var> is not an <a id=percentages-and-dimensions:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII
+   digit</a>, then return failure.<li><p><a id=percentages-and-dimensions:collect-a-sequence-of-code-points href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=percentages-and-dimensions:ascii-digits-2 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+   <var>input</var> given <var>position</var>, and interpret the resulting sequence as a base-ten
+   integer. Let <var>value</var> be that number.<li><p>If <var>position</var> is past the end of <var>input</var>, then return <var>value</var>
+   as a length.<li>
+    <p>If the code point at <var>position</var> within <var>input</var> is U+002E (.):</p>
+
+    <ol><li><p>Advance <var>position</var> by 1.<li><p>If <var>position</var> is past the end of <var>input</var> or the code point at
+     <var>position</var> within <var>input</var> is not an <a id=percentages-and-dimensions:ascii-digits-3 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII
+     digit</a>, then return the <a id=percentages-and-dimensions:current-dimension-value href=#current-dimension-value>current dimension value</a> with <var>value</var>,
+     <var>input</var>, and <var>position</var>.<li><p>Let <var>divisor</var> have the value 1.<li>
+      <p>While true:</p>
+
+      <ol><li><p>Multiply <var>divisor</var> by ten.<li><p>Add the value of the code point at <var>position</var> within <var>input</var>,
+       interpreted as a base-ten digit (0..9) and divided by <var>divisor</var>, to
+       <var>value</var>.<li><p>Advance <var>position</var> by 1.<li><p>If <var>position</var> is past the end of <var>input</var>, then return
+       <var>value</var> as a length.<li><p>If the code point at <var>position</var> within <var>input</var> is not an <a id=percentages-and-dimensions:ascii-digits-4 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digit</a>, then <a id=percentages-and-dimensions:break href=https://infra.spec.whatwg.org/#iteration-break data-x-internal=break>break</a>.</ol>
+     </ol>
+   <li><p>Return the <a id=percentages-and-dimensions:current-dimension-value-2 href=#current-dimension-value>current dimension value</a> with <var>value</var>, <var>input</var>,
+   and <var>position</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn id=current-dimension-value>current dimension value</dfn>, given <var>value</var>, <var>input</var>, and
+  <var>position</var>, is determined as follows:</p>
+
+  <ol><li><p>If <var>position</var> is past the end of <var>input</var>, then return <var>value</var>
+   as a length.<li><p>If the code point at <var>position</var> within <var>input</var> is U+0025 (%), then
+   return <var>value</var> as a percentage.<li><p>Return <var>value</var> as a length.</ol>
+  </div>
+
+  <h5 id=nonzero-percentages-and-lengths><span class=secno>2026</span> Nonzero percentages and lengths<a class=self-link href=#nonzero-percentages-and-lengths></a></h5>
+
+  <div algorithm="">
+  <p>The <dfn id=rules-for-parsing-non-zero-dimension-values>rules for parsing nonzero dimension
+  values</dfn> are as given in the following algorithm. When invoked, the steps must be followed in
+  the order given, aborting at the first step that returns a value. This algorithm will return
+  either a number greater than 0.0, or an error; if a number is returned, then it is further
+  categorized as either a percentage or a length.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>value</var> be the result of parsing <var>input</var> using the <a id=nonzero-percentages-and-lengths:rules-for-parsing-dimension-values href=#rules-for-parsing-dimension-values>rules for
+   parsing dimension values</a>.<li><p>If <var>value</var> is an error, return an error.<li><p>If <var>value</var> is zero, return an error.<li><p>If <var>value</var> is a percentage, return <var>value</var> as a percentage.<li><p>Return <var>value</var> as a length.</ol>
+  </div>
+
+  
+
+
+  <h5 id=lists-of-floating-point-numbers><span class=secno>2026</span> Lists of floating-point numbers<a class=self-link href=#lists-of-floating-point-numbers></a></h5>
+
+  <div algorithm="">
+  <p>A <dfn id=valid-list-of-floating-point-numbers>valid list of floating-point numbers</dfn> is a number of <a id=lists-of-floating-point-numbers:valid-floating-point-number href=#valid-floating-point-number>valid floating-point numbers</a> separated by U+002C COMMA characters,
+  with no other characters (e.g. no <a id=lists-of-floating-point-numbers:space-characters href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a>). In addition, there might be
+  restrictions on the number of floating-point numbers that can be given, or on the range of values
+  allowed.</p>
+  </div>
+
+  
+
+  <div algorithm="">
+  <p>The <dfn id=rules-for-parsing-a-list-of-floating-point-numbers>rules for parsing a list of floating-point numbers</dfn> are as follows:</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a pointer into <var>input</var>, initially pointing at the
+   start of the string.<li><p>Let <var>numbers</var> be an initially empty list of floating-point numbers. This list
+   will be the result of this algorithm.<li><p><a id=lists-of-floating-point-numbers:collect-a-sequence-of-code-points href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=lists-of-floating-point-numbers:space-characters-2 href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a>,
+   U+002C COMMA, or U+003B SEMICOLON characters from <var>input</var> given <var>position</var>.
+   This skips past any leading delimiters.<li><p>While <var>position</var> is not past the end of <var>input</var>:</p>
+
+    <ol><li><p><a id=lists-of-floating-point-numbers:collect-a-sequence-of-code-points-2 href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are not <a id=lists-of-floating-point-numbers:space-characters-3 href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII
+     whitespace</a>, U+002C COMMA, U+003B SEMICOLON, <a id=lists-of-floating-point-numbers:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, U+002E FULL STOP,
+     or U+002D HYPHEN-MINUS characters from <var>input</var> given <var>position</var>. This skips
+     past leading garbage.<li><p><a id=lists-of-floating-point-numbers:collect-a-sequence-of-code-points-3 href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are not <a id=lists-of-floating-point-numbers:space-characters-4 href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII
+     whitespace</a>, U+002C COMMA, or U+003B SEMICOLON characters from <var>input</var> given
+     <var>position</var>, and let <var>unparsed number</var> be the result.<li><p>Let <var>number</var> be the result of parsing <var>unparsed number</var> using the
+     <a id=lists-of-floating-point-numbers:rules-for-parsing-floating-point-number-values href=#rules-for-parsing-floating-point-number-values>rules for parsing floating-point number values</a>.<li><p>If <var>number</var> is an error, set <var>number</var> to zero.<li><p>Append <var>number</var> to <var>numbers</var>.<li><p><a id=lists-of-floating-point-numbers:collect-a-sequence-of-code-points-4 href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=lists-of-floating-point-numbers:space-characters-5 href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a>,
+     U+002C COMMA, or U+003B SEMICOLON characters from <var>input</var> given <var>position</var>.
+     This skips past the delimiter.</ol>
+   <li><p>Return <var>numbers</var>.</ol>
+  </div>
+
+  
+
+  
+
+  <h5 id=lists-of-dimensions><span class=secno>2026</span> Lists of dimensions<a class=self-link href=#lists-of-dimensions></a></h5>
+
+  
+
+  <div algorithm="">
+  <p>The <dfn id=rules-for-parsing-a-list-of-dimensions>rules for parsing a list of dimensions</dfn> are as follows. These rules return a list
+  of zero or more pairs consisting of a number and a unit, the unit being one of <i>percentage</i>,
+  <i>relative</i>, and <i>absolute</i>.</p>
+
+  <ol><li><p>Let <var>raw input</var> be the string being parsed.<li><p>If the last character in <var>raw input</var> is a U+002C COMMA character (,),
+   then remove that character from <var>raw input</var>.<li><p><a id=lists-of-dimensions:split-a-string-on-commas href=https://infra.spec.whatwg.org/#split-on-commas data-x-internal=split-a-string-on-commas>Split the string <var>raw input</var> on
+   commas</a>. Let <var>raw tokens</var> be the resulting list of tokens.<li><p>Let <var>result</var> be an empty list of number/unit pairs.<li>
+    <p>For each token in <var>raw tokens</var>, run the following substeps:</p>
+
+    <ol><li><p>Let <var>input</var> be the token.<li><p>Let <var>position</var> be a pointer into <var>input</var>,
+     initially pointing at the start of the string.<li><p>Let <var>value</var> be the number 0.<li><p>Let <var>unit</var> be <i>absolute</i>.<li><p>If <var>position</var> is past the end of <var>input</var>, set <var>unit</var> to <i>relative</i> and jump to the last substep.<li><p>If the character at <var>position</var> is an <a id=lists-of-dimensions:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digit</a>, <a id=lists-of-dimensions:collect-a-sequence-of-code-points href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>collect a sequence of code points</a> that are <a id=lists-of-dimensions:ascii-digits-2 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII
+     digits</a> from <var>input</var> given <var>position</var>, interpret the resulting sequence
+     as an integer in base ten, and increment <var>value</var> by that integer.<li>
+      <p>If the character at <var>position</var> is U+002E (.):</p>
+
+      <ol><li><p><a id=lists-of-dimensions:collect-a-sequence-of-code-points-2 href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> consisting of <a id=lists-of-dimensions:space-characters href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII
+       whitespace</a> and <a id=lists-of-dimensions:ascii-digits-3 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from <var>input</var> given
+       <var>position</var>. Let <var>s</var> be the resulting sequence.<li><p>Remove all <a id=lists-of-dimensions:space-characters-2 href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a> in <var>s</var>.<li>
+        <p>If <var>s</var> is not the empty string:</p>
+
+        <ol><li><p>Let <var>length</var> be the number of characters in <var>s</var> (after the spaces were removed).<li><p>Let <var>fraction</var> be the result of interpreting <var>s</var> as a base-ten integer, and then dividing that number by <span>10<sup><var>length</var></sup></span>.<li><p>Increment <var>value</var> by <var>fraction</var>.</ol>
+       </ol>
+     <li><p><a id=lists-of-dimensions:skip-ascii-whitespace href=https://infra.spec.whatwg.org/#skip-ascii-whitespace data-x-internal=skip-ascii-whitespace>Skip ASCII whitespace</a> within <var>input</var> given
+     <var>position</var>.<li>
+      <p>If the character at <var>position</var> is a U+0025 PERCENT SIGN character (%),
+      then set <var>unit</var> to <i>percentage</i>.</p>
+
+      <p>Otherwise, if the character at <var>position</var> is a U+002A ASTERISK character
+      (*), then set <var>unit</var> to <i>relative</i>.</p>
+     <li><p>Add an entry to <var>result</var> consisting of the number given by <var>value</var> and the unit given by <var>unit</var>.</ol>
+   <li><p>Return the list <var>result</var>.</ol>
+  </div>
+
+  
+
+
+  <h4 id=dates-and-times><span class=secno>2026</span> Dates and times<a class=self-link href=#dates-and-times></a></h4>
+
+  <div algorithm="">
+  <p>In the algorithms below, the <dfn id=number-of-days-in-month-month-of-year-year>number of days in month <var>month</var> of year
+  <var>year</var></dfn> is: <em>31</em> if <var>month</var> is 1, 3, 5, 7, 8,
+  10, or 12; <em>30</em> if <var>month</var> is 4, 6, 9, or 11; <em>29</em> if <var>month</var> is 2
+  and <var>year</var> is a number divisible by 400, or if <var>year</var> is a number divisible by 4
+  but not by 100; and <em>28</em> otherwise. This takes into account leap years in the Gregorian
+  calendar. <a href=references.html#refsGREGORIAN>[GREGORIAN]</a></p>
+  </div>
+
+  <p>When <a id=dates-and-times:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> are used in the date and time syntaxes defined in this section,
+  they express numbers in base ten.</p>
+
+  
+
+  <p class=note>While the formats described here are intended to be subsets of the corresponding
+  ISO8601 formats, this specification defines parsing rules in much more detail than ISO8601.
+  Implementers are therefore encouraged to carefully examine any date parsing libraries before using
+  them to implement the parsing rules described below; ISO8601 libraries might not parse dates and
+  times in exactly the same manner. <a href=references.html#refsISO8601>[ISO8601]</a></p>
+
+  
+
+  <p>Where this specification refers to the <dfn id=proleptic-gregorian-calendar>proleptic Gregorian calendar</dfn>, it means the
+  modern Gregorian calendar, extrapolated backwards to year 1. A date in the <a id=dates-and-times:proleptic-gregorian-calendar href=#proleptic-gregorian-calendar>proleptic
+  Gregorian calendar</a>, sometimes explicitly referred to as a <dfn id=proleptic-gregorian-date>proleptic-Gregorian
+  date</dfn>, is one that is described using that calendar even if that calendar was not in use at
+  the time (or place) in question. <a href=references.html#refsGREGORIAN>[GREGORIAN]</a></p>
+
+  <p class=note>The use of the Gregorian calendar as the wire format in this specification is an
+  arbitrary choice resulting from the cultural biases of those involved in the decision. See also
+  the section discussing <a href=forms.html#input-author-notes>date, time, and number formats</a> in forms
+  (for authors), <a href=input.html#input-impl-notes>implementation notes regarding
+  localization of form controls</a>, and the <code id=dates-and-times:the-time-element><a href=text-level-semantics.html#the-time-element>time</a></code> element.</p>
+
+
+  <h5 id=months><span class=secno>2026</span> Months<a class=self-link href=#months></a></h5>
+
+  <p>A <dfn id=concept-month>month</dfn> consists of a specific <a id=months:proleptic-gregorian-date href=#proleptic-gregorian-date>proleptic-Gregorian
+  date</a> with no time-zone information and no date information beyond a year and a month.
+  <a href=references.html#refsGREGORIAN>[GREGORIAN]</a></p>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-month-string>valid month string</dfn> representing a year <var>year</var> and
+  month <var>month</var> if it consists of the following components in the given order:</p>
+
+  <ol><li>Four or more <a id=months:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing <var>year</var>, where <var>year</var> > 0<li>A U+002D HYPHEN-MINUS character (-)<li>Two <a id=months:ascii-digits-2 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing the month <var>month</var>, in the range
+   1 ≤ <var>month</var> ≤ 12</ol>
+  </div>
+
+  
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-month-string>parse a month string</dfn> are as follows. This will return either a year and
+  month, or nothing. If at any point the algorithm says that it "fails", this means that it is
+  aborted at that point and returns nothing.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a pointer into <var>input</var>, initially
+   pointing at the start of the string.<li><p><a id=months:parse-a-month-component href=#parse-a-month-component>Parse a month component</a> to obtain <var>year</var> and <var>month</var>. If this returns nothing, then fail.</p>
+
+   <li><p>If <var>position</var> is <em>not</em> beyond the
+   end of <var>input</var>, then fail.<li><p>Return <var>year</var> and <var>month</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-month-component>parse a month component</dfn>, given an <var>input</var> string and
+  a <var>position</var>, are as follows. This will return either a year and a month, or
+  nothing. If at any point the algorithm says that it "fails", this means that it is aborted at that
+  point and returns nothing.</p>
+
+  <ol><li><p><a id=months:collect-a-sequence-of-code-points href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=months:ascii-digits-3 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+   <var>input</var> given <var>position</var>. If the collected sequence is not at least four
+   characters long, then fail. Otherwise, interpret the resulting sequence as a base-ten integer.
+   Let <var>year</var> be that number.<li><p>If <var>year</var> is not a number greater than zero, then fail.<li><p>If <var>position</var> is beyond the end of <var>input</var> or if the
+   character at <var>position</var> is not a U+002D HYPHEN-MINUS character, then fail.
+   Otherwise, move <var>position</var> forwards one character.<li><p><a id=months:collect-a-sequence-of-code-points-2 href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=months:ascii-digits-4 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+   <var>input</var> given <var>position</var>. If the collected sequence is not exactly two
+   characters long, then fail. Otherwise, interpret the resulting sequence as a base-ten integer.
+   Let <var>month</var> be that number.<li><p>If <var>month</var> is not a number in the range 1 ≤ <var>month</var> ≤ 12, then fail.<li><p>Return <var>year</var> and <var>month</var>.</ol>
+  </div>
+
+  
+
+
+  <h5 id=dates><span class=secno>2026</span> Dates<a class=self-link href=#dates></a></h5>
+
+  <p>A <dfn id=concept-date>date</dfn> consists of a specific <a id=dates:proleptic-gregorian-date href=#proleptic-gregorian-date>proleptic-Gregorian
+  date</a> with no time-zone information, consisting of a year, a month, and a day.
+  <a href=references.html#refsGREGORIAN>[GREGORIAN]</a></p>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-date-string>valid date string</dfn> representing a year <var>year</var>, month
+  <var>month</var>, and day <var>day</var> if it consists of the following
+  components in the given order:</p>
+
+  <ol><li>A <a id=dates:valid-month-string href=#valid-month-string>valid month string</a>, representing <var>year</var> and <var>month</var><li>A U+002D HYPHEN-MINUS character (-)<li>Two <a id=dates:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing <var>day</var>, in the range
+   1 ≤ <var>day</var> ≤ <var>maxday</var> where <var>maxday</var> is the <a id=dates:number-of-days-in-month-month-of-year-year href=#number-of-days-in-month-month-of-year-year>number of
+   days in the month <var>month</var> and year <var>year</var></a></ol>
+  </div>
+
+  
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-date-string>parse a date string</dfn> are as follows. This will return either a date, or
+  nothing. If at any point the algorithm says that it "fails", this means that it is aborted at that
+  point and returns nothing.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a pointer into <var>input</var>, initially
+   pointing at the start of the string.<li><p><a id=dates:parse-a-date-component href=#parse-a-date-component>Parse a date component</a> to obtain <var>year</var>, <var>month</var>, and <var>day</var>. If this returns nothing, then fail.</p>
+
+   <li><p>If <var>position</var> is <em>not</em> beyond the end of <var>input</var>, then fail.<li><p>Let <var>date</var> be the date with year <var>year</var>, month <var>month</var>, and day <var>day</var>.<li><p>Return <var>date</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-date-component>parse a date component</dfn>, given an <var>input</var> string and a
+  <var>position</var>, are as follows. This will return either a year, a month, and a day,
+  or nothing. If at any point the algorithm says that it "fails", this means that it is aborted at
+  that point and returns nothing.</p>
+
+  <ol><li><p><a id=dates:parse-a-month-component href=#parse-a-month-component>Parse a month component</a> to obtain <var>year</var> and <var>month</var>. If this returns nothing, then fail.<li><p>Let <var>maxday</var> be the <a id=dates:number-of-days-in-month-month-of-year-year-2 href=#number-of-days-in-month-month-of-year-year>number of days in month <var>month</var> of year <var>year</var></a>.<li><p>If <var>position</var> is beyond the end of <var>input</var> or if the
+   character at <var>position</var> is not a U+002D HYPHEN-MINUS character, then fail.
+   Otherwise, move <var>position</var> forwards one character.<li><p><a id=dates:collect-a-sequence-of-code-points href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=dates:ascii-digits-2 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+   <var>input</var> given <var>position</var>. If the collected sequence is not exactly two
+   characters long, then fail. Otherwise, interpret the resulting sequence as a base-ten integer.
+   Let <var>day</var> be that number.<li><p>If <var>day</var> is not a number in the range 1 ≤ <var>day</var> ≤ <var>maxday</var>, then fail.<li><p>Return <var>year</var>, <var>month</var>, and <var>day</var>.</ol>
+  </div>
+
+  
+
+
+  <h5 id=yearless-dates><span class=secno>2026</span> Yearless dates<a class=self-link href=#yearless-dates></a></h5>
+
+  <p>A <dfn id=concept-yearless-date>yearless date</dfn> consists of a Gregorian month and a
+  day within that month, but with no associated year. <a href=references.html#refsGREGORIAN>[GREGORIAN]</a></p>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-yearless-date-string>valid yearless date string</dfn> representing a month <var>month</var> and a day <var>day</var> if it consists of the following components
+  in the given order:</p>
+
+  <ol><li>Optionally, two U+002D HYPHEN-MINUS characters (-)<li>Two <a id=yearless-dates:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing the month <var>month</var>, in the range
+   1 ≤ <var>month</var> ≤ 12<li>A U+002D HYPHEN-MINUS character (-)<li>Two <a id=yearless-dates:ascii-digits-2 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing <var>day</var>, in the range
+   1 ≤ <var>day</var> ≤ <var>maxday</var> where <var>maxday</var> is the <a id=yearless-dates:number-of-days-in-month-month-of-year-year href=#number-of-days-in-month-month-of-year-year>number of
+   days</a> in the month <var>month</var> and any arbitrary leap year (e.g. 4 or
+   2000)</ol>
+
+  <p class=note>In other words, if the <var>month</var> is "<code>02</code>",
+  meaning February, then the day can be 29, as if the year was a leap year.</p>
+  </div>
+
+  
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-yearless-date-string>parse a yearless date string</dfn> are as follows. This will return either a
+  month and a day, or nothing. If at any point the algorithm says that it "fails", this means that
+  it is aborted at that point and returns nothing.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a pointer into <var>input</var>, initially
+   pointing at the start of the string.<li><p><a id=yearless-dates:parse-a-yearless-date-component href=#parse-a-yearless-date-component>Parse a yearless date component</a> to obtain <var>month</var> and <var>day</var>. If this returns nothing, then fail.</p>
+
+   <li><p>If <var>position</var> is <em>not</em> beyond the end of <var>input</var>, then fail.<li><p>Return <var>month</var> and <var>day</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-yearless-date-component>parse a yearless date component</dfn>, given an <var>input</var>
+  string and a <var>position</var>, are as follows. This will return either a month and a
+  day, or nothing. If at any point the algorithm says that it "fails", this means that it is aborted
+  at that point and returns nothing.</p>
+
+  <ol><li><p><a id=yearless-dates:collect-a-sequence-of-code-points href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are U+002D HYPHEN-MINUS characters (-)
+   from <var>input</var> given <var>position</var>. If the collected sequence is not exactly zero or
+   two characters long, then fail.<li><p><a id=yearless-dates:collect-a-sequence-of-code-points-2 href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=yearless-dates:ascii-digits-3 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+   <var>input</var> given <var>position</var>. If the collected sequence is not exactly two
+   characters long, then fail. Otherwise, interpret the resulting sequence as a base-ten integer.
+   Let <var>month</var> be that number.<li><p>If <var>month</var> is not a number in the range 1 ≤ <var>month</var> ≤ 12, then fail.<li><p>Let <var>maxday</var> be the <a id=yearless-dates:number-of-days-in-month-month-of-year-year-2 href=#number-of-days-in-month-month-of-year-year>number of days</a> in month <var>month</var> of any arbitrary leap year (e.g. 4
+   or 2000).<li><p>If <var>position</var> is beyond the end of <var>input</var> or if the
+   character at <var>position</var> is not a U+002D HYPHEN-MINUS character, then fail.
+   Otherwise, move <var>position</var> forwards one character.<li><p><a id=yearless-dates:collect-a-sequence-of-code-points-3 href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=yearless-dates:ascii-digits-4 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+   <var>input</var> given <var>position</var>. If the collected sequence is not exactly two
+   characters long, then fail. Otherwise, interpret the resulting sequence as a base-ten integer.
+   Let <var>day</var> be that number.<li><p>If <var>day</var> is not a number in the range 1 ≤ <var>day</var> ≤ <var>maxday</var>, then fail.<li><p>Return <var>month</var> and <var>day</var>.</ol>
+  </div>
+
+  
+
+
+  <h5 id=times><span class=secno>2026</span> Times<a class=self-link href=#times></a></h5>
+
+  <p>A <dfn id=concept-time>time</dfn> consists of a specific time with no time-zone
+  information, consisting of an hour, a minute, a second, and a fraction of a second.</p>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-time-string>valid time string</dfn> representing an hour <var>hour</var>, a
+  minute <var>minute</var>, and a second <var>second</var> if it consists of the
+  following components in the given order:</p>
+
+  <ol><li>Two <a id=times:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing <var>hour</var>, in the range
+   0 ≤ <var>hour</var> ≤ 23<li>A U+003A COLON character (:)<li>Two <a id=times:ascii-digits-2 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing <var>minute</var>, in the range
+   0 ≤ <var>minute</var> ≤ 59<li>If <var>second</var> is nonzero, or optionally if <var>second</var> is
+   zero:
+
+    <ol><li>A U+003A COLON character (:)<li>Two <a id=times:ascii-digits-3 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing the integer part of <var>second</var>,
+     in the range 0 ≤ <var>s</var> ≤ 59<li>If <var>second</var> is not an integer, or optionally if <var>second</var> is an integer:
+
+      <ol><li>A U+002E FULL STOP character (.)<li>One, two, or three <a id=times:ascii-digits-4 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing the fractional part of <var>second</var></ol>
+     </ol>
+   </ol>
+
+  <p class=note>The <var>second</var> component cannot be 60 or 61; leap seconds cannot
+  be represented.</p>
+  </div>
+
+  
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-time-string>parse a time string</dfn> are as follows. This will return either a time, or
+  nothing. If at any point the algorithm says that it "fails", this means that it is aborted at that
+  point and returns nothing.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a pointer into <var>input</var>, initially
+   pointing at the start of the string.<li><p><a id=times:parse-a-time-component href=#parse-a-time-component>Parse a time component</a> to obtain <var>hour</var>, <var>minute</var>, and <var>second</var>. If this returns nothing, then fail.</p>
+
+   <li><p>If <var>position</var> is <em>not</em> beyond the end of <var>input</var>, then fail.<li><p>Let <var>time</var> be the time with hour <var>hour</var>, minute <var>minute</var>, and second <var>second</var>.<li><p>Return <var>time</var>.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-time-component>parse a time component</dfn>, given an <var>input</var> string and a
+  <var>position</var>, are as follows. This will return either an hour, a minute, and a
+  second, or nothing. If at any point the algorithm says that it "fails", this means that it is
+  aborted at that point and returns nothing.</p>
+
+  <ol><li><p><a id=times:collect-a-sequence-of-code-points href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=times:ascii-digits-5 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+   <var>input</var> given <var>position</var>. If the collected sequence is not exactly two
+   characters long, then fail. Otherwise, interpret the resulting sequence as a base-ten integer.
+   Let <var>hour</var> be that number.<li>If <var>hour</var> is not a number in the range 0 ≤ <var>hour</var> ≤ 23, then fail.<li><p>If <var>position</var> is beyond the end of <var>input</var> or if the
+   character at <var>position</var> is not a U+003A COLON character, then fail. Otherwise,
+   move <var>position</var> forwards one character.<li><p><a id=times:collect-a-sequence-of-code-points-2 href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=times:ascii-digits-6 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+   <var>input</var> given <var>position</var>. If the collected sequence is not exactly two
+   characters long, then fail. Otherwise, interpret the resulting sequence as a base-ten integer.
+   Let <var>minute</var> be that number.<li>If <var>minute</var> is not a number in the range 0 ≤ <var>minute</var> ≤ 59, then fail.<li><p>Let <var>second</var> be 0.<li>
+    <p>If <var>position</var> is not beyond the end of <var>input</var> and the character at
+    <var>position</var> is U+003A (:):</p>
+
+    <ol><li><p>Advance <var>position</var> to the next character in <var>input</var>.<li><p>If <var>position</var> is beyond the end of <var>input</var>, or at
+     the last character in <var>input</var>, or if the next <em>two</em> characters in <var>input</var> starting at <var>position</var> are not both <a id=times:ascii-digits-7 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII
+     digits</a>, then fail.<li><p><a id=times:collect-a-sequence-of-code-points-3 href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are either <a id=times:ascii-digits-8 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>
+     or U+002E FULL STOP characters from <var>input</var> given <var>position</var>. If the
+     collected sequence is three characters long, or if it is longer than three characters long and
+     the third character is not a U+002E FULL STOP character, or if it has more than one U+002E FULL
+     STOP character, then fail. Otherwise, interpret the resulting sequence as a base-ten number
+     (possibly with a fractional part). Set <var>second</var> to that number.<li><p>If <var>second</var> is not a number in the range
+     0 ≤ <var>second</var> &lt; 60, then fail.</ol>
+   <li><p>Return <var>hour</var>, <var>minute</var>, and <var>second</var>.</ol>
+  </div>
+
+  
+
+
+  <h5 id=local-dates-and-times><span class=secno>2026</span> Local dates and times<a class=self-link href=#local-dates-and-times></a></h5>
+
+  <p>A <dfn id=concept-datetime-local>local date and time</dfn> consists of a specific
+  <a id=local-dates-and-times:proleptic-gregorian-date href=#proleptic-gregorian-date>proleptic-Gregorian date</a>, consisting of a year, a month, and a day, and a time,
+  consisting of an hour, a minute, a second, and a fraction of a second, but expressed without a
+  time zone. <a href=references.html#refsGREGORIAN>[GREGORIAN]</a></p>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-local-date-and-time-string>valid local date and time string</dfn> representing a date and time if it
+  consists of the following components in the given order:</p>
+
+  <ol><li>A <a id=local-dates-and-times:valid-date-string href=#valid-date-string>valid date string</a> representing the date<li>A U+0054 LATIN CAPITAL LETTER T character (T) or a U+0020 SPACE character<li>A <a id=local-dates-and-times:valid-time-string href=#valid-time-string>valid time string</a> representing the time</ol>
+  </div>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-normalised-local-date-and-time-string>valid
+  normalized local date and time string</dfn> representing a date and time if it consists of the
+  following components in the given order:</p>
+
+  <ol><li>A <a id=local-dates-and-times:valid-date-string-2 href=#valid-date-string>valid date string</a> representing the date<li>A U+0054 LATIN CAPITAL LETTER T character (T)<li>A <a id=local-dates-and-times:valid-time-string-2 href=#valid-time-string>valid time string</a> representing the time, expressed as the shortest possible
+   string for the given time (e.g. omitting the seconds component entirely if the given time is zero
+   seconds past the minute)</ol>
+  </div>
+
+  
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-local-date-and-time-string>parse a local date and time string</dfn> are as follows. This will return
+  either a date and time, or nothing. If at any point the algorithm says that it "fails", this means
+  that it is aborted at that point and returns nothing.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a pointer into <var>input</var>, initially
+   pointing at the start of the string.<li><p><a id=local-dates-and-times:parse-a-date-component href=#parse-a-date-component>Parse a date component</a> to obtain <var>year</var>, <var>month</var>, and <var>day</var>. If this returns nothing, then fail.</p>
+
+   <li><p>If <var>position</var> is beyond the end of <var>input</var> or if the
+   character at <var>position</var> is neither a U+0054 LATIN CAPITAL LETTER T character
+   (T) nor a U+0020 SPACE character, then fail. Otherwise, move <var>position</var>
+   forwards one character.<li><p><a id=local-dates-and-times:parse-a-time-component href=#parse-a-time-component>Parse a time component</a> to obtain <var>hour</var>, <var>minute</var>, and <var>second</var>. If this returns nothing, then fail.</p>
+
+   <li><p>If <var>position</var> is <em>not</em> beyond the end of <var>input</var>, then fail.<li><p>Let <var>date</var> be the date with year <var>year</var>, month <var>month</var>, and day <var>day</var>.<li><p>Let <var>time</var> be the time with hour <var>hour</var>, minute <var>minute</var>, and second <var>second</var>.<li><p>Return <var>date</var> and <var>time</var>.</ol>
+  </div>
+
+  
+
+
+  <h5 id=time-zones><span class=secno>2026</span> Time zones<a class=self-link href=#time-zones></a></h5>
+
+  <p>A <dfn id=concept-timezone>time-zone offset</dfn> consists of a signed number of hours and
+  minutes.</p>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-time-zone-offset-string>valid time-zone offset string</dfn> representing a time-zone offset if it
+  consists of either:</p>
+
+
+  <ul><li><p>A U+005A LATIN CAPITAL LETTER Z character (Z), allowed only if the time zone is
+   UTC<li>
+    <p>Or, the following components, in the given order:</p>
+
+    <ol><li>Either a U+002B PLUS SIGN character (+) or, if the time-zone offset is not zero, a U+002D
+     HYPHEN-MINUS character (-), representing the sign of the time-zone offset<li>Two <a id=time-zones:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing the hours component <var>hour</var> of
+     the time-zone offset, in the range 0 ≤ <var>hour</var> ≤ 23<li>Optionally, a U+003A COLON character (:)<li>Two <a id=time-zones:ascii-digits-2 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing the minutes component <var>minute</var> of the time-zone offset, in the range 0 ≤ <var>minute</var> ≤ 59</ol>
+   </ul>
+  </div>
+
+  <p class=note>This format allows for time-zone offsets from -23:59 to +23:59. Right now, in
+  practice, the range of offsets of actual time zones is -12:00 to +14:00, and the minutes component
+  of offsets of actual time zones is always either 00, 30, or 45. There is no guarantee that this
+  will remain so forever, however, since time zones are used as political footballs and are thus
+  subject to very whimsical policy decisions.</p>
+
+  <p class=note>See also the usage notes and examples in the <a id=time-zones:concept-datetime href=#concept-datetime>global
+  date and time</a> section below for details on using time-zone offsets with historical times
+  that predate the formation of formal time zones.</p>
+
+  
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-time-zone-offset-string>parse a time-zone offset string</dfn> are as follows. This will return either
+  a time-zone offset, or nothing. If at any point the algorithm says that it "fails", this means
+  that it is aborted at that point and returns nothing.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a pointer into <var>input</var>, initially
+   pointing at the start of the string.<li><p><a id=time-zones:parse-a-time-zone-offset-component href=#parse-a-time-zone-offset-component>Parse a time-zone offset component</a> to obtain <var>timezone<sub>hours</sub></var> and <var>timezone<sub>minutes</sub></var>. If this
+   returns nothing, then fail.</p>
+
+   <li><p>If <var>position</var> is <em>not</em> beyond the end of <var>input</var>, then fail.<li><p>Return the time-zone offset that is <var>timezone<sub>hours</sub></var>
+   hours and <var>timezone<sub>minutes</sub></var> minutes from UTC.</ol>
+  </div>
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-time-zone-offset-component>parse a time-zone offset component</dfn>, given an <var>input</var>
+  string and a <var>position</var>, are as follows. This will return either time-zone hours
+  and time-zone minutes, or nothing. If at any point the algorithm says that it "fails", this means
+  that it is aborted at that point and returns nothing.</p>
+
+  <ol><li>
+    <p>If the character at <var>position</var> is a U+005A LATIN CAPITAL LETTER Z character
+    (Z):</p>
+
+    <ol><li><p>Let <var>timezone<sub>hours</sub></var> be 0.<li><p>Let <var>timezone<sub>minutes</sub></var> be 0.<li><p>Advance <var>position</var> to the next character in <var>input</var>.</ol>
+
+    <p>Otherwise, if the character at <var>position</var> is either a U+002B PLUS SIGN (+)
+    or a U+002D HYPHEN-MINUS (-):</p>
+
+    <ol><li><p>If the character at <var>position</var> is a U+002B PLUS SIGN (+), let <var>sign</var> be "positive". Otherwise, it's a U+002D HYPHEN-MINUS (-); let <var>sign</var> be "negative".<li><p>Advance <var>position</var> to the next character in <var>input</var>.<li><p><a id=time-zones:collect-a-sequence-of-code-points href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=time-zones:ascii-digits-3 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+     <var>input</var> given <var>position</var>. Let <var>s</var> be the collected
+     sequence.<li>
+      <p>If <var>s</var> is exactly two characters long:</p>
+
+      <ol><li><p>Interpret <var>s</var> as a base-ten integer. Let <var>timezone<sub>hours</sub></var> be that number.<li><p>If <var>position</var> is beyond the end of <var>input</var> or if
+       the character at <var>position</var> is not a U+003A COLON character, then fail.
+       Otherwise, move <var>position</var> forwards one character.<li><p><a id=time-zones:collect-a-sequence-of-code-points-2 href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=time-zones:ascii-digits-4 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+       <var>input</var> given <var>position</var>. If the collected sequence is not exactly two
+       characters long, then fail. Otherwise, interpret the resulting sequence as a base-ten
+       integer. Let <var>timezone<sub>minutes</sub></var> be that number.</ol>
+
+      <p>If <var>s</var> is exactly four characters long:</p>
+
+      <ol><li><p>Interpret the first two characters of <var>s</var> as a base-ten integer. Let
+       <var>timezone<sub>hours</sub></var> be that number.<li><p>Interpret the last two characters of <var>s</var> as a base-ten integer. Let
+       <var>timezone<sub>minutes</sub></var> be that number.</ol>
+
+      <p>Otherwise, fail.</p>
+     <li>If <var>timezone<sub>hours</sub></var> is not a number in the range
+     0 ≤ <var>timezone<sub>hours</sub></var> ≤ 23, then
+     fail.<li>If <var>sign</var> is "negative", then negate <var>timezone<sub>hours</sub></var>.<li>If <var>timezone<sub>minutes</sub></var> is not a number in the range
+     0 ≤ <var>timezone<sub>minutes</sub></var> ≤ 59,
+     then fail.<li>If <var>sign</var> is "negative", then negate <var>timezone<sub>minutes</sub></var>.</ol>
+
+    <p>Otherwise, fail.</p>
+   <li><p>Return <var>timezone<sub>hours</sub></var> and <var>timezone<sub>minutes</sub></var>.</ol>
+  </div>
+
+  
+
+
+  <h5 id=global-dates-and-times><span class=secno>2026</span> Global dates and times<a class=self-link href=#global-dates-and-times></a></h5>
+
+  <p>A <dfn id=concept-datetime>global date and time</dfn> consists of a specific
+  <a id=global-dates-and-times:proleptic-gregorian-date href=#proleptic-gregorian-date>proleptic-Gregorian date</a>, consisting of a year, a month, and a day, and a time,
+  consisting of an hour, a minute, a second, and a fraction of a second, expressed with a time-zone
+  offset, consisting of a signed number of hours and minutes. <a href=references.html#refsGREGORIAN>[GREGORIAN]</a></p>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-global-date-and-time-string>valid global date and time string</dfn> representing a date, time, and a
+  time-zone offset if it consists of the following components in the given order:</p>
+
+  <ol><li>A <a id=global-dates-and-times:valid-date-string href=#valid-date-string>valid date string</a> representing the date<li>A U+0054 LATIN CAPITAL LETTER T character (T) or a U+0020 SPACE character<li>A <a id=global-dates-and-times:valid-time-string href=#valid-time-string>valid time string</a> representing the time<li>A <a id=global-dates-and-times:valid-time-zone-offset-string href=#valid-time-zone-offset-string>valid time-zone offset string</a> representing the time-zone offset</ol>
+  </div>
+
+  <p>Times in dates before the formation of UTC in the mid-twentieth century must be expressed and
+  interpreted in terms of UT1 (contemporary Earth solar time at the 0° longitude), not UTC (the
+  approximation of UT1 that ticks in SI seconds). Time before the formation of time zones must be
+  expressed and interpreted as UT1 times with explicit time zones that approximate the contemporary
+  difference between the appropriate local time and the time observed at the location of Greenwich,
+  London.</p>
+
+  <div class=example>
+
+   <p>The following are some examples of dates written as <a id=global-dates-and-times:valid-global-date-and-time-string href=#valid-global-date-and-time-string>valid global date and time strings</a>.</p>
+
+   <dl><dt>"<code>0037-12-13 00:00Z</code>"<dd>Midnight in areas using London time on the birthday of Nero (the Roman Emperor). See below
+    for further discussion on which date this actually corresponds to.<dt>"<code>1979-10-14T12:00:00.001-04:00</code>"<dd>One millisecond after noon on October 14th 1979, in the time zone in use on the east coast
+    of the USA during daylight saving time.<dt>"<code>8592-01-01T02:09+02:09</code>"<dd>Midnight UTC on the 1st of January, 8592. The time zone associated with that time is two
+    hours and nine minutes ahead of UTC, which is not currently a real time zone, but is nonetheless
+    allowed.</dl>
+
+   <p>Several things are notable about these dates:</p>
+
+   <ul><li>Years with fewer than four digits have to be zero-padded. The date "37-12-13" would not be a
+    valid date.<li>If the "<code>T</code>" is replaced by a space, it must be a single space
+    character. The string "<code>2001-12-21  12:00Z</code>" (with two spaces
+    between the components) would not be parsed successfully.<li>To unambiguously identify a moment in time prior to the introduction of the Gregorian
+    calendar (insofar as moments in time before the formation of UTC can be unambiguously
+    identified), the date has to be first converted to the Gregorian calendar from the calendar in
+    use at the time (e.g. from the Julian calendar). The date of Nero's birth is the 15th of
+    December 37, in the Julian Calendar, which is the 13th of December 37 in the <a id=global-dates-and-times:proleptic-gregorian-calendar href=#proleptic-gregorian-calendar>proleptic
+    Gregorian calendar</a>.<li>The time and time-zone offset components are not optional.<li>Dates before the year one can't be represented as a datetime in this version of HTML.<li>Times of specific events in ancient times are, at best, approximations, since time was not
+    well coordinated or measured until relatively recent decades.<li>Time-zone offsets differ based on daylight saving time.</ul>
+
+  </div>
+
+  
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-global-date-and-time-string>parse a global date and time string</dfn> are as follows. This will return
+  either a time in UTC, with associated time-zone offset information for round-tripping or display
+  purposes, or nothing. If at any point the algorithm says that it "fails", this means that it is
+  aborted at that point and returns nothing.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a pointer into <var>input</var>, initially
+   pointing at the start of the string.<li><p><a id=global-dates-and-times:parse-a-date-component href=#parse-a-date-component>Parse a date component</a> to obtain <var>year</var>, <var>month</var>, and <var>day</var>. If this returns nothing, then fail.</p>
+
+   <li><p>If <var>position</var> is beyond the end of <var>input</var> or if the
+   character at <var>position</var> is neither a U+0054 LATIN CAPITAL LETTER T character
+   (T) nor a U+0020 SPACE character, then fail. Otherwise, move <var>position</var>
+   forwards one character.<li><p><a id=global-dates-and-times:parse-a-time-component href=#parse-a-time-component>Parse a time component</a> to obtain <var>hour</var>, <var>minute</var>, and <var>second</var>. If this returns nothing, then fail.</p>
+
+   <li><p>If <var>position</var> is beyond the end of <var>input</var>, then
+   fail.<li><p><a id=global-dates-and-times:parse-a-time-zone-offset-component href=#parse-a-time-zone-offset-component>Parse a time-zone offset component</a> to obtain <var>timezone<sub>hours</sub></var> and <var>timezone<sub>minutes</sub></var>. If this
+   returns nothing, then fail.</p>
+
+   <li><p>If <var>position</var> is <em>not</em> beyond the end of <var>input</var>, then fail.<li><p>Let <var>time</var> be the moment in time at year <var>year</var>, month
+   <var>month</var>, day <var>day</var>, hours <var>hour</var>, minute
+   <var>minute</var>, second <var>second</var>, subtracting <var>timezone<sub>hours</sub></var> hours and <var>timezone<sub>minutes</sub></var> minutes. That moment in time is a moment in the UTC time
+   zone.<li><p>Let <var>timezone</var> be <var>timezone<sub>hours</sub></var>
+   hours and <var>timezone<sub>minutes</sub></var> minutes from UTC.<li><p>Return <var>time</var> and <var>timezone</var>.</ol>
+  </div>
+
+  
+
+
+  <h5 id=weeks><span class=secno>2026</span> Weeks<a class=self-link href=#weeks></a></h5>
+
+  <p>A <dfn id=concept-week>week</dfn> consists of a week-year number and a week number
+  representing a seven-day period starting on a Monday. Each week-year in this calendaring system
+  has either 52 or 53 such seven-day periods, as defined below. The seven-day period starting on the
+  Gregorian date Monday December 29th 1969 (1969-12-29) is defined as week number 1 in week-year
+  1970. Consecutive weeks are numbered sequentially. The week before the number 1 week in a
+  week-year is the last week in the previous week-year, and vice versa. <a href=references.html#refsGREGORIAN>[GREGORIAN]</a></p>
+
+  <div algorithm="">
+  <p>A week-year with a number <var>year</var> has 53 weeks if it corresponds to either a
+  year <var>year</var> in the <a id=weeks:proleptic-gregorian-calendar href=#proleptic-gregorian-calendar>proleptic Gregorian calendar</a> that has a Thursday
+  as its first day (January 1st), or a year <var>year</var> in the <a id=weeks:proleptic-gregorian-calendar-2 href=#proleptic-gregorian-calendar>proleptic
+  Gregorian calendar</a> that has a Wednesday as its first day (January 1st) and where <var>year</var> is a number divisible by 400, or a number divisible by 4 but not by 100. All
+  other week-years have 52 weeks.</p>
+  </div>
+
+  <div algorithm="">
+  <p>The <dfn id=week-number-of-the-last-day>week number of the last day</dfn> of a week-year with 53 weeks is 53; the week number
+  of the last day of a week-year with 52 weeks is 52.</p>
+  </div>
+
+  <p class=note var-scope="">The week-year number of a particular day can be different than the number of the
+  year that contains that day in the <a id=weeks:proleptic-gregorian-calendar-3 href=#proleptic-gregorian-calendar>proleptic Gregorian calendar</a>. The first week in a
+  week-year <var>y</var> is the week that contains the first Thursday of the Gregorian year
+  <var>y</var>.</p>
+
+  <p class=note>For modern purposes, a <a id=weeks:concept-week href=#concept-week>week</a> as defined here is
+  equivalent to ISO weeks as defined in ISO 8601. <a href=references.html#refsISO8601>[ISO8601]</a></p>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-week-string>valid week string</dfn> representing a week-year <var>year</var>
+  and week <var>week</var> if it consists of the following components in the given
+  order:</p>
+
+  <ol><li>Four or more <a id=weeks:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing <var>year</var>, where <var>year</var> > 0<li>A U+002D HYPHEN-MINUS character (-)<li>A U+0057 LATIN CAPITAL LETTER W character (W)<li>Two <a id=weeks:ascii-digits-2 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing the week <var>week</var>, in the range
+   1 ≤ <var>week</var> ≤ <var>maxweek</var>, where <var>maxweek</var> is the <a id=weeks:week-number-of-the-last-day href=#week-number-of-the-last-day>week number of the last day</a> of week-year <var>year</var></ol>
+  </div>
+
+  
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-week-string>parse a week string</dfn> are as follows. This will return either a week-year
+  number and week number, or nothing. If at any point the algorithm says that it "fails", this means
+  that it is aborted at that point and returns nothing.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a pointer into <var>input</var>, initially
+   pointing at the start of the string.<li><p><a id=weeks:collect-a-sequence-of-code-points href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=weeks:ascii-digits-3 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+   <var>input</var> given <var>position</var>. If the collected sequence is not at least four
+   characters long, then fail. Otherwise, interpret the resulting sequence as a base-ten integer.
+   Let <var>year</var> be that number.<li><p>If <var>year</var> is not a number greater than zero, then fail.<li><p>If <var>position</var> is beyond the end of <var>input</var> or if the
+   character at <var>position</var> is not a U+002D HYPHEN-MINUS character, then fail.
+   Otherwise, move <var>position</var> forwards one character.<li><p>If <var>position</var> is beyond the end of <var>input</var> or if the
+   character at <var>position</var> is not a U+0057 LATIN CAPITAL LETTER W character (W),
+   then fail. Otherwise, move <var>position</var> forwards one character.<li><p><a id=weeks:collect-a-sequence-of-code-points-2 href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=weeks:ascii-digits-4 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+   <var>input</var> given <var>position</var>. If the collected sequence is not exactly two
+   characters long, then fail. Otherwise, interpret the resulting sequence as a base-ten integer.
+   Let <var>week</var> be that number.<li><p>Let <var>maxweek</var> be the <a id=weeks:week-number-of-the-last-day-2 href=#week-number-of-the-last-day>week number of the last day</a> of year
+   <var>year</var>.<li><p>If <var>week</var> is not a number in the range 1 ≤ <var>week</var> ≤ <var>maxweek</var>, then fail.<li><p>If <var>position</var> is <em>not</em> beyond the end of <var>input</var>, then fail.<li><p>Return the week-year number <var>year</var> and the week number <var>week</var>.</ol>
+  </div>
+
+  
+
+
+  <h5 id=durations><span class=secno>2026</span> Durations<a class=self-link href=#durations></a></h5>
+
+  
+
+  <p>A <dfn id=concept-duration>duration</dfn> consists of  a number of seconds.</p>
+
+  <p class=note>Since months and seconds are not comparable (a month is not a precise number of
+  seconds, but is instead a period whose exact length depends on the precise day from which it is
+  measured) a <a id=durations:concept-duration href=#concept-duration>duration</a> as defined in this specification cannot
+   include months (or years, which are equivalent to
+  twelve months). Only durations that describe a specific number of seconds can be described.</p>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-duration-string>valid duration string</dfn> representing a <a id=durations:concept-duration-2 href=#concept-duration>duration</a> <var>t</var> if it consists of either of the
+  following:</p>
+
+  <ul><li>
+    
+
+    
+
+    <p>A literal U+0050 LATIN CAPITAL LETTER P character followed by one or more of the following
+    subcomponents, in the order given, where the number of days, hours, minutes, and
+    seconds corresponds to the same number of seconds as in <var>t</var>:</p>
+
+    <ol><li><p>One or more <a id=durations:ascii-digits href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> followed by a U+0044 LATIN CAPITAL LETTER D
+     character, representing a number of days.<li>
+      <p>A U+0054 LATIN CAPITAL LETTER T character followed by one or more of the following
+      subcomponents, in the order given:</p>
+
+      <ol><li><p>One or more <a id=durations:ascii-digits-2 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> followed by a U+0048 LATIN CAPITAL LETTER H
+       character, representing a number of hours.<li><p>One or more <a id=durations:ascii-digits-3 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> followed by a U+004D LATIN CAPITAL LETTER M
+       character, representing a number of minutes.<li>
+        <p>The following components:</p>
+
+        <ol><li><p>One or more <a id=durations:ascii-digits-4 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing a number of seconds.<li><p>Optionally, a U+002E FULL STOP character (.) followed by one, two, or three
+         <a id=durations:ascii-digits-5 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing a fraction of a second.<li><p>A U+0053 LATIN CAPITAL LETTER S character.</ol>
+       </ol>
+     </ol>
+
+    <p class=note>This, as with a number of other date- and time-related microsyntaxes defined in
+    this specification, is based on one of the formats defined in ISO 8601. <a href=references.html#refsISO8601>[ISO8601]</a></p>
+   <li>
+    <p>One or more <a id=durations:duration-time-component href=#duration-time-component>duration time components</a>, each with
+    a different <a id=durations:duration-time-component-scale href=#duration-time-component-scale>duration time component scale</a>, in any order; the sum of the represented
+    seconds being equal to the number of seconds in <var>t</var>.</p>
+
+    <p>A <dfn id=duration-time-component>duration time component</dfn> is a string consisting of the following components:</p>
+
+    <ol><li><p>Zero or more <a id=durations:space-characters href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a>.<li><p>One or more <a id=durations:ascii-digits-6 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing a number of time units, scaled by
+     the <a id=durations:duration-time-component-scale-2 href=#duration-time-component-scale>duration time component scale</a> specified (see below) to represent a number of
+     seconds.<li><p>If the <a id=durations:duration-time-component-scale-3 href=#duration-time-component-scale>duration time component scale</a> specified is 1 (i.e. the units are
+     seconds), then, optionally, a U+002E FULL STOP character (.) followed by one, two, or three
+     <a id=durations:ascii-digits-7 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a>, representing a fraction of a second.<li><p>Zero or more <a id=durations:space-characters-2 href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a>.<li>
+      <p>One of the following characters, representing the <dfn id=duration-time-component-scale>duration time component scale</dfn>
+      of the time unit used in the numeric part of the <a id=durations:duration-time-component-2 href=#duration-time-component>duration time component</a>:</p>
+
+      <dl><dt>U+0057 LATIN CAPITAL LETTER W character<dt>U+0077 LATIN SMALL LETTER W character<dd>Weeks. The scale is 604800.<dt>U+0044 LATIN CAPITAL LETTER D character<dt>U+0064 LATIN SMALL LETTER D character<dd>Days. The scale is 86400.<dt>U+0048 LATIN CAPITAL LETTER H character<dt>U+0068 LATIN SMALL LETTER H character<dd>Hours. The scale is 3600.<dt>U+004D LATIN CAPITAL LETTER M character<dt>U+006D LATIN SMALL LETTER M character<dd>Minutes. The scale is 60.<dt>U+0053 LATIN CAPITAL LETTER S character<dt>U+0073 LATIN SMALL LETTER S character<dd>Seconds. The scale is 1.</dl>
+     <li><p>Zero or more <a id=durations:space-characters-3 href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a>.</ol>
+
+    <p class=note>This is not based on any of the formats in ISO 8601. It is intended to be a more
+    human-readable alternative to the ISO 8601 duration format.</p>
+   </ul>
+  </div>
+
+  
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-duration-string>parse a duration string</dfn> are as follows. This will return either a <a id=durations:concept-duration-3 href=#concept-duration>duration</a> or nothing. If at any point the algorithm says that it
+  "fails", this means that it is aborted at that point and returns nothing.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a pointer into <var>input</var>, initially
+   pointing at the start of the string.<li><p>Let <var>months</var>, <var>seconds</var>, and <var>component
+   count</var> all be zero.<li>
+    <p>Let <var>M-disambiguator</var> be <i>minutes</i>.</p>
+
+    
+    <p class=note>This flag's other value is <i>months</i>. It is used to disambiguate the "M"
+    unit in ISO8601 durations, which use the same unit for months and minutes. Months are not
+    allowed, but are parsed for future compatibility and to avoid misinterpreting ISO8601 durations
+    that would be valid in other contexts.</p>
+   <li><p><a id=durations:skip-ascii-whitespace href=https://infra.spec.whatwg.org/#skip-ascii-whitespace data-x-internal=skip-ascii-whitespace>Skip ASCII whitespace</a> within <var>input</var> given
+   <var>position</var>.<li><p>If <var>position</var> is past the end of <var>input</var>, then
+   fail.<li><p>If the character in <var>input</var> pointed to by <var>position</var> is a U+0050 LATIN
+   CAPITAL LETTER P character, then advance <var>position</var> to the next character, set
+   <var>M-disambiguator</var> to <i>months</i>, and <a id=durations:skip-ascii-whitespace-2 href=https://infra.spec.whatwg.org/#skip-ascii-whitespace data-x-internal=skip-ascii-whitespace>skip ASCII whitespace</a> within
+   <var>input</var> given <var>position</var>.<li>
+    <p>While true:</p>
+
+    <ol><li><p>Let <var>units</var> be undefined. It will be assigned one of the following
+     values: <i>years</i>, <i>months</i>, <i>weeks</i>, <i>days</i>, <i>hours</i>, <i>minutes</i>,
+     and <i>seconds</i>.<li><p>Let <var>next character</var> be undefined. It is used to process characters
+     from the <var>input</var>.<li><p>If <var>position</var> is past the end of <var>input</var>, then break.<li><p>If the character in <var>input</var> pointed to by <var>position</var> is a U+0054 LATIN
+     CAPITAL LETTER T character, then advance <var>position</var> to the next character, set
+     <var>M-disambiguator</var> to <i>minutes</i>, <a id=durations:skip-ascii-whitespace-3 href=https://infra.spec.whatwg.org/#skip-ascii-whitespace data-x-internal=skip-ascii-whitespace>skip ASCII whitespace</a> within
+     <var>input</var> given <var>position</var>, and <a id=durations:continue href=https://infra.spec.whatwg.org/#iteration-continue data-x-internal=continue>continue</a>.<li><p>Set <var>next character</var> to the character in <var>input</var>
+     pointed to by <var>position</var>.<li>
+      <p>If <var>next character</var> is a U+002E FULL STOP character (.), then let <var>N</var> be 0. (Do not advance <var>position</var>. That is taken care
+      of below.)</p>
+
+      <p>Otherwise, if <var>next character</var> is an <a id=durations:ascii-digits-8 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII
+      digit</a>, then <a id=durations:collect-a-sequence-of-code-points href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>collect a sequence of code points</a> that are <a id=durations:ascii-digits-9 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII
+      digits</a> from <var>input</var> given <var>position</var>, interpret the resulting
+      sequence as a base-ten integer, and let <var>N</var> be that number.</p>
+
+      <p>Otherwise, <var>next character</var> is not part of a number; fail.</p>
+     <li><p>If <var>position</var> is past the end of <var>input</var>, then
+     fail.<li><p>Set <var>next character</var> to the character in <var>input</var>
+     pointed to by <var>position</var>, and this time advance <var>position</var>
+     to the next character. (If <var>next character</var> was a U+002E FULL STOP character
+     (.) before, it will still be that character this time.)<li>
+      <p>If <var>next character</var> is U+002E (.):</p>
+
+      <ol><li><p><a id=durations:collect-a-sequence-of-code-points-2 href=https://infra.spec.whatwg.org/#collect-a-sequence-of-code-points data-x-internal=collect-a-sequence-of-code-points>Collect a sequence of code points</a> that are <a id=durations:ascii-digits-10 href=https://infra.spec.whatwg.org/#ascii-digit data-x-internal=ascii-digits>ASCII digits</a> from
+       <var>input</var> given <var>position</var>. Let <var>s</var> be the resulting
+       sequence.<li><p>If <var>s</var> is the empty string, then fail.<li><p>Let <var>length</var> be the number of characters in <var>s</var>.<li><p>Let <var>fraction</var> be the result of interpreting <var>s</var>
+       as a base-ten integer, and then dividing that number by <span>10<sup><var>length</var></sup></span>.<li><p>Increment <var>N</var> by <var>fraction</var>.<li><p><a id=durations:skip-ascii-whitespace-4 href=https://infra.spec.whatwg.org/#skip-ascii-whitespace data-x-internal=skip-ascii-whitespace>Skip ASCII whitespace</a> within <var>input</var> given
+       <var>position</var>.<li><p>If <var>position</var> is past the end of <var>input</var>, then
+       fail.<li><p>Set <var>next character</var> to the character in <var>input</var>
+       pointed to by <var>position</var>, and advance <var>position</var> to the
+       next character.<li><p>If <var>next character</var> is neither a U+0053 LATIN CAPITAL LETTER S
+       character nor a U+0073 LATIN SMALL LETTER S character, then fail.<li><p>Set <var>units</var> to <i>seconds</i>.</ol>
+
+      <p>Otherwise:</p>
+
+      <ol><li><p>If <var>next character</var> is <a id=durations:space-characters-4 href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a>, then <a id=durations:skip-ascii-whitespace-5 href=https://infra.spec.whatwg.org/#skip-ascii-whitespace data-x-internal=skip-ascii-whitespace>skip ASCII
+       whitespace</a> within <var>input</var> given <var>position</var>, set <var>next
+       character</var> to the character in <var>input</var> pointed to by <var>position</var>, and
+       advance <var>position</var> to the next character.<li>
+        
+
+        <p>If <var>next character</var> is a U+0059 LATIN CAPITAL LETTER Y character, or a
+        U+0079 LATIN SMALL LETTER Y character, set <var>units</var> to <i>years</i> and set
+        <var>M-disambiguator</var> to <i>months</i>.</p>
+
+        <p>If <var>next character</var> is a U+004D LATIN CAPITAL LETTER M character or a
+        U+006D LATIN SMALL LETTER M character, and <var>M-disambiguator</var> is
+        <i>months</i>, then set <var>units</var> to <i>months</i>.</p>
+
+        <p>If <var>next character</var> is a U+0057 LATIN CAPITAL LETTER W character or a
+        U+0077 LATIN SMALL LETTER W character, set <var>units</var> to <i>weeks</i> and set
+        <var>M-disambiguator</var> to <i>minutes</i>.</p>
+
+        <p>If <var>next character</var> is a U+0044 LATIN CAPITAL LETTER D character or a
+        U+0064 LATIN SMALL LETTER D character, set <var>units</var> to <i>days</i> and set
+        <var>M-disambiguator</var> to <i>minutes</i>.</p>
+
+        <p>If <var>next character</var> is a U+0048 LATIN CAPITAL LETTER H character or a
+        U+0068 LATIN SMALL LETTER H character, set <var>units</var> to <i>hours</i> and set
+        <var>M-disambiguator</var> to <i>minutes</i>.</p>
+
+        <p>If <var>next character</var> is a U+004D LATIN CAPITAL LETTER M character or a
+        U+006D LATIN SMALL LETTER M character, and <var>M-disambiguator</var> is
+        <i>minutes</i>, then set <var>units</var> to <i>minutes</i>.</p>
+
+        <p>If <var>next character</var> is a U+0053 LATIN CAPITAL LETTER S character or a
+        U+0073 LATIN SMALL LETTER S character, set <var>units</var> to <i>seconds</i> and
+        set <var>M-disambiguator</var> to <i>minutes</i>.</p>
+
+        <p>Otherwise, if <var>next character</var> is none of the above characters, then
+        fail.</p>
+       </ol>
+     <li><p>Increment <var>component count</var>.<li><p>Let <var>multiplier</var> be 1.<li><p>If <var>units</var> is <i>years</i>, multiply <var>multiplier</var> by
+     12 and set <var>units</var> to <i>months</i>.<li>
+      <p>If <var>units</var> is <i>months</i>, add the product of <var>N</var> and
+      <var>multiplier</var> to <var>months</var>.</p>
+
+      <p>Otherwise:</p>
+
+      <ol><li><p>If <var>units</var> is <i>weeks</i>, multiply <var>multiplier</var>
+       by 7 and set <var>units</var> to <i>days</i>.<li><p>If <var>units</var> is <i>days</i>, multiply <var>multiplier</var>
+       by 24 and set <var>units</var> to <i>hours</i>.<li><p>If <var>units</var> is <i>hours</i>, multiply <var>multiplier</var>
+       by 60 and set <var>units</var> to <i>minutes</i>.<li><p>If <var>units</var> is <i>minutes</i>, multiply <var>multiplier</var> by 60 and set <var>units</var> to <i>seconds</i>.<li><p>Forcibly, <var>units</var> is now <i>seconds</i>. Add the product of <var>N</var> and <var>multiplier</var> to <var>seconds</var>.</ol>
+     <li><p><a id=durations:skip-ascii-whitespace-6 href=https://infra.spec.whatwg.org/#skip-ascii-whitespace data-x-internal=skip-ascii-whitespace>Skip ASCII whitespace</a> within <var>input</var> given
+     <var>position</var>.</ol>
+   <li><p>If <var>component count</var> is zero,
+   fail.<li><p>If <var>months</var> is not zero, fail.<li><p>Return the <a id=durations:concept-duration-4 href=#concept-duration>duration</a> consisting of <var>seconds</var> seconds.</ol>
+  </div>
+
+  
+
+
+  <h5 id=vaguer-moments-in-time><span class=secno>2026</span> Vaguer moments in time<a class=self-link href=#vaguer-moments-in-time></a></h5>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-date-string-with-optional-time>valid date string with optional time</dfn> if
+  it is also one of the following:</p>
+
+  <ul><li>A <a id=vaguer-moments-in-time:valid-date-string href=#valid-date-string>valid date string</a><li>A <a id=vaguer-moments-in-time:valid-global-date-and-time-string href=#valid-global-date-and-time-string>valid global date and time string</a></ul>
+  </div>
+
+  
+
+  <hr>
+
+  <div algorithm="">
+  <p>The rules to <dfn id=parse-a-date-or-time-string>parse a date or time string</dfn> are as follows. The algorithm will return
+  either a <a id=vaguer-moments-in-time:concept-date href=#concept-date>date</a>, a <a id=vaguer-moments-in-time:concept-time href=#concept-time>time</a>, a <a id=vaguer-moments-in-time:concept-datetime href=#concept-datetime>global date and time</a>, or nothing. If at any point the algorithm
+  says that it "fails", this means that it is aborted at that point and returns nothing.</p>
+
+  <ol><li><p>Let <var>input</var> be the string being parsed.<li><p>Let <var>position</var> be a pointer into <var>input</var>, initially
+   pointing at the start of the string.<li><p>Set <var>start position</var> to the same position as <var>position</var>.<li><p>Set the <var>date present</var> and <var>time present</var> flags to
+   true.<li><p><a id=vaguer-moments-in-time:parse-a-date-component href=#parse-a-date-component>Parse a date component</a> to obtain <var>year</var>, <var>month</var>, and <var>day</var>. If this fails, then set the <var>date
+   present</var> flag to false.</p>
+
+   <li>
+    <p>If <var>date present</var> is true, and <var>position</var> is not beyond
+    the end of <var>input</var>, and the character at <var>position</var> is
+    either a U+0054 LATIN CAPITAL LETTER T character (T) or a U+0020 SPACE character, then advance
+    <var>position</var> to the next character in <var>input</var>.</p>
+
+    <p>Otherwise, if <var>date present</var> is true, and either <var>position</var> is beyond the end of <var>input</var> or the character at <var>position</var> is neither a U+0054 LATIN CAPITAL LETTER T character (T) nor a U+0020
+    SPACE character, then set <var>time present</var> to false.</p>
+
+    <p>Otherwise, if <var>date present</var> is false, set <var>position</var>
+    back to the same position as <var>start position</var>.</p>
+   <li><p>If the <var>time present</var> flag is true, then <a id=vaguer-moments-in-time:parse-a-time-component href=#parse-a-time-component>parse a time
+   component</a> to obtain <var>hour</var>, <var>minute</var>, and <var>second</var>. If this returns nothing, then fail.<li><p>If the <var>date present</var> and <var>time present</var> flags are
+   both true, but <var>position</var> is beyond the end of <var>input</var>, then
+   fail.<li><p>If the <var>date present</var> and <var>time present</var> flags are
+   both true, <a id=vaguer-moments-in-time:parse-a-time-zone-offset-component href=#parse-a-time-zone-offset-component>parse a time-zone offset component</a> to obtain <var>timezone<sub>hours</sub></var> and <var>timezone<sub>minutes</sub></var>. If this
+   returns nothing, then fail.</p>
+
+   <li><p>If <var>position</var> is <em>not</em> beyond the end of <var>input</var>, then fail.<li>
+    <p>If the <var>date present</var> flag is true and the <var>time present</var>
+    flag is false, then let <var>date</var> be the date with year <var>year</var>,
+    month <var>month</var>, and day <var>day</var>, and return <var>date</var>.</p>
+
+    <p>Otherwise, if the <var>time present</var> flag is true and the <var>date
+    present</var> flag is false, then let <var>time</var> be the time with hour <var>hour</var>, minute <var>minute</var>, and second <var>second</var>,
+    and return <var>time</var>.</p>
+
+    <p>Otherwise, let <var>time</var> be the moment in time at year <var>year</var>, month <var>month</var>, day <var>day</var>, hours <var>hour</var>, minute <var>minute</var>, second <var>second</var>,
+    subtracting <var>timezone<sub>hours</sub></var> hours and <var>timezone<sub>minutes</sub></var> minutes, that moment in time being a moment
+    in the UTC time zone; let <var>timezone</var> be <var>timezone<sub>hours</sub></var> hours and <var>timezone<sub>minutes</sub></var>
+    minutes from UTC; and return <var>time</var> and <var>timezone</var>.</p>
+   </ol>
+  </div>
+
+  
+
+
+  
+
+  <h4 id=colours><span class=secno>2026</span> Legacy colors<a class=self-link href=#colours></a></h4>
+
+  <div algorithm="">
+  <p>Some obsolete legacy attributes parse colors using the
+  <dfn id=rules-for-parsing-a-legacy-colour-value>rules for parsing a legacy color
+  value</dfn>, given a string <var>input</var>. They will return either a CSS color or failure.</p>
+
+  <ol><li><p>If <var>input</var> is the empty string, then return failure.<li><p><a id=colours:strip-leading-and-trailing-ascii-whitespace href=https://infra.spec.whatwg.org/#strip-leading-and-trailing-ascii-whitespace data-x-internal=strip-leading-and-trailing-ascii-whitespace>Strip leading and trailing ASCII whitespace</a> from <var>input</var>.<li><p>If <var>input</var> is an <a id=colours:ascii-case-insensitive href=https://infra.spec.whatwg.org/#ascii-case-insensitive data-x-internal=ascii-case-insensitive>ASCII case-insensitive</a> match for "<code>transparent</code>", then return failure.<li>
+    <p>If <var>input</var> is an <a id=colours:ascii-case-insensitive-2 href=https://infra.spec.whatwg.org/#ascii-case-insensitive data-x-internal=ascii-case-insensitive>ASCII case-insensitive</a> match for one of the <a id=colours:named-color href=https://drafts.csswg.org/css-color/#named-color data-x-internal=named-color>named colors</a>, then return the CSS color corresponding to that
+    keyword. <a href=references.html#refsCSSCOLOR>[CSSCOLOR]</a></p>
+
+    <p class=note><a href=https://www.w3.org/TR/css3-color/#css2-system>CSS2 System
+    Colors</a> are not recognized.</p>
+   <li>
+    <p>If <var>input</var>'s <a id=colours:code-point-length href=https://infra.spec.whatwg.org/#string-code-point-length data-x-internal=code-point-length>code point length</a> is four, and the first character in
+    <var>input</var> is U+0023 (#), and the last three characters of <var>input</var> are all
+    <a id=colours:ascii-hex-digits href=https://infra.spec.whatwg.org/#ascii-hex-digit data-x-internal=ascii-hex-digits>ASCII hex digits</a>:</p>
+
+    <ol><li><p>Let <var>result</var> be a CSS color.</p>
+
+     <li><p>Interpret the second character of <var>input</var> as a hexadecimal digit; let
+     the red component of <var>result</var> be the resulting number multiplied by 17.</p>
+
+     <li><p>Interpret the third character of <var>input</var> as a hexadecimal digit; let
+     the green component of <var>result</var> be the resulting number multiplied by 17.</p>
+
+     <li><p>Interpret the fourth character of <var>input</var> as a hexadecimal digit; let
+     the blue component of <var>result</var> be the resulting number multiplied by 17.</p>
+
+     <li><p>Return <var>result</var>.</p>
+    </ol>
+   <li><p>Replace any <a id=colours:code-point href=https://infra.spec.whatwg.org/#code-point data-x-internal=code-point>code points</a> greater than U+FFFF in
+   <var>input</var> (i.e., any characters that are not in the basic multilingual plane) with "<code>00</code>".<li><p>If <var>input</var>'s <a id=colours:code-point-length-2 href=https://infra.spec.whatwg.org/#string-code-point-length data-x-internal=code-point-length>code point length</a> is greater than 128, truncate
+   <var>input</var>, leaving only the first 128 characters.<li><p>If the first character in <var>input</var> is U+0023 (#), then remove it.<li><p>Replace any character in <var>input</var> that is not an <a id=colours:ascii-hex-digits-2 href=https://infra.spec.whatwg.org/#ascii-hex-digit data-x-internal=ascii-hex-digits>ASCII hex digit</a> with U+0030 (0).<li><p>While <var>input</var>'s <a id=colours:code-point-length-3 href=https://infra.spec.whatwg.org/#string-code-point-length data-x-internal=code-point-length>code point length</a> is zero or not a multiple of
+   three, append U+0030 (0) to <var>input</var>.<li><p>Split <var>input</var> into three strings of equal <a id=colours:code-point-length-4 href=https://infra.spec.whatwg.org/#string-code-point-length data-x-internal=code-point-length>code point length</a>, to
+   obtain three components. Let <var>length</var> be the <a id=colours:code-point-length-5 href=https://infra.spec.whatwg.org/#string-code-point-length data-x-internal=code-point-length>code point length</a> that all of
+   those components have (one third the <a id=colours:code-point-length-6 href=https://infra.spec.whatwg.org/#string-code-point-length data-x-internal=code-point-length>code point length</a> of <var>input</var>).<li><p>If <var>length</var> is greater than 8, then remove the leading <span><var>length</var>-8</span> characters in each component, and let <var>length</var> be 8.<li><p>While <var>length</var> is greater than two and the first character in each
+   component is U+0030 (0), remove that character and reduce <var>length</var> by one.<li><p>If <var>length</var> is <em>still</em> greater than two, truncate each component,
+   leaving only the first two characters in each.<li><p>Let <var>result</var> be a CSS color.</p>
+
+   <li><p>Interpret the first component as a hexadecimal number; let the red component of <var>result</var> be the resulting number.<li><p>Interpret the second component as a hexadecimal number; let the green component of <var>result</var> be the resulting number.<li><p>Interpret the third component as a hexadecimal number; let the blue component of <var>result</var> be the resulting number.<li><p>Return <var>result</var>.</p>
+  </ol>
+  </div>
+
+  
+
+
+
+  <h4 id=space-separated-tokens><span class=secno>2026</span> Space-separated tokens<a class=self-link href=#space-separated-tokens></a></h4>
+
+  <div algorithm="">
+  <p>A <dfn data-export="" id=set-of-space-separated-tokens>set of space-separated tokens</dfn> is a string containing zero or more words
+  (known as tokens) separated by one or more <a id=space-separated-tokens:space-characters href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a>, where words consist of
+  any string of one or more characters, none of which are <a id=space-separated-tokens:space-characters-2 href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a>.</p>
+
+  <p>A string containing a <a id=space-separated-tokens:set-of-space-separated-tokens href=#set-of-space-separated-tokens>set of space-separated tokens</a> may have leading or trailing
+  <a id=space-separated-tokens:space-characters-3 href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a>.</p>
+  </div>
+
+  <div algorithm="">
+  <p>An <dfn data-export="" id=unordered-set-of-unique-space-separated-tokens>unordered set of unique space-separated tokens</dfn> is a <a id=space-separated-tokens:set-of-space-separated-tokens-2 href=#set-of-space-separated-tokens>set of
+  space-separated tokens</a> where none of the tokens are duplicated.</p>
+  </div>
+
+  <div algorithm="">
+  <p>An <dfn id=ordered-set-of-unique-space-separated-tokens>ordered set of unique space-separated tokens</dfn> is a <a id=space-separated-tokens:set-of-space-separated-tokens-3 href=#set-of-space-separated-tokens>set of space-separated
+  tokens</a> where none of the tokens are duplicated but where the order of the tokens is
+  meaningful.</p>
+  </div>
+
+  <p><a id=space-separated-tokens:set-of-space-separated-tokens-4 href=#set-of-space-separated-tokens>Sets of space-separated tokens</a> sometimes
+  have a defined set of allowed values. When a set of allowed values is defined, the tokens must all
+  be from that list of allowed values; other values are non-conforming. If no such set of allowed
+  values is provided, then all values are conforming.</p>
+
+  <p class=note>How tokens in a <a id=space-separated-tokens:set-of-space-separated-tokens-5 href=#set-of-space-separated-tokens>set of space-separated tokens</a> are to be compared
+  (e.g. case-sensitively or not) is defined on a per-set basis.</p>
+
+
+
+  <h4 id=comma-separated-tokens><span class=secno>2026</span> Comma-separated tokens<a class=self-link href=#comma-separated-tokens></a></h4>
+
+  <div algorithm="">
+  <p>A <dfn id=set-of-comma-separated-tokens>set of comma-separated tokens</dfn> is a string containing zero or more tokens each
+  separated from the next by a single U+002C COMMA character (,), where tokens consist of any string
+  of zero or more characters, neither beginning nor ending with <a id=comma-separated-tokens:space-characters href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a>, nor
+  containing any U+002C COMMA characters (,), and optionally surrounded by <a id=comma-separated-tokens:space-characters-2 href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII
+  whitespace</a>.</p>
+  </div>
+
+  <p class=example>For instance, the string "<code> a ,b,,d d </code>" consists of four tokens: "a", "b", the empty
+  string, and "d d". Leading and trailing whitespace around each token doesn't count as part of
+  the token, and the empty string can be a token.</p>
+
+  <p><a id=comma-separated-tokens:set-of-comma-separated-tokens href=#set-of-comma-separated-tokens>Sets of comma-separated tokens</a> sometimes
+  have further restrictions on what consists a valid token. When such restrictions are defined, the
+  tokens must all fit within those restrictions; other values are non-conforming. If no such
+  restrictions are specified, then all values are conforming.</p>
+
+
+
+  <h4 id=syntax-references><span class=secno>2026</span> References<a class=self-link href=#syntax-references></a></h4>
+
+  <div algorithm="">
+  <p>A <dfn id=valid-hash-name-reference>valid hash-name reference</dfn> to an element of type <var>type</var> is a
+  string consisting of a U+0023 NUMBER SIGN character (#) followed by a string which exactly matches
+  the value of the <code>name</code> attribute of an element with type <var>type</var> in
+  the same <a id=syntax-references:tree href=https://dom.spec.whatwg.org/#concept-tree data-x-internal=tree>tree</a>.</p>
+  </div>
+
+  
+
+  <div algorithm="">
+  <p>The <dfn id=rules-for-parsing-a-hash-name-reference>rules for parsing a hash-name reference</dfn> to an element of type <var>type</var>,
+  given a context node <var>scope</var>, are as follows:</p>
+
+  <ol><li><p>If the string being parsed does not contain a U+0023 NUMBER SIGN character, or if the
+   first such character in the string is the last character in the string, then return null.<li><p>Let <var>s</var> be the string from the character immediately after the first
+   U+0023 NUMBER SIGN character in the string being parsed up to the end of that string.<li>
+    <p>Return the first element of type <var>type</var> in <var>scope</var>'s <a id=syntax-references:tree-2 href=https://dom.spec.whatwg.org/#concept-tree data-x-internal=tree>tree</a>, in
+    <a id=syntax-references:tree-order href=https://dom.spec.whatwg.org/#concept-tree-order data-x-internal=tree-order>tree order</a>, that has an <code id=syntax-references:the-id-attribute><a href=dom.html#the-id-attribute>id</a></code> or <code>name</code> attribute whose value is <var>s</var>, or null if there is no such
+    element.</p>
+
+    <p class=note>Although <code id=syntax-references:the-id-attribute-2><a href=dom.html#the-id-attribute>id</a></code> attributes are accounted for when
+    parsing, they are not used in determining whether a value is a <a id=syntax-references:valid-hash-name-reference href=#valid-hash-name-reference><em>valid</em> hash-name
+    reference</a>. That is, a hash-name reference that refers to an element based on <code id=syntax-references:the-id-attribute-3><a href=dom.html#the-id-attribute>id</a></code> is a conformance error (unless that element also has a <code>name</code> attribute with the same value).</p>
+   </ol>
+  </div>
+
+  
+
+
+  <h4 id=mq><span class=secno>2026</span> Media queries<a class=self-link href=#mq></a></h4>
+
+  <div algorithm="">
+  <p>A string is a <dfn id=valid-media-query-list>valid media query list</dfn> if it matches the <code>&lt;media-query-list></code> production of <cite>Media Queries</cite>.
+  <a href=references.html#refsMQ>[MQ]</a></p>
+  </div>
+
+  <div algorithm="">
+  <p>A string <dfn id=matches-the-environment>matches the environment</dfn> of the user if it is the empty string, a string
+  consisting of only <a id=mq:space-characters href=https://infra.spec.whatwg.org/#ascii-whitespace data-x-internal=space-characters>ASCII whitespace</a>, or is a media query list that matches the user's
+  environment according to the definitions given in <cite>Media Queries</cite>. <a href=references.html#refsMQ>[MQ]</a></p>
+  </div>
+
+
+  <h4 id=unique-values><span class=secno>2026</span> Unique internal values<a class=self-link href=#unique-values></a></h4>
+
+  <p>A <dfn id=unique-internal-value>unique internal value</dfn> is a value that is serializable, comparable by value, and
+  never exposed to script.</p>
+
+  <div algorithm="">
+  <p>To create a <dfn id=new-unique-internal-value>new unique internal value</dfn>, return a <a id=unique-values:unique-internal-value href=#unique-internal-value>unique internal value</a>
+  that has never previously been returned by this algorithm.</p>
+  </div>
+
+
+  <nav><a href=infrastructure.html>← 2026 Common infrastructure</a> — <a href=./>Table of Contents</a> — <a href=urls-and-fetching.html>2026 URLs →</a></nav>

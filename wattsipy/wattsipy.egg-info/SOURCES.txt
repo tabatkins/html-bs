@@ -1,0 +1,17 @@
+README.md
+pyproject.toml
+wattsipy/__init__.py
+wattsipy/__main__.py
+wattsipy/cli.py
+wattsipy/dom.py
+wattsipy/mdn.py
+wattsipy/parser.py
+wattsipy/processor.py
+wattsipy/serializer.py
+wattsipy/splitter.py
+wattsipy.egg-info/PKG-INFO
+wattsipy.egg-info/SOURCES.txt
+wattsipy.egg-info/dependency_links.txt
+wattsipy.egg-info/entry_points.txt
+wattsipy.egg-info/requires.txt
+wattsipy.egg-info/top_level.txt

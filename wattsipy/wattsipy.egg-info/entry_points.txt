@@ -1,0 +1,2 @@
+[console_scripts]
+wattsipy = wattsipy.cli:main
