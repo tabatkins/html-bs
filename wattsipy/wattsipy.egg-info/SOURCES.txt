@@ -4,7 +4,6 @@ wattsipy/__init__.py
 wattsipy/__main__.py
 wattsipy/cli.py
 wattsipy/dom.py
-wattsipy/mdn.py
 wattsipy/parser.py
 wattsipy/processor.py
 wattsipy/serializer.py

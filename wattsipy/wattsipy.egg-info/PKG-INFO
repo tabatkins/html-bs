@@ -19,13 +19,12 @@ WattsiPy is a Python port of [Wattsi](https://github.com/whatwg/wattsi), the bui
 - Spec splitting into multipage versions (`multipage-html`, `multipage-dev`) with fragment links (`fragment-links.json`)
 - Dev edition search index generation (`search-index.json`)
 - Add output for `<wpt>` elements
-- Add MDN browser compatibility annotations
 - Strip unused references and validate missing references
 
 ## Usage
 
 ```bash
-wattsipy [--quiet] [--single-page-only] <source-file> <source-git-sha> <output-directory> <default-or-review> <mdn-spec-links/html.json> [<highlight-server-url>]
+wattsipy [--quiet] [--single-page-only] <source-file> <source-git-sha> <output-directory> <default-or-review> [<highlight-server-url>]
 ```
 
 Or via python:
