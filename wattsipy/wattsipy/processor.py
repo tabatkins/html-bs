@@ -129,30 +129,6 @@ def ensure_id(element: Element, suggested_id: str, ids: dict[str, Element]) -> s
     return element.get_attribute("id")
 
 
-def translate_bikeshed_syntax(element: Element) -> None:
-    if element.has_attribute("lt"):
-        raise RuntimeError(f'Element with lt="" found, use data-x="" instead; dfn is <{element.local_name}>')
-    if element.has_attribute("for"):
-        val = element.get_attribute("for")
-        element.set_attribute("data-dfn-for", val)
-        element.remove_attribute("for")
-    if element.has_attribute("export"):
-        element.set_attribute("data-export", "")
-        element.remove_attribute("export")
-    if element.has_attribute("noexport"):
-        element.set_attribute("data-noexport", "")
-        element.remove_attribute("noexport")
-    for dfn_type in DFN_TYPES:
-        if element.has_attribute(dfn_type):
-            if dfn_type == "dfn" and element.is_identity(NS_HTML, "dfn"):
-                raise RuntimeError('<dfn> element found with redundant dfn="" attribute')
-            element.set_attribute("data-dfn-type", dfn_type)
-            element.remove_attribute(dfn_type)
-    if element.has_attribute("data-dfn-type") and element.has_attribute("data-export"):
-        if element.get_attribute("data-dfn-type") != "dfn":
-            raise RuntimeError("Element found with dfn type name and redundant export attribute")
-
-
 class DFNEntry:
     def __init__(self):
         self.dfn_element: Optional[Element] = None
@@ -178,6 +154,28 @@ class CrossRefRecord:
         self.kind = kind  # 'explicit' or 'implicit'
 
 
+def convert_idl_blocks(root: Node) -> None:
+    current = root
+    while current is not None:
+        if isinstance(current, Element) and current.is_identity(NS_HTML, "pre"):
+            pre = current
+            for child in list(pre.child_nodes):
+                if isinstance(child, Element) and child.is_identity(NS_HTML, "code"):
+                    classes = child.get_attribute("class").split()
+                    if "idl" in classes:
+                        pre_classes = pre.get_attribute("class").split()
+                        for c in classes:
+                            if c not in pre_classes:
+                                pre_classes.append(c)
+                        pre.set_attribute("class", " ".join(pre_classes))
+                        for k, v in child.attributes.items():
+                            if k != "class" and not pre.has_attribute(k):
+                                pre.set_attribute(k, v)
+                        pre.replace_child_with_children(child)
+                        break
+        current = walk_to_next(current, root, None)
+
+
 class Processor:
     def __init__(
         self,
@@ -185,13 +183,13 @@ class Processor:
         variant: str,
         source_git_sha: str,
         output_directory: str,
-        bikeshed_pass: int = 0,
+        bikeshed: bool = False,
     ):
         self.document = document
         self.variant = variant
         self.source_git_sha = source_git_sha
         self.output_directory = output_directory
-        self.bikeshed_pass = bikeshed_pass
+        self.bikeshed = bikeshed
 
         self.ids: dict[str, Element] = {}
         self.dfns: dict[str, DFNEntry] = {}
@@ -230,15 +228,28 @@ class Processor:
         self.errors += 1
 
     def first_pass(self) -> None:
+        if self.bikeshed:
+            convert_idl_blocks(self.document)
+            # Remove header element for Bikeshed
+            doc_elem = self.document.get_document_element()
+            if doc_elem:
+                for c in doc_elem.child_nodes:
+                    if isinstance(c, Element) and c.is_identity(NS_HTML, "body"):
+                        for bc in list(c.child_nodes):
+                            if isinstance(bc, Element) and bc.is_identity(NS_HTML, "header"):
+                                bc.remove()
+                                break
+                        break
+
         current = self.document
         excl_attr = EXCLUDING_ATTRIBUTES.get(self.variant, "")
 
         while current is not None:
             if isinstance(current, Element):
                 elem = current
-                if (excl_attr and elem.has_attribute(excl_attr)) or (
+                if not self.bikeshed and ((excl_attr and elem.has_attribute(excl_attr)) or (
                     self.variant != "dev" and elem.has_attribute("w-dev")
-                ):
+                )):
                     nxt = walk_to_next_skipping_children(current, self.document, None)
                     current.remove()
                     current = nxt
@@ -248,7 +259,7 @@ class Processor:
                     if id_str in self.ids:
                         self.fail(f'Multiple elements found with ID "{id_str}"')
                     self.ids[id_str] = elem
-                elif elem.attributes:
+                elif elem.attributes and not self.bikeshed:
                     attr_count = 0
                     for sub_var in ("html", "dev", "snap", "review"):
                         if elem.has_attribute(EXCLUDING_ATTRIBUTES[sub_var]):
@@ -271,7 +282,7 @@ class Processor:
                             continue
             elif isinstance(current, Text):
                 assert current.parent_node is not None
-                if current.parent_node.has_properties(PROP_CANNOT_CONTAIN_PALPABLE_TEXT):
+                if not self.bikeshed and current.parent_node.has_properties(PROP_CANNOT_CONTAIN_PALPABLE_TEXT):
                     nxt = walk_to_next_skipping_children(current, self.document, None)
                     current.remove()
                     current = nxt
@@ -284,12 +295,7 @@ class Processor:
         if not cross_ref_name:
             return
 
-        if self.bikeshed_pass == 1:
-            if element.has_attribute("subdfn"):
-                element.set_attribute("data-x", cross_ref_name)
-            else:
-                element.set_attribute("data-wattsi-x", cross_ref_name)
-                element.set_attribute("data-x-lt", cross_ref_name)
+        element.set_attribute("data-link-x", cross_ref_name)
 
         if cross_ref_name not in self.dfns:
             self.dfns[cross_ref_name] = DFNEntry()
@@ -344,7 +350,6 @@ class Processor:
 
             # Check heading
             if elem.has_properties(PROP_HEADING):
-                translate_bikeshed_syntax(elem)
                 class_name = elem.get_attribute("class")
                 rank = elem.rank
                 if rank > 1:
@@ -358,133 +363,134 @@ class Processor:
                         self.last_seen_heading_id = "blank-heading"
                     self.last_seen_heading_id = ensure_id(elem, self.last_seen_heading_id, self.ids)
 
-                    # Self link
-                    if class_name != "no-num no-toc":
-                        heading_self_link = E(
-                            "a",
-                            ["class", "self-link", "href", "#" + self.last_seen_heading_id],
-                        )
-                        elem.append_child(heading_self_link)
+                    # Self link and TOC adjustments (Wattsi HTML only)
+                    if not self.bikeshed:
+                        if class_name != "no-num no-toc":
+                            heading_self_link = E(
+                                "a",
+                                ["class", "self-link", "href", "#" + self.last_seen_heading_id],
+                            )
+                            elem.append_child(heading_self_link)
 
-                    # Heading rank adjustment
-                    if rank > self.last_heading_rank:
-                        self.last_heading_rank += 1
+                        # Heading rank adjustment
                         if rank > self.last_heading_rank:
-                            self.fail(f'heading rank failure - jumped a heading with text "{elem.text_content}"')
-                            self.last_heading_rank = rank
-                        self.current_section_number[self.last_heading_rank] = 0
-                        if class_name != "no-num no-toc" and self.last_heading_rank > 2:
-                            if self.last_toc_ol is not None:
-                                if self.last_toc_li is None:
-                                    self.fail("First heading after Table of Contents must be an <h2> also")
-                                else:
-                                    new_ol = E("ol")
-                                    self.last_toc_li.append_child(new_ol)
-                                    self.last_toc_ol = new_ol
-                    else:
-                        while rank < self.last_heading_rank:
-                            self.last_heading_rank -= 1
-                            if class_name != "no-num no-toc" and self.last_toc_ol is not None:
-                                if (
-                                    self.last_toc_ol.parent_node
-                                    and self.last_toc_ol.parent_node.parent_node
-                                    and isinstance(self.last_toc_ol.parent_node.parent_node, Element)
-                                ):
-                                    self.last_toc_ol = self.last_toc_ol.parent_node.parent_node
-
-                    if class_name != "no-num no-toc":
-                        if class_name != "no-num":
-                            self.current_section_number[self.last_heading_rank] += 1
-                            sec_nums = [
-                                str(self.current_section_number[r])
-                                for r in range(2, self.last_heading_rank + 1)
-                            ]
-                            sec_num_str = ".".join(sec_nums)
-                            if self.variant == "dev" and self.search_index_file:
-                                h_id = elem.get_attribute("id")
-                                heading_text = munge_for_json_output(elem.text_content)
-                                if not self.is_first_search_index_item:
-                                    self.search_index_file.write(",")
-                                self.is_first_search_index_item = False
-                                self.search_index_file.write("{")
-                                self.search_index_file.write(f'"url":"{self.split_filename}.html#{h_id}",')
-                                self.search_index_file.write(f'"text":"{heading_text}",')
-                                if "." in sec_num_str:
-                                    parent_sec = sec_num_str.rsplit(".", 1)[0]
-                                    parent_ht = self.heading_text_by_section_number.get(parent_sec, "")
-                                    self.search_index_file.write(f'"section":"{sec_num_str} \u2014 {parent_ht}"')
-                                else:
-                                    self.search_index_file.write(f'"section":"{sec_num_str}"')
-                                self.search_index_file.write("}")
-                                self.heading_text_by_section_number[sec_num_str] = heading_text
-
-                            new_span = E("span", ["class", "secno"], [T(sec_num_str)])
-                            elem.insert_before(T(" "), elem.first_child)
-                            elem.insert_before(new_span, elem.first_child)
+                            self.last_heading_rank += 1
+                            if rank > self.last_heading_rank:
+                                self.fail(f'heading rank failure - jumped a heading with text "{elem.text_content}"')
+                                self.last_heading_rank = rank
+                            self.current_section_number[self.last_heading_rank] = 0
+                            if class_name != "no-num no-toc" and self.last_heading_rank > 2:
+                                if self.last_toc_ol is not None:
+                                    if self.last_toc_li is None:
+                                        self.fail("First heading after Table of Contents must be an <h2> also")
+                                    else:
+                                        new_ol = E("ol")
+                                        self.last_toc_li.append_child(new_ol)
+                                        self.last_toc_ol = new_ol
                         else:
-                            if self.variant == "dev" and self.search_index_file:
-                                h_id = elem.get_attribute("id")
-                                heading_text = munge_for_json_output(elem.text_content)
-                                self.search_index_file.write(",{")
-                                self.search_index_file.write(f'"url": "{self.split_filename}.html#{h_id}",')
-                                self.search_index_file.write(f'"text": "{heading_text}",')
-                                if self.split_filename == "indices" and h_id != "index":
-                                    self.search_index_file.write('"section": " \u2014 Index"')
-                                else:
-                                    self.search_index_file.write('"section": ""')
-                                self.search_index_file.write("}")
+                            while rank < self.last_heading_rank:
+                                self.last_heading_rank -= 1
+                                if class_name != "no-num no-toc" and self.last_toc_ol is not None:
+                                    if (
+                                        self.last_toc_ol.parent_node
+                                        and self.last_toc_ol.parent_node.parent_node
+                                        and isinstance(self.last_toc_ol.parent_node.parent_node, Element)
+                                    ):
+                                        self.last_toc_ol = self.last_toc_ol.parent_node.parent_node
 
-                        if self.last_toc_ol is not None or self.small_toc is not None:
-                            new_li = E("li")
-                            new_link = E("a", ["href", "#" + elem.get_attribute("id")])
-                            temp_element = elem.clone_node(True)
-                            cand = temp_element.first_child
-                            if cand:
-                                cand.remove()
-                                new_link.append_child(cand)
-                            cand = temp_element.first_child
-                            in_skipped_node = False
-                            while cand and not (
-                                isinstance(cand, Element) and cand.get_attribute("class") == "self-link"
-                            ):
-                                selected_for_transfer = None
-                                if isinstance(cand, Element) and (
-                                    cand.is_identity(NS_HTML, "dfn") or cand.is_identity(NS_HTML, "span")
+                        if class_name != "no-num no-toc":
+                            if class_name != "no-num":
+                                self.current_section_number[self.last_heading_rank] += 1
+                                sec_nums = [
+                                    str(self.current_section_number[r])
+                                    for r in range(2, self.last_heading_rank + 1)
+                                ]
+                                sec_num_str = ".".join(sec_nums)
+                                if self.variant == "dev" and self.search_index_file:
+                                    h_id = elem.get_attribute("id")
+                                    heading_text = munge_for_json_output(elem.text_content)
+                                    if not self.is_first_search_index_item:
+                                        self.search_index_file.write(",")
+                                    self.is_first_search_index_item = False
+                                    self.search_index_file.write("{")
+                                    self.search_index_file.write(f'"url":"{self.split_filename}.html#{h_id}",')
+                                    self.search_index_file.write(f'"text":"{heading_text}",')
+                                    if "." in sec_num_str:
+                                        parent_sec = sec_num_str.rsplit(".", 1)[0]
+                                        parent_ht = self.heading_text_by_section_number.get(parent_sec, "")
+                                        self.search_index_file.write(f'"section":"{sec_num_str} \u2014 {parent_ht}"')
+                                    else:
+                                        self.search_index_file.write(f'"section":"{sec_num_str}"')
+                                    self.search_index_file.write("}")
+                                    self.heading_text_by_section_number[sec_num_str] = heading_text
+
+                                new_span = E("span", ["class", "secno"], [T(sec_num_str)])
+                                elem.insert_before(T(" "), elem.first_child)
+                                elem.insert_before(new_span, elem.first_child)
+                            else:
+                                if self.variant == "dev" and self.search_index_file:
+                                    h_id = elem.get_attribute("id")
+                                    heading_text = munge_for_json_output(elem.text_content)
+                                    self.search_index_file.write(",{")
+                                    self.search_index_file.write(f'"url": "{self.split_filename}.html#{h_id}",')
+                                    self.search_index_file.write(f'"text": "{heading_text}",')
+                                    if self.split_filename == "indices" and h_id != "index":
+                                        self.search_index_file.write('"section": " \u2014 Index"')
+                                    else:
+                                        self.search_index_file.write('"section": ""')
+                                    self.search_index_file.write("}")
+
+                            if self.last_toc_ol is not None or self.small_toc is not None:
+                                new_li = E("li")
+                                new_link = E("a", ["href", "#" + elem.get_attribute("id")])
+                                temp_element = elem.clone_node(True)
+                                cand = temp_element.first_child
+                                if cand:
+                                    cand.remove()
+                                    new_link.append_child(cand)
+                                cand = temp_element.first_child
+                                in_skipped_node = False
+                                while cand and not (
+                                    isinstance(cand, Element) and cand.get_attribute("class") == "self-link"
                                 ):
-                                    in_skipped_node = True
-                                    if cand.has_child_nodes():
-                                        cand = cand.first_child
+                                    selected_for_transfer = None
+                                    if isinstance(cand, Element) and (
+                                        cand.is_identity(NS_HTML, "dfn") or cand.is_identity(NS_HTML, "span")
+                                    ):
+                                        in_skipped_node = True
+                                        if cand.has_child_nodes():
+                                            cand = cand.first_child
+                                            selected_for_transfer = cand
+                                    else:
                                         selected_for_transfer = cand
-                                else:
-                                    selected_for_transfer = cand
 
-                                if cand and cand.next_sibling:
-                                    cand = cand.next_sibling
-                                elif in_skipped_node:
-                                    cand = cand.parent_node.next_sibling if cand and cand.parent_node else None
-                                    in_skipped_node = False
-                                else:
-                                    cand = None
+                                    if cand and cand.next_sibling:
+                                        cand = cand.next_sibling
+                                    elif in_skipped_node:
+                                        cand = cand.parent_node.next_sibling if cand and cand.parent_node else None
+                                        in_skipped_node = False
+                                    else:
+                                        cand = None
 
-                                if selected_for_transfer:
-                                    selected_for_transfer.remove()
-                                    new_link.append_child(selected_for_transfer)
+                                    if selected_for_transfer:
+                                        selected_for_transfer.remove()
+                                        new_link.append_child(selected_for_transfer)
 
-                            new_li.append_child(new_link)
-                            used_li = False
-                            if self.last_toc_ol is not None:
-                                self.last_toc_ol.append_child(new_li)
-                                self.last_toc_li = new_li
-                                used_li = True
-                            if self.small_toc is not None and self.last_heading_rank == 2:
-                                if used_li:
-                                    second_li = new_li.clone_node(True)
-                                    extracted_id = ensure_id(new_li, "toc-" + self.last_seen_heading_id, self.ids)
-                                    if second_li.first_child and isinstance(second_li.first_child, Element):
-                                        second_li.first_child.set_attribute("href", "#" + extracted_id)
-                                else:
-                                    second_li = new_li
-                                self.small_toc.append_child(second_li)
+                                new_li.append_child(new_link)
+                                used_li = False
+                                if self.last_toc_ol is not None:
+                                    self.last_toc_ol.append_child(new_li)
+                                    self.last_toc_li = new_li
+                                    used_li = True
+                                if self.small_toc is not None and self.last_heading_rank == 2:
+                                    if used_li:
+                                        second_li = new_li.clone_node(True)
+                                        extracted_id = ensure_id(new_li, "toc-" + self.last_seen_heading_id, self.ids)
+                                        if second_li.first_child and isinstance(second_li.first_child, Element):
+                                            second_li.first_child.set_attribute("href", "#" + extracted_id)
+                                    else:
+                                        second_li = new_li
+                                    self.small_toc.append_child(second_li)
 
             elif elem.is_identity(NS_HTML, "body") and self.variant == "snap":
                 elem.set_attribute("class", "status-LS-COMMIT")
@@ -502,8 +508,6 @@ class Processor:
                             date_str = str(today.year)
                         elem.first_child.data = date_str
                 else:
-                    if elem.has_attribute("lt"):
-                        self.fail('<span> with lt="" found, use data-x="" instead')
                     if self.in_dfn is not None:
                         self.fail("<span> inside <dfn>")
                     else:
@@ -513,10 +517,8 @@ class Processor:
                 elem.append_child(T(f" (Commit Snapshot {self.source_git_sha})"))
 
             elif elem.is_identity(NS_HTML, "dfn"):
-                translate_bikeshed_syntax(elem)
                 cross_ref_name = get_topic_identifier(elem)
-                if self.bikeshed_pass == 1:
-                    elem.set_attribute("data-x", cross_ref_name)
+                elem.set_attribute("data-x", cross_ref_name)
                 if self.in_dfn is not None:
                     self.fail("Nested <dfn>")
                 self.in_dfn = elem
@@ -540,8 +542,6 @@ class Processor:
                             elem.append_child(new_link)
 
             elif elem.is_identity(NS_HTML, "code") and self.in_dfn is None:
-                if elem.has_attribute("lt"):
-                    self.fail('<code> with lt="" found, use data-x="" instead')
                 self.save_cross_reference(elem)
 
             elif elem.is_identity(NS_HTML, "a") and elem.get_attribute("href") == "/commit-snapshots/[SHA]":
@@ -556,7 +556,7 @@ class Processor:
                 elem.append_child(T(" commit"))
                 elem.set_attribute("href", f"https://github.com/whatwg/html/commit/{self.source_git_sha}")
 
-            elif elem.is_identity(NS_HTML, "a") and not elem.has_attribute("href"):
+            elif not self.bikeshed and elem.is_identity(NS_HTML, "a") and not elem.has_attribute("href"):
                 self.fail(f"<a> without href found")
 
             elif (
@@ -597,7 +597,7 @@ class Processor:
                 ref_id = elem.get_attribute("id")
                 if len(ref_id) > 4:
                     self.last_seen_reference_name = ref_id[4:]
-                    if self.last_seen_reference_name not in self.references:
+                    if not self.bikeshed and self.last_seen_reference_name not in self.references:
                         if self.variant != "dev":
                             self.fail(f"Unused reference: [{self.last_seen_reference_name}]")
                         return False, elem
@@ -607,25 +607,16 @@ class Processor:
                     self.last_seen_reference_name = ""
 
             elif self.in_references is not None and elem.is_identity(NS_HTML, "dd"):
-                if self.last_seen_reference_name not in self.references:
+                if not self.bikeshed and self.last_seen_reference_name not in self.references:
                     return False, elem
 
         elif isinstance(node, Comment):
+            if self.bikeshed:
+                if node.data.strip() in ("toc", "smalltoc"):
+                    return False, node
+                return True, node
             instruction = node.data
-            if instruction == "toc":
-                if self.last_heading_rank != 2:
-                    self.fail("Table of Contents must be in the context of an <h2>")
-                else:
-                    self.big_toc = E("ol", ["class", "toc"])
-                    self.big_toc_bookmark = node
-                    self.last_toc_ol = self.big_toc
-            elif instruction == "smalltoc" and self.variant != "dev":
-                if self.last_heading_rank != 2:
-                    self.fail("Small Table of Contents must be in the context of an <h2>")
-                else:
-                    self.small_toc = E("ol", ["class", "brief toc", "w-nosplit", ""])
-                    self.small_toc_bookmark = node
-            elif instruction == " NON-NORMATIVE SECTION " and self.variant != "dev":
+            if instruction == " NON-NORMATIVE SECTION " and self.variant != "dev":
                 new_p = E("p", [E("i", [T("This section is non-normative.")])])
                 assert node.parent_node is not None
                 node.parent_node.replace_child(new_p, node)
@@ -797,6 +788,10 @@ class Processor:
     def run(self) -> Optional[Element]:
         self.first_pass()
 
+        if self.bikeshed:
+            self.second_pass()
+            return None
+
         if self.variant == "dev":
             dev_dir = os.path.join(self.output_directory, "multipage-dev")
             os.makedirs(dev_dir, exist_ok=True)
@@ -819,13 +814,13 @@ def process_document(
     variant: str,
     source_git_sha: str,
     output_directory: str,
-    bikeshed_pass: int = 0,
+    bikeshed: bool = False,
 ) -> Optional[Element]:
     processor = Processor(
         document=document,
         variant=variant,
         source_git_sha=source_git_sha,
         output_directory=output_directory,
-        bikeshed_pass=bikeshed_pass,
+        bikeshed=bikeshed,
     )
     return processor.run()

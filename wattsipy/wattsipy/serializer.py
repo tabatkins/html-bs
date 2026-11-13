@@ -8,9 +8,12 @@ from .dom import (
     Node,
     Element,
     Text,
+    Comment,
     Document,
     DocumentType,
     NS_HTML,
+    NS_MATHML,
+    NS_SVG,
     PROP_HTML,
     PROP_VOID_ELEMENT,
     PROP_RAW_TEXT_ELEMENT,
@@ -255,13 +258,131 @@ def serialize_node(
             current = walk_to_next(current, document, walk_out)
 
 
+BIKESHED_META = """<pre class=metadata>
+Group: WHATWG
+H1: HTML
+Shortname: html
+Text Macro: TWITTER htmlstandard
+Text Macro: LATESTRD 2025-01
+Abstract: HTML is Bikeshed.
+Indent: 1
+Markup Shorthands: css off, markdown-block off
+Complain About: accidental-2119 off, missing-example-ids off
+Include MDN Panels: false
+Die On: nothing
+Remove Multiple Links: no
+</pre>
+"""
+
+
+def serialize_bikeshed_node(node: Node, out: TextIO) -> None:
+    if isinstance(node, Text):
+        parent = node.parent_node
+        if parent and isinstance(parent, Element) and parent.has_properties(PROP_RAW_TEXT_ELEMENT):
+            out.write(node.data)
+        else:
+            out.write(escape_text(node.data))
+    elif isinstance(node, Comment):
+        if node.data.strip() in ("toc", "smalltoc"):
+            return
+        out.write(f"<!--{node.data}-->")
+    elif isinstance(node, DocumentType):
+        out.write("<!DOCTYPE html>")
+    elif isinstance(node, Element):
+        elem = node
+        is_void = elem.has_properties(PROP_VOID_ELEMENT)
+        is_svg_mathml = elem.namespace_url in (NS_SVG, NS_MATHML)
+
+        out.write(f"<{elem.local_name}")
+        for attr_name, attr_val in elem.attributes.items():
+            if attr_val == "" and attr_name not in (
+                "data-x", "alt", "value", "content", "type", "rel",
+                "data-noexport", "data-lt"
+            ):
+                out.write(f" {attr_name}")
+            else:
+                escaped_val = attr_val.replace("&", "&amp;").replace('"', "&quot;")
+                out.write(f' {attr_name}="{escaped_val}"')
+
+        if is_void:
+            out.write(">")
+        elif is_svg_mathml and not elem.has_child_nodes():
+            out.write("/>")
+        else:
+            out.write(">")
+            for child in elem.child_nodes:
+                serialize_bikeshed_node(child, out)
+            out.write(f"</{elem.local_name}>")
+
+
+def serialize_bikeshed(
+    document: Document,
+    out: TextIO,
+    body_only: bool = True,
+    metadata: Optional[str] = BIKESHED_META,
+) -> None:
+    if metadata:
+        out.write(metadata.rstrip())
+        out.write("\n\n")
+
+    if body_only:
+        body = None
+        doc_elem = document.get_document_element()
+        if doc_elem:
+            for c in doc_elem.child_nodes:
+                if isinstance(c, Element) and c.is_identity(NS_HTML, "body"):
+                    body = c
+                    break
+        if body is not None:
+            nodes_to_serialize = list(body.child_nodes)
+            header_idx = None
+            for i, c in enumerate(nodes_to_serialize):
+                if isinstance(c, Element) and c.is_identity(NS_HTML, "header"):
+                    header_idx = i
+                    break
+            if header_idx is not None:
+                del nodes_to_serialize[header_idx]
+                if header_idx > 0 and isinstance(nodes_to_serialize[header_idx - 1], Text):
+                    if not nodes_to_serialize[header_idx - 1].data.strip():
+                        del nodes_to_serialize[header_idx - 1]
+                    else:
+                        nodes_to_serialize[header_idx - 1].data = nodes_to_serialize[header_idx - 1].data.rstrip(" ")
+            if nodes_to_serialize and isinstance(nodes_to_serialize[0], Text):
+                t_data = nodes_to_serialize[0].data
+                if t_data.startswith("\n"):
+                    nodes_to_serialize[0].data = t_data[1:]
+        else:
+            nodes_to_serialize = document.child_nodes
+    else:
+        nodes_to_serialize = document.child_nodes
+
+    for node in nodes_to_serialize:
+        serialize_bikeshed_node(node, out)
+
+
+def save_bikeshed(
+    document: Document,
+    file_path: str,
+    body_only: bool = True,
+    metadata: Optional[str] = BIKESHED_META,
+) -> None:
+    with open(file_path, "w", encoding="utf-8") as f:
+        serialize_bikeshed(document, f, body_only=body_only, metadata=metadata)
+
+
 def save_document(
     document: Document,
     file_path: str,
     variant: str = "html",
     in_split: bool = False,
     bikeshed_pass: int = 0,
+    bikeshed: bool = False,
+    body_only: bool = True,
+    metadata: Optional[str] = BIKESHED_META,
 ) -> None:
+    if bikeshed or bikeshed_pass > 0:
+        save_bikeshed(document, file_path, body_only=body_only, metadata=metadata)
+        return
     with open(file_path, "w", encoding="utf-8") as f:
         serialize_node(document, f, variant, in_split, bikeshed_pass)
         f.write("\n")

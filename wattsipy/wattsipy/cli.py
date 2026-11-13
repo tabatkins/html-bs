@@ -29,7 +29,6 @@ def main(argv: Optional[list[str]] = None) -> int:
 
     quiet = False
     single_page_only = False
-    bikeshed_pass = 0
     highlight_server_url = ""
 
     args: list[str] = []
@@ -43,14 +42,6 @@ def main(argv: Optional[list[str]] = None) -> int:
             quiet = True
         elif arg == "--single-page-only":
             single_page_only = True
-        elif arg == "--bikeshed":
-            if bikeshed_pass == 0:
-                bikeshed_pass = 1
-        elif arg.startswith("--pass="):
-            try:
-                bikeshed_pass = int(arg[7:])
-            except ValueError:
-                bikeshed_pass = 0
         else:
             args.append(arg)
 
@@ -73,8 +64,6 @@ def main(argv: Optional[list[str]] = None) -> int:
             print(msg)
 
     inform("Parsing...")
-    if bikeshed_pass > 0:
-        inform(f"Bikeshed Pass: {bikeshed_pass}")
 
     with open(source_file, "rb") as f:
         source_data = f.read()
@@ -83,96 +72,19 @@ def main(argv: Optional[list[str]] = None) -> int:
 
     os.makedirs(output_directory, exist_ok=True)
 
-    if build_type == "default":
-        doc_dev = doc_html.clone_node(True)
-        doc_snap = doc_html.clone_node(True)
-
-        # 1. HTML variant
-        inform("Generating HTML variant...")
-        big_toc_html = process_document(
-            document=doc_html,
-            variant="html",
-            source_git_sha=source_git_sha,
-            output_directory=output_directory,
-            bikeshed_pass=bikeshed_pass,
-        )
-        inform("Saving index-html")
-        save_document(
-            doc_html,
-            os.path.join(output_directory, "index-html"),
-            variant="html",
-            in_split=False,
-            bikeshed_pass=bikeshed_pass,
-        )
-        if not single_page_only:
-            inform("Splitting...")
-            split_specification(
-                doc_html,
-                big_toc_html,
-                os.path.join(output_directory, "multipage-html"),
-                variant="html",
-                bikeshed_pass=bikeshed_pass,
-            )
-
-        if single_page_only:
-            return 0
-
-        # 2. DEV variant
-        inform("Generating DEV variant...")
-        big_toc_dev = process_document(
-            document=doc_dev,
-            variant="dev",
-            source_git_sha=source_git_sha,
-            output_directory=output_directory,
-            bikeshed_pass=bikeshed_pass,
-        )
-        if not single_page_only:
-            inform("Splitting...")
-            split_specification(
-                doc_dev,
-                big_toc_dev,
-                os.path.join(output_directory, "multipage-dev"),
-                variant="dev",
-                bikeshed_pass=bikeshed_pass,
-            )
-
-        # 3. SNAP variant
-        inform("Generating SNAP variant...")
-        big_toc_snap = process_document(
-            document=doc_snap,
-            variant="snap",
-            source_git_sha=source_git_sha,
-            output_directory=output_directory,
-            bikeshed_pass=bikeshed_pass,
-        )
-        inform("Saving index-snap")
-        save_document(
-            doc_snap,
-            os.path.join(output_directory, "index-snap"),
-            variant="snap",
-            in_split=False,
-            bikeshed_pass=bikeshed_pass,
-        )
-
-    elif build_type == "review":
-        inform("Generating REVIEW exclusively...")
-        big_toc_review = process_document(
-            document=doc_html,
-            variant="review",
-            source_git_sha=source_git_sha,
-            output_directory=output_directory,
-            bikeshed_pass=bikeshed_pass,
-        )
-        inform("Saving index-review")
-        save_document(
-            doc_html,
-            os.path.join(output_directory, "index-review"),
-            variant="review",
-            in_split=False,
-            bikeshed_pass=bikeshed_pass,
-        )
-    else:
-        print(f"Unknown build type: {build_type}")
-        sys.exit(1)
-
+    inform("Generating Bikeshed variant...")
+    process_document(
+        document=doc_html,
+        variant="html",
+        source_git_sha=source_git_sha,
+        output_directory=output_directory,
+        bikeshed=True,
+    )
+    bs_path = os.path.join(output_directory, "html.bs")
+    inform(f"Saving {bs_path}")
+    save_document(
+        doc_html,
+        bs_path,
+        bikeshed=True,
+    )
     return 0
